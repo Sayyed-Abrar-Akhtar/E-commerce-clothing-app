@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 
 class LoginFragment : Fragment() {
@@ -31,14 +33,20 @@ class LoginFragment : Fragment() {
         etPassword = view.findViewById(R.id.etPassword)
         btnLogin = view.findViewById(R.id.btnLogin)
 
+        btnLogin.setOnClickListener {
+            loginCustomer()
+
+        }
         return view
     }
 
     private fun loginCustomer() {
-     if (etUsername.text.toString() == "admin" && etPassword.text.toString() == "password") {
-         val intent = Intent(context, DashboardActivity::class.java)
+        val user: String = etUsername.text.toString()
+        val password: String = etPassword.text.toString()
+        if (user == "admin" && password == "admin") {
+            val intent = Intent(context, DashboardActivity::class.java)
          startActivity(intent)
-     }
+        }
     }
 
 
