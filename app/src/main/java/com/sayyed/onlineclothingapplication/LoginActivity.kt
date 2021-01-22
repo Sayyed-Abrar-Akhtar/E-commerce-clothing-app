@@ -25,7 +25,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        imageView = findViewById(R.id.imageView)
         viewpager = findViewById(R.id.viewpager)
         tabLayout = findViewById(R.id.tabLayout)
 
@@ -35,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         viewpager.adapter = adapter
         TabLayoutMediator(tabLayout, viewpager) {
             tab, position -> tab.text = listTitle[position]
-        }
+        }.attach()
 
 
     }
