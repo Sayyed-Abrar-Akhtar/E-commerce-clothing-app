@@ -1,9 +1,10 @@
-package com.sayyed.onlineclothingapplication
+package com.sayyed.onlineclothingapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
 import com.sayyed.onlineclothingapplication.models.Categories
 

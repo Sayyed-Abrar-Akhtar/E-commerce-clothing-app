@@ -1,6 +1,5 @@
-package com.sayyed.onlineclothingapplication
+package com.sayyed.onlineclothingapplication.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.sayyed.onlineclothingapplication.ui.DashboardActivity
+import com.sayyed.onlineclothingapplication.R
 
 
 class LoginFragment : Fragment() {
@@ -34,6 +33,8 @@ class LoginFragment : Fragment() {
         btnLogin = view.findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
+
+
             loginCustomer()
 
         }

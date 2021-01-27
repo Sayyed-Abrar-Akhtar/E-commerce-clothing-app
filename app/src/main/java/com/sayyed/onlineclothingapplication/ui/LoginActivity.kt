@@ -1,15 +1,17 @@
-package com.sayyed.onlineclothingapplication
+package com.sayyed.onlineclothingapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ViewPagerAdapter
+import com.sayyed.onlineclothingapplication.fragments.LoginFragment
+import com.sayyed.onlineclothingapplication.fragments.SignUpFragment
 
 class LoginActivity : AppCompatActivity() {
 
@@ -33,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         val adapter =  ViewPagerAdapter(listFragments, supportFragmentManager, lifecycle)
         viewpager.adapter = adapter
         TabLayoutMediator(tabLayout, viewpager) {
-            tab, position -> tab.text = listTitle[position]
+                tab, position -> tab.text = listTitle[position]
         }.attach()
 
 
