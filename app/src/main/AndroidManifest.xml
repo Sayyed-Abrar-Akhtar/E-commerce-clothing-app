@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineClothingApplication">
-        <activity android:name=".DashboardActivity"></activity>
+        <activity android:name=".SplashScreenActivity"></activity>
+        <activity android:name=".DashboardActivity" />
         <activity android:name=".adapter.DashboardActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
