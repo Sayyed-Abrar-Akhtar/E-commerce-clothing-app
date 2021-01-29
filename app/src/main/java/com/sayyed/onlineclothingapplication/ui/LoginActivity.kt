@@ -2,6 +2,8 @@ package com.sayyed.onlineclothingapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -15,40 +17,27 @@ import com.sayyed.onlineclothingapplication.fragments.SignUpFragment
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var listTitle: ArrayList<String>
-    private lateinit var listFragments: ArrayList<Fragment>
-    private lateinit var imageView: ImageView
-    private lateinit var constraintLayout: ConstraintLayout
-    private lateinit var viewpager: ViewPager2
-    private lateinit var tabLayout: TabLayout
+    private lateinit var etUsername : EditText
+    private lateinit var etPassword : EditText
+    private lateinit var btnLogin : Button
+    private lateinit var btnSignUp : Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        viewpager = findViewById(R.id.viewpager)
-        tabLayout = findViewById(R.id.tabLayout)
 
-        addList()
+        etUsername = findViewById(R.id.etUsername)
+        etPassword = findViewById(R.id.etPassword)
+        btnLogin = findViewById(R.id.btnLogin)
+        btnSignUp = findViewById(R.id.btnSignUp)
 
-        val adapter =  ViewPagerAdapter(listFragments, supportFragmentManager, lifecycle)
-        viewpager.adapter = adapter
-        TabLayoutMediator(tabLayout, viewpager) {
-                tab, position -> tab.text = listTitle[position]
-        }.attach()
 
 
     }
 
-    private fun addList() {
-        listTitle = ArrayList<String>()
-        listTitle.add("Login")
-        listTitle.add("Sign Up")
-        listFragments = ArrayList<Fragment>()
-        listFragments.add(LoginFragment())
-        listFragments.add(SignUpFragment())
-    }
+
 }
 
 

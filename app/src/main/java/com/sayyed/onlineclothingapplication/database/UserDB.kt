@@ -18,6 +18,7 @@ abstract class UserDB: RoomDatabase() {
 
     companion object{
 
+
         @Volatile
         private var instance : UserDB? = null
 
@@ -34,7 +35,7 @@ abstract class UserDB: RoomDatabase() {
                 Room.databaseBuilder(
                         context.applicationContext,
                         UserDB::class.java,
-                        "UserDatabase"
+                        "UserDatabase.db"
                 ).build()
     }
 }
