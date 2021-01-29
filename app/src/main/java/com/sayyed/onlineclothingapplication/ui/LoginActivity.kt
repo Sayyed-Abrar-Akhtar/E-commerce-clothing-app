@@ -81,7 +81,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this@LoginActivity,
                         DashboardActivity::class.java))
                 saveSharedPref()
-                clearInputFields()
+
             }
         }
 
@@ -145,10 +145,10 @@ class LoginActivity : AppCompatActivity() {
     /*----------end permissions-------------- */
 
 
-    private fun clearInputFields() {
+    /*private fun clearInputFields() {
         etUsername.text.clear()
         etPassword.text.clear()
-    }
+    }*/
 
 }
 
