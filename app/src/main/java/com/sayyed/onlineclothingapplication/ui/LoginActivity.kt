@@ -1,6 +1,7 @@
 package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -8,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -35,7 +37,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        /*----------Permissions-------------- */
+        if (!hasPermission()) {
+            requestPermission()
+        }
 
+        /*----------End Permissions-------------- */
 
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
@@ -80,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    /*----------shared preferences-------------- */
     private fun saveSharedPref() {
         val username = etUsername.text.toString()
         val password = etPassword.text.toString()
@@ -102,13 +110,45 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /*----------end shared preferences-------------- */
+
+
+
+
+    /*----------Permissions-------------- */
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+                this@LoginActivity,
+                permissions, 234
+        )
+    }
+    private fun hasPermission(): Boolean {
+        var hasPermission = true
+        for (permission in permissions) {
+            if (ActivityCompat.checkSelfPermission(
+                            this,
+                            permission
+                    ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                hasPermission = false
+            }
+        }
+        return hasPermission
+    }
+
+    private val permissions = arrayOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    /*----------end permissions-------------- */
+
+
     private fun clearInputFields() {
         etUsername.text.clear()
         etPassword.text.clear()
     }
-
-
-
 
 }
 
