@@ -1,58 +1,82 @@
 package com.sayyed.onlineclothingapplication.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.sayyed.onlineclothingapplication.R
+import com.sayyed.onlineclothingapplication.database.UserDB
+import com.sayyed.onlineclothingapplication.entities.User
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var etFirstName : EditText
+    private lateinit var etLastName : EditText
+    private lateinit var etEmail : EditText
+    private lateinit var etUsername : EditText
+    private lateinit var etPassword : EditText
+    private lateinit var etConfirmPassword : EditText
+    private lateinit var btnSignUp : Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_sign_up, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                SignUpFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+        etFirstName = view.findViewById(R.id.etFirstName)
+        etLastName = view.findViewById(R.id.etLastName)
+        etEmail = view.findViewById(R.id.etEmail)
+        etUsername = view.findViewById(R.id.etUsername)
+        etPassword = view.findViewById(R.id.etPassword)
+        etConfirmPassword = view.findViewById(R.id.etConfirmPassword)
+        btnSignUp = view.findViewById(R.id.btnSignUp)
+
+        btnSignUp.setOnClickListener {
+            val firstName = etFirstName.text.toString()
+            val lastName = etLastName.text.toString()
+            val email = etEmail.text.toString()
+            val username = etUsername.text.toString()
+            val password = etPassword.text.toString()
+            val confirmPassword = etConfirmPassword.text.toString()
+            val context = activity as AppCompatActivity
+
+            if (password != confirmPassword) {
+                etConfirmPassword.error = "Password did not matched!!"
+                etConfirmPassword.requestFocus()
+
+            } else {
+                val user = User(firstName, lastName, email, username, password)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    UserDB
+                            .getInstance(context)
+                            .getUserDao()
+                            .insertUser(user)
+
+                    withContext(Main) {
+                        Toast.makeText(context, "User data inserted Successfully!!", Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+
+        }
+
+        return view
     }
+
+
 }
