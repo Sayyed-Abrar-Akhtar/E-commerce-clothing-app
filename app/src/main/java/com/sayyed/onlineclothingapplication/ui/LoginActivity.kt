@@ -36,10 +36,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
 
+
         etUsername = findViewById(R.id.etUsername)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
         btnSignUp = findViewById(R.id.btnSignUp)
+
+        getSharedPref()
+
 
         btnLogin.setOnClickListener {
             login()
@@ -69,10 +73,41 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 startActivity(Intent(this@LoginActivity,
                         DashboardActivity::class.java))
+                saveSharedPref()
+                clearInputFields()
             }
         }
 
     }
+
+    private fun saveSharedPref() {
+        val username = etUsername.text.toString()
+        val password = etPassword.text.toString()
+        val sharedPref = getSharedPreferences("LoginPreference",
+                MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.apply()
+
+    }
+
+    private fun getSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        val username = sharedPref.getString("username", "")
+        val password = sharedPref.getString("password", "")
+        if(username != null) {
+            etUsername.setText(username)
+            etPassword.setText(password)
+        }
+    }
+
+    private fun clearInputFields() {
+        etUsername.text.clear()
+        etPassword.text.clear()
+    }
+
+
 
 
 }

@@ -64,9 +64,11 @@ class SignUpActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         Toast.makeText(this@SignUpActivity, "User data inserted Successfully!!", Toast.LENGTH_SHORT).show()
-                        clearFields()
+
                         startActivity(Intent(this@SignUpActivity,
                                 LoginActivity::class.java))
+
+                        clearFields()
                     }
                 }
             }
