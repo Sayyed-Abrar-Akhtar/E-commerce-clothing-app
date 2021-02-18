@@ -1,7 +1,8 @@
 package com.sayyed.onlineclothingapplication.api
 
-import com.kiran.student.entity.User
-import com.kiran.student.response.LoginResponse
+
+import com.sayyed.onlineclothingapplication.entities.User
+import com.sayyed.onlineclothingapplication.response.LoginResponse
 import retrofit2.Response
 
 import retrofit2.http.Body

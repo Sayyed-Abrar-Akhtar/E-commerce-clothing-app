@@ -9,10 +9,12 @@ import android.widget.Toast
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.database.UserDB
 import com.sayyed.onlineclothingapplication.entities.User
+import com.sayyed.onlineclothingapplication.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -54,6 +56,7 @@ class SignUpActivity : AppCompatActivity() {
                 etConfirmPassword.requestFocus()
                 return@setOnClickListener
             } else {
+                /*
                 val user = User(firstName, lastName, email, username, password)
 
                 CoroutineScope(Dispatchers.IO).launch {
@@ -69,6 +72,30 @@ class SignUpActivity : AppCompatActivity() {
                                 LoginActivity::class.java))
 
                         clearFields()
+                    }
+                }
+
+                */
+                val user = User(fname = firstName, lname = lastName, email= email, username= username, password=password)
+
+                // Api code goes here
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+
+                        val repository = UserRepository()
+                        val response = repository.registerUser(user)
+
+                        if (response.success == true) {
+
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(this@SignUpActivity, "User registered", Toast.LENGTH_LONG).show()
+                            }
+                        }
+
+                    } catch (ex: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@SignUpActivity, ex.toString(), Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
