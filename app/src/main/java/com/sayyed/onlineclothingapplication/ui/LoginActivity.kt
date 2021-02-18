@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         btnLogin.setOnClickListener {
-            login()
+            loginApiRequest()
         }
 
         btnSignUp.setOnClickListener {
