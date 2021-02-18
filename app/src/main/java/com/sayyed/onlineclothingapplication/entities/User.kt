@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/*
 @Entity
 data class User (
     var firstName: String? = null,
@@ -49,3 +50,13 @@ data class User (
         }
     }
 }
+
+ */
+
+data class User(
+        val _id : String? = null,
+        val firstName : String? = null,
+        val lastname : String? = null,
+        val username: String? = null,
+        val password: String? = null,
+)
