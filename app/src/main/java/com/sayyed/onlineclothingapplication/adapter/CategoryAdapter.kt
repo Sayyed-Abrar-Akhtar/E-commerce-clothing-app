@@ -35,9 +35,11 @@ class CategoryAdapter (
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categoriesList[position]
         holder.categoryName.text = category.categoryName
+
         Glide.with(context)
             .load(category.categoryImage)
             .into(holder.categoryImage)
+
     }
 
     override fun getItemCount(): Int {
