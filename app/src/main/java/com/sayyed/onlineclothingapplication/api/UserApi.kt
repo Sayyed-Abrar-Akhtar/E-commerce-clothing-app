@@ -13,14 +13,14 @@ import retrofit2.http.POST
 interface UserAPI {
 
     //Register User
-    @POST("auth/register")
+    @POST("user/new")
     suspend fun registerUser(
         @Body user: User
     ): Response<LoginResponse>
 
     // Login
     @FormUrlEncoded
-    @POST ("auth/login")
+    @POST ("user/login")
     suspend fun checkUser(
         @Field ("username") username :String,
         @Field ("password") password :String

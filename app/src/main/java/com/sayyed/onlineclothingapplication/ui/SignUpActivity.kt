@@ -76,7 +76,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
 
                 */
-                val user = User(fname = firstName, lname = lastName, email= email, username= username, password=password)
+                val user = User(firstName = firstName, lastName = lastName, contact = "02312", email= email, username= username, password=password, role = "admin")
 
                 // Api code goes here
                 CoroutineScope(Dispatchers.IO).launch {
@@ -106,7 +106,7 @@ class SignUpActivity : AppCompatActivity() {
 
                     } catch (ex: Exception) {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(this@SignUpActivity, ex.toString(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@SignUpActivity, " error occured: ${ex.toString()}", Toast.LENGTH_LONG).show()
                         }
                     }
                 }

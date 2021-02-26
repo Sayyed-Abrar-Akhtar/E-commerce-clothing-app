@@ -55,11 +55,13 @@ data class User (
 @Entity
 data class User(
         val _id : String? = null,
-        val fname : String? = null,
-        val lname : String? = null,
+        val firstName : String? = null,
+        val lastName : String? = null,
+        val contact: String? = null,
         val email: String? = null,
         val username : String? = null,
         val password : String? = null,
+        val role: String? = null
 ): Parcelable {
     @PrimaryKey(autoGenerate = true)
     var userId: Int = 0
@@ -69,16 +71,20 @@ data class User(
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
             parcel.readString()) {
         userId = parcel.readInt()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(fname)
-        parcel.writeString(lname)
+        parcel.writeString(firstName)
+        parcel.writeString(lastName)
+        parcel.writeString(contact)
         parcel.writeString(email)
         parcel.writeString(username)
         parcel.writeString(password)
+        parcel.writeString(role)
         parcel.writeInt(userId)
     }
 

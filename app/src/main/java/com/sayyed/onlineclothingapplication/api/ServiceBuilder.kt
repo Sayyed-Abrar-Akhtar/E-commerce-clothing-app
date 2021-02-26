@@ -7,7 +7,7 @@ import retrofit2.create
 
 object ServiceBuilder {
 
-    private const val BASE_URL = "http://10.0.2.2:3000/api/v1/"
+    private const val BASE_URL = "http://10.0.2.2:90/"
     var token : String? = null
     private val okHttp = OkHttpClient.Builder()
     private val retrofitBuilder = Retrofit.Builder()
