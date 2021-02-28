@@ -1,53 +1,34 @@
 package com.sayyed.onlineclothingapplication.adapter
 
-
-
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.sayyed.onlineclothingapplication.R
+import com.sayyed.onlineclothingapplication.databinding.ProductsLayoutBinding
 import com.sayyed.onlineclothingapplication.entities.Product
 
-
 class ProductAdapter(
-    val productList: ArrayList<Product>,
-    val context: Context
+        private val productList: List<Product>
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
-    class ProductViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        val productTitle: TextView
-        val productPrice: TextView
-        val productImage: ImageView
+    class ProductViewHolder(val binding: ProductsLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            productTitle = view.findViewById(R.id.tvProductTitle)
-            productPrice = view.findViewById(R.id.tvProductPrice)
-            productImage = view.findViewById(R.id.imgProduct)
+        fun bind(product: Product) {
+            binding.tvProductTitle.text = product.productTitle
+            binding.tvProductPrice.text = product.productPrice
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.products_layout, parent, false)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = ProductsLayoutBinding.inflate(layoutInflater)
 
-        return ProductViewHolder(view)
+        return ProductViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
-        val product = productList[position]
-
-        holder.productTitle.text = product.productTitle
-        holder.productPrice.text = product.productImage
-
-        Glide.with(context)
-            .load(product.productImage)
-            .into(holder.productImage)
+        holder.bind(productList[position])
 
     }
 
@@ -55,3 +36,5 @@ class ProductAdapter(
         return productList.size
     }
 }
+
+

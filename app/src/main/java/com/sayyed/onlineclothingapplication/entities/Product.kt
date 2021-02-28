@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class Product(
 
+    @PrimaryKey(autoGenerate = true)
+    var productId: Int = 0,
     var productTitle: String? = null,
     var productPrice: String? = null,
     var productDescription: String? = null,
@@ -17,10 +19,9 @@ data class Product(
     var productImage: String? = null
 
 ) : Parcelable {
-    @PrimaryKey(autoGenerate = true)
-    var productId: Int = 0
 
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -30,6 +31,7 @@ data class Product(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(productId)
         parcel.writeString(productTitle)
         parcel.writeString(productPrice)
         parcel.writeString(productDescription)
