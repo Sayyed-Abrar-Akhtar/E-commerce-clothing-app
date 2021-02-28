@@ -1,31 +1,55 @@
 package com.sayyed.onlineclothingapplication.entities
 
-import androidx.room.ColumnInfo
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "product_data_table")
-data class Product (
+@Entity
+data class Product(
+
+    var productTitle: String? = null,
+    var productPrice: String? = null,
+    var productDescription: String? = null,
+    var productColor: String? = null,
+    var productSize: String? = null,
+    var productImage: String? = null
+
+) : Parcelable {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "product_id")
-    val productId: Int,
+    var productId: Int = 0
 
-    @ColumnInfo(name = "product_title")
-    val productTitle: String,
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+    }
 
-    @ColumnInfo(name ="product_price")
-    val productPrice: Double,
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(productTitle)
+        parcel.writeString(productPrice)
+        parcel.writeString(productDescription)
+        parcel.writeString(productColor)
+        parcel.writeString(productSize)
+        parcel.writeString(productImage)
+    }
 
-    @ColumnInfo(name = "product_description")
-    val productDescription: String,
+    override fun describeContents(): Int {
+        return 0
+    }
 
-    @ColumnInfo(name ="product_color")
-    val productColor: String,
+    companion object CREATOR : Parcelable.Creator<Product> {
+        override fun createFromParcel(parcel: Parcel): Product {
+            return Product(parcel)
+        }
 
-    @ColumnInfo(name = "product_size")
-    val productSize: String,
-
-    @ColumnInfo(name = "product_image")
-    val productImage: String
-)
+        override fun newArray(size: Int): Array<Product?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

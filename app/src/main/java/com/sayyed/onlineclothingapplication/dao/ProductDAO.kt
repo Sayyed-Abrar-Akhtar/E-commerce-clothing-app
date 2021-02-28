@@ -1,12 +1,11 @@
 package com.sayyed.onlineclothingapplication.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.sayyed.onlineclothingapplication.entities.Product
 
+
+@Dao
 interface ProductDAO {
 
     @Insert
@@ -18,10 +17,7 @@ interface ProductDAO {
     @Delete
     suspend fun deleteProduct(product: Product)
 
-    @Query("SELECT * FROM product_data_table")
-    suspend fun deleteAllProduct()
-
-    @Query("SELECT * FROM product_data_table")
+    @Query("SELECT * FROM Product")
     fun getProducts(): LiveData<List<Product>>
 
 }
