@@ -33,8 +33,7 @@ class DashboardActivity : AppCompatActivity() {
                         "https://image.freepik.com/free-photo/pretty-young-stylish-sexy-woman-pink-luxury-dress-summer-fashion-trend-chic-style-sunglasses-blue-studio-background-shopping-holding-paper-bags-talking-mobile-phone-shopaholic_285396-2957.jpg"
                 )
         )
-        println(categoriesList
-        )
+
 
         categoriesList.add(
                 Categories("Clothing",
