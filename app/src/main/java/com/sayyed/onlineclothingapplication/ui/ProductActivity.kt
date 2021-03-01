@@ -53,7 +53,7 @@ class ProductActivity : AppCompatActivity() {
     private fun displayProductList() {
         productViewModel.products.observe(this, Observer {
             Log.i("MYTAG", it.toString())
-            binding.recyclerViewProduct.adapter = ProductAdapter(it)
+            binding.recyclerViewProduct.adapter = ProductAdapter(it, this@ProductActivity)
         })
     }
 
