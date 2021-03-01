@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
@@ -46,7 +47,9 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        binding.recyclerViewProduct.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewProduct.layoutManager = GridLayoutManager(
+                this, 2, GridLayoutManager.VERTICAL, false)
+
         displayProductList()
     }
 
