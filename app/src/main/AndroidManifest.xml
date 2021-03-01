@@ -17,11 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineClothingApplication"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ProductActivity">
-
-
-
-        </activity>
+        <activity android:name=".InformationActivity"></activity>
+        <activity android:name=".ui.ProductActivity"></activity>
         <activity android:name=".ui.SignUpActivity" />
         <activity android:name=".ui.SplashScreenActivity" />
         <activity android:name=".ui.DashboardActivity" />

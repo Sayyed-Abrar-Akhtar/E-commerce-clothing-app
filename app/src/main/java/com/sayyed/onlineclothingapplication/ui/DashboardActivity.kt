@@ -98,8 +98,10 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     }
 
-    override fun OnCategoryItemClick(position: Int) {
-        Toast.makeText(this, "category -> $position ", Toast.LENGTH_LONG).show()
+    override fun OnCategoryItemClick(position: Int, category: String) {
+        val intent = Intent(this, ProductActivity::class.java)
+        startActivity(intent)
     }
+
 
 }

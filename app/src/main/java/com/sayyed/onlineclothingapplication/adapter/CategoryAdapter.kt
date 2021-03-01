@@ -34,7 +34,7 @@ class CategoryAdapter (
                 .into(holder.categoryImage)
 
         holder.itemView.setOnClickListener {
-            onCategoryClickListener.OnCategoryItemClick(position)
+            onCategoryClickListener.OnCategoryItemClick(position, "${holder.categoryName.text}")
         }
     }
 
