@@ -1,5 +1,6 @@
 package com.sayyed.onlineclothingapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -14,7 +15,8 @@ class InformationActivity : AppCompatActivity() {
         btnLocateUs = findViewById(R.id.btnLocateUs)
 
         btnLocateUs.setOnClickListener {
-            // start map activity
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
         }
     }
 }
