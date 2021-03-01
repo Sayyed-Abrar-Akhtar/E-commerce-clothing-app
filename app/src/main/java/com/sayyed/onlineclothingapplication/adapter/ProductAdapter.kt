@@ -31,7 +31,12 @@ class ProductAdapter(
 
 
             itemView.setOnClickListener {
+
+
                 context.startActivity(Intent(context, DashboardActivity::class.java))
+
+
+
             }
 
         }
@@ -49,6 +54,8 @@ class ProductAdapter(
 
 
         holder.bind(productList[position])
+
+
 
     }
 

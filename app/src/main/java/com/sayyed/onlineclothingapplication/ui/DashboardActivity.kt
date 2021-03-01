@@ -1,14 +1,17 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
+import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Categories
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     private var categoriesList =  ArrayList<Categories>()
     private lateinit var recyclerViewCategory: RecyclerView
@@ -21,11 +24,15 @@ class DashboardActivity : AppCompatActivity() {
 
         initialCategoryData()
 
-        val adapter = CategoryAdapter(categoriesList, this@DashboardActivity)
+        val adapter = CategoryAdapter(categoriesList, this@DashboardActivity, this)
         recyclerViewCategory.layoutManager = LinearLayoutManager(this@DashboardActivity)
         recyclerViewCategory.adapter = adapter
+        adapter.notifyDataSetChanged()
 
     }
+
+
+
 
     private fun initialCategoryData() {
         categoriesList.add(
@@ -90,4 +97,9 @@ class DashboardActivity : AppCompatActivity() {
         )
 
     }
+
+    override fun OnCategoryItemClick(position: Int) {
+        Toast.makeText(this, "category -> $position ", Toast.LENGTH_LONG).show()
+    }
+
 }

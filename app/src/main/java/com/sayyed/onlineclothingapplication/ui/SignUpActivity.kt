@@ -103,7 +103,6 @@ class SignUpActivity : AppCompatActivity() {
                                 clearFields()
                             }
                         }
-
                     } catch (ex: Exception) {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@SignUpActivity, " error occured: $ex", Toast.LENGTH_LONG).show()

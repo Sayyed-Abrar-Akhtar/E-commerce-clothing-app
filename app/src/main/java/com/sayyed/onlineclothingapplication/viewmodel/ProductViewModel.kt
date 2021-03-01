@@ -1,14 +1,12 @@
 package com.sayyed.onlineclothingapplication.viewmodel
 
-import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sayyed.onlineclothingapplication.entities.Product
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.sayyed.onlineclothingapplication.ui.DashboardActivity
 import kotlinx.coroutines.launch
 
 class ProductViewModel(private val productRepository: ProductRepository): ViewModel(), Observable {
@@ -52,7 +50,6 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
 
     }
-
 
     private fun allProducts() {
         insertProduct(

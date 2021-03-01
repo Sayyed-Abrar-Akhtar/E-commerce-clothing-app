@@ -9,23 +9,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
+import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Categories
-import java.util.zip.Inflater
 import kotlin.collections.ArrayList
 
 class CategoryAdapter (
     val categoriesList: ArrayList<Categories>,
-    val context: Context
+    val context: Context,
+    private val onCategoryClickListener: OnCategoryClickListener
     ): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-    class CategoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val categoryName : TextView
-        val categoryImage : ImageView
 
-        init {
-            categoryName = view.findViewById(R.id.tvCategoryName)
-            categoryImage = view.findViewById(R.id.imageViewCategoryImg)
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.categories_layout, parent, false)
@@ -37,13 +30,34 @@ class CategoryAdapter (
         holder.categoryName.text = category.categoryName
 
         Glide.with(context)
-            .load(category.categoryImage)
-            .into(holder.categoryImage)
+                .load(category.categoryImage)
+                .into(holder.categoryImage)
 
+        holder.itemView.setOnClickListener {
+            onCategoryClickListener.OnCategoryItemClick(position)
+        }
     }
 
     override fun getItemCount(): Int {
         return categoriesList.size
     }
 
+
+    inner class CategoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        val categoryName : TextView
+        val categoryImage : ImageView
+
+        init {
+            categoryName = view.findViewById(R.id.tvCategoryName)
+            categoryImage = view.findViewById(R.id.imageViewCategoryImg)
+
+        }
+
+
+
+
+    }
+
+
 }
+
