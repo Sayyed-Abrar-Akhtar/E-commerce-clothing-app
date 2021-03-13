@@ -15,7 +15,7 @@ import org.junit.runners.JUnit4
 
 @LargeTest
 @RunWith(JUnit4::class)
-class LoginInstrumentedTest {
+class LoginInstrumentedgTest {
 
     @get:Rule
     val testRule = ActivityScenarioRule(LoginActivity::class.java)
