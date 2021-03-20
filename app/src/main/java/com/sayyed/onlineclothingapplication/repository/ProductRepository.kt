@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.entities.Product
 
-class ProductRepository(private val productDAO: ProductDAO) : ViewModel() {
+class ProductRepository(private val productDAO: ProductDAO) /*: ViewModel()*/ {
 
 
     val products = productDAO.getProducts()
@@ -23,7 +23,4 @@ class ProductRepository(private val productDAO: ProductDAO) : ViewModel() {
         productDAO.deleteProduct(product)
     }
 
-    suspend fun getProducts() {
-        productDAO.getProducts()
-    }
 }
