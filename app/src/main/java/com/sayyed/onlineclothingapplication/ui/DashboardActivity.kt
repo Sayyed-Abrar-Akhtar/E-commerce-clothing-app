@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
+import com.sayyed.onlineclothingapplication.dao.CategoryDAO
+import com.sayyed.onlineclothingapplication.database.CategoryDB
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
@@ -40,8 +42,21 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         setupUI()
         setupViewModel()
         setupCategoryObservers()
+        loadCategoryFromRoom()
 
 
+    }
+
+    private fun loadCategoryFromRoom() {
+        categoryViewModel.categoryFromRoom.observe(this, {
+            it?.let { category ->
+                progressBar.visibility = View.GONE
+                recyclerViewCategory.visibility = View.VISIBLE
+                listCategory.clear()
+                listCategory.addAll(category)
+                adapter.notifyDataSetChanged()
+            }
+        })
     }
 
     private fun setupCategoryObservers() {
@@ -83,9 +98,11 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     }
 
     private fun setupViewModel() {
-        val repository =  CategoryRepository()
+        val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
+        val repository =  CategoryRepository(categoryDAO)
         val factory =CategoryViewModelFactory(repository)
         categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
+        categoryViewModel.insertCategoryIntoRoom()
     }
 
     override fun OnCategoryItemClick(position: Int, category: String) {
