@@ -8,55 +8,56 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
-import com.sayyed.onlineclothingapplication.models.Categories
+import com.sayyed.onlineclothingapplication.models.Category
 import kotlin.collections.ArrayList
 
 class CategoryAdapter (
-    val categoriesList: ArrayList<Categories>,
-    val context: Context,
-    private val onCategoryClickListener: OnCategoryClickListener
+        val context: Context,
+        val categoryList: MutableList<Category>,
+        private val onCategoryClickListener: OnCategoryClickListener
     ): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.categories_layout, parent, false)
+
+        val inflater = LayoutInflater.from(context)
+        val view: View = inflater.inflate(R.layout.categories_layout, parent, false)
         return CategoryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = categoriesList[position]
-        holder.categoryName.text = category.categoryName
-
+        val category = categoryList[position]
+        holder.tvCategoryName?.text = category.name
+        val requestOptions = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .override(600, 120)
         Glide.with(context)
-                .load(category.categoryImage)
-                .into(holder.categoryImage)
+                .load(category.image)
+                .apply(requestOptions)
+                .into(holder.imageViewCategoryImg)
+
 
         holder.itemView.setOnClickListener {
-            onCategoryClickListener.OnCategoryItemClick(position, "${holder.categoryName.text}")
+            onCategoryClickListener.OnCategoryItemClick(position, "${holder.tvCategoryName.text}")
         }
     }
 
     override fun getItemCount(): Int {
-        return categoriesList.size
+        return categoryList.size
     }
 
 
-    inner class CategoryViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val categoryName : TextView
-        val categoryImage : ImageView
+    class CategoryViewHolder(  view: View) : RecyclerView.ViewHolder(view) {
 
-        init {
-            categoryName = view.findViewById(R.id.tvCategoryName)
-            categoryImage = view.findViewById(R.id.imageViewCategoryImg)
-
-        }
-
-
-
+        var tvCategoryName: TextView = itemView.findViewById(R.id.tvCategoryName)
+        var imageViewCategoryImg: ImageView = itemView.findViewById(R.id.imageViewCategoryImg)
 
     }
+
 
 
 }

@@ -9,8 +9,8 @@ object ServiceBuilder {
 
 
 
-    private const val BASE_URL = "http://192.168.1.69/"
-    //private const val BASE_URL = "http://localhost:3000/api/v1/"
+    private const val BASE_URL = "http://192.168.1.69:90/"
+    //private const val BASE_URL = "http://10.0.2.2:90/"
 
     var token : String? = null
     private val okHttp = OkHttpClient.Builder()

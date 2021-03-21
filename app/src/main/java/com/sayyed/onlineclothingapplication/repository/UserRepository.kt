@@ -2,11 +2,11 @@ package com.sayyed.onlineclothingapplication.repository
 
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.UserAPI
-import com.sayyed.onlineclothingapplication.api.UserApiRequest
+import com.sayyed.onlineclothingapplication.api.ApiRequest
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.response.LoginResponse
 
-class UserRepository: UserApiRequest() {
+class UserRepository: ApiRequest() {
 
     private val userApi = ServiceBuilder.buildService(UserAPI::class.java)
 

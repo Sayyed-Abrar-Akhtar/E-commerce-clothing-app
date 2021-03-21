@@ -2,23 +2,31 @@ package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.annotation.NonNull
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
-import com.sayyed.onlineclothingapplication.models.Categories
+import com.sayyed.onlineclothingapplication.models.Category
+import com.sayyed.onlineclothingapplication.repository.CategoryRepository
+import com.sayyed.onlineclothingapplication.utils.Status
+import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
+import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
 
 class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
-    private var categoriesList =  ArrayList<Categories>()
     private lateinit var recyclerViewCategory: RecyclerView
     private lateinit var dashboardBottomNav: BottomNavigationView
+    private lateinit var progressBar: ProgressBar
+
+    private lateinit var listCategory: MutableList<Category>
+    private lateinit var adapter: CategoryAdapter
+    private lateinit var categoryViewModel: CategoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,21 +34,57 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
         recyclerViewCategory = findViewById(R.id.recyclerViewCategory)
         dashboardBottomNav = findViewById(R.id.dashboardBottomNav)
+        progressBar = findViewById(R.id.progressBar)
         dashboardBottomNav.setOnNavigationItemSelectedListener(bottomNavigation)
 
-        initialCategoryData()
+        setupUI()
+        setupViewModel()
+        setupCategoryObservers()
+    }
 
-        val adapter = CategoryAdapter(categoriesList, this@DashboardActivity, this)
-        recyclerViewCategory.layoutManager = LinearLayoutManager(this@DashboardActivity)
-        recyclerViewCategory.adapter = adapter
-        adapter.notifyDataSetChanged()
+    private fun setupCategoryObservers() {
+        categoryViewModel.getCategory().observe(this, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.SUCCESS -> {
+                        progressBar.visibility = View.GONE
+                        recyclerViewCategory.visibility = View.VISIBLE
 
+                        resource.data?.let { category ->
+                            listCategory.clear()
+                            listCategory.addAll(category.category)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    Status.ERROR -> {
+                        recyclerViewCategory.visibility = View.VISIBLE
+                        progressBar.visibility = View.GONE
+                    }
+
+                    Status.LOADING -> {
+                        progressBar.visibility = View.VISIBLE
+                        recyclerViewCategory.visibility = View.GONE
+                    }
+                }
+
+            }
+        })
     }
 
 
+    private fun setupUI() {
+        recyclerViewCategory.layoutManager =LinearLayoutManager(this@DashboardActivity)
+        listCategory = mutableListOf<Category>()
+        adapter =CategoryAdapter(this, listCategory, this)
+        recyclerViewCategory.adapter = adapter
+    }
 
-
-
+    private fun setupViewModel() {
+        val repository =  CategoryRepository()
+        val factory =CategoryViewModelFactory(repository)
+        categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
+    }
 
     override fun OnCategoryItemClick(position: Int, category: String) {
         val intent = Intent(this, ProductActivity::class.java)
@@ -70,69 +114,71 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     }
 
-    private fun initialCategoryData() {
+
+
+    /*private fun initialCategoryData() {
         categoriesList.add(
-            Categories("New in",
+            Category("New in",
                 "https://image.freepik.com/free-photo/pretty-young-stylish-sexy-woman-pink-luxury-dress-summer-fashion-trend-chic-style-sunglasses-blue-studio-background-shopping-holding-paper-bags-talking-mobile-phone-shopaholic_285396-2957.jpg"
             )
         )
 
 
         categoriesList.add(
-            Categories("Clothing",
+            Category("Clothing",
                 "https://image.freepik.com/free-photo/refined-caucasian-girl-blue-denim-jacket-posing_197531-7568.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Shoes",
+            Category("Shoes",
                 "https://image.freepik.com/free-photo/cheerful-model-sitting-floor-wearing-modern-oversize-black-jacket-creamy-long-dress-high-heel-shoes-her-feet-curly-hairstyle-makeup_343629-61.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Accessories",
+            Category("Accessories",
                 "https://image.freepik.com/free-photo/wonderful-young-woman-with-long-hair-having-fun-rosy-magnificent-girl-trendy-sunglasses-relaxing-during-portraitshoot_197531-11059.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Trending now",
+            Category("Trending now",
                 "https://image.freepik.com/free-photo/sexy-brunette-woman-trendy-blue-fur-jacket-velvet-thight-high-boots-posing-grey-wall_273443-4066.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Active Wear",
+            Category("Active Wear",
                 "https://image.freepik.com/free-photo/good-looking-optimistic-girl-25-years-old-happily-portrait-cute-model-pensive-pose-posing-isolated-wall_197531-12012.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Face + Body",
+            Category("Face + Body",
                 "https://image.freepik.com/free-photo/full-length-shot-glad-curly-woman-striped-pants-jumping-purple-wall-indoor-portrait-wonderful-girl-sunglasses-fooling-around_197531-5125.jpg"
             )
         )
 
 
         categoriesList.add(
-            Categories("Brands",
+            Category("Brands",
                 "https://image.freepik.com/free-photo/blonde-woman-with-perfect-wavy-hairstyle-pink-party-dress-posing-hight-heels_273443-1636.jpg"
             )
         )
         categoriesList.add(
-            Categories("Outlets",
+            Category("Outlets",
                 "https://image.freepik.com/free-photo/blissful-lady-trendy-summer-clothes-posing-with-camera-yellow-positive-beautiful-girl-hat-chilling-studio_197531-11082.jpg"
             )
         )
 
         categoriesList.add(
-            Categories("Sale",
+            Category("Sale",
                 "https://image.freepik.com/free-photo/surprised-happy-girl-pointing-left-recommend-product-advertisement-make-okay-gesture_176420-20191.jpg"
             )
         )
 
-    }
+    }*/
 
 
 }
