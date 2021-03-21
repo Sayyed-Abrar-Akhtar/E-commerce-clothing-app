@@ -28,7 +28,7 @@
         android:fontFamily="sans-serif-black"
         android:text="New in"
         android:textAllCaps="true"
-        android:textColor="#1C1C1C"
+        android:textColor="@color/white"
         android:textSize="21sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewCategoryImg"

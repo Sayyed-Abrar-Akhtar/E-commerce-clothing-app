@@ -40,6 +40,8 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         setupUI()
         setupViewModel()
         setupCategoryObservers()
+
+
     }
 
     private fun setupCategoryObservers() {
