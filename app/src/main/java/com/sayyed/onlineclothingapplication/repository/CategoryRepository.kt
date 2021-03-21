@@ -22,5 +22,9 @@ class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
         categoryDAO.createCategory(category)
     }
 
+    suspend fun deleteCategoriesFromRoom() {
+        categoryDAO.deleteAllCategory()
+    }
+
     val retrieveCategoryFromRoom = categoryDAO.retrieveCategory()
 }

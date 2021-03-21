@@ -32,6 +32,14 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository): Vie
         }
     }
 
+    fun deleteAllCategory() = viewModelScope.launch {
+        try {
+            categoryRepository.deleteCategoriesFromRoom()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
     val categoryFromRoom = categoryRepository.retrieveCategoryFromRoom
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

@@ -2,6 +2,7 @@ package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.sayyed.onlineclothingapplication.database.CategoryDB
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
+import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
@@ -41,11 +43,18 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
         setupUI()
         setupViewModel()
-        setupCategoryObservers()
-        loadCategoryFromRoom()
 
+        loadFromRoomOrAPi()
 
     }
+
+    private fun loadFromRoomOrAPi() {
+        when (Network.isNetworkAvailable(this@DashboardActivity)) {
+            true -> setupCategoryObservers()
+            false -> loadCategoryFromRoom()
+        }
+    }
+
 
     private fun loadCategoryFromRoom() {
         categoryViewModel.categoryFromRoom.observe(this, {
@@ -55,6 +64,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                 listCategory.clear()
                 listCategory.addAll(category)
                 adapter.notifyDataSetChanged()
+                Log.i("CategoryTAG", "------------------LOADED FROM ROOM----------------")
             }
         })
     }
@@ -71,6 +81,8 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                             listCategory.clear()
                             listCategory.addAll(category.category)
                             adapter.notifyDataSetChanged()
+                            categoryViewModel.deleteAllCategory()
+                            Log.i("CategoryTAG", "------------------LOADED FROM API----------------")
                         }
                     }
 
@@ -87,6 +99,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
             }
         })
+
     }
 
 
