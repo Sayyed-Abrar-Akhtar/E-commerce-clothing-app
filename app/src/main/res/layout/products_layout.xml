@@ -17,8 +17,6 @@
             android:gravity="center_horizontal|center_vertical"
             app:srcCompat="@android:drawable/ic_menu_report_image" />
 
-
-
         <TextView
             android:id="@+id/tvProductTitle"
             android:layout_width="180dp"

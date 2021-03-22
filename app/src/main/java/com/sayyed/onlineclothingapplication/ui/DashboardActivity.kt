@@ -33,6 +33,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     private lateinit var categoryViewModel: CategoryViewModel
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -114,13 +115,14 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     private fun setupViewModel() {
         val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
         val repository =  CategoryRepository(categoryDAO)
-        val factory =CategoryViewModelFactory(repository)
+        val factory = CategoryViewModelFactory(repository)
         categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
         categoryViewModel.insertCategoryIntoRoom()
     }
 
     override fun OnCategoryItemClick(position: Int, category: String) {
         val intent = Intent(this, ProductActivity::class.java)
+        intent.putExtra("categoryName", "$category")
         startActivity(intent)
     }
 

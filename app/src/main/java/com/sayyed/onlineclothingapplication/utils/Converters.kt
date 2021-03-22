@@ -2,8 +2,12 @@ package com.sayyed.onlineclothingapplication.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.sayyed.onlineclothingapplication.models.Category
-import com.sayyed.onlineclothingapplication.models.ReviewsList
+import com.sayyed.onlineclothingapplication.models.Review
+import java.lang.reflect.Type
+import java.util.*
+
 
 class Converters {
     @TypeConverter
@@ -12,9 +16,20 @@ class Converters {
     @TypeConverter
     fun stringToCategory(string: String): Category = Gson().fromJson(string, Category::class.java)
 
-    @TypeConverter
-    fun reviewsToString(reviewsList: ReviewsList) = Gson().toJson(reviewsList)
+
 
     @TypeConverter
-    fun stringToReviews(string: String) = Gson().fromJson(string, ReviewsList::class.java)
+    fun stringToSomeObjectList(data: String?): List<Review?>? {
+        if (data == null) {
+            return Collections.emptyList()
+        }
+        val listType: Type = object : TypeToken<List<Review?>?>() {}.type
+        return Gson().fromJson(data, listType)
+    }
+
+    @TypeConverter
+    fun someObjectListToString(someObjects: List<Review?>?): String? {
+        return Gson().toJson(someObjects)
+    }
+
 }

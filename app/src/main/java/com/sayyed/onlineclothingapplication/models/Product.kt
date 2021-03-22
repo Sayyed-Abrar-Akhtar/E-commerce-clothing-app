@@ -8,50 +8,50 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Product (
 
-    @SerializedName("__v")
+        @SerializedName("__v")
     val __v: Int,
 
-    @PrimaryKey
+        @PrimaryKey
     @SerializedName("_id")
     val _id: String,
 
-    @SerializedName("name")
+        @SerializedName("name")
     val name: String,
 
-    @SerializedName("price")
+        @SerializedName("price")
     val price: Int,
 
-    @SerializedName("brand")
+        @SerializedName("brand")
     val brand: String,
 
-    @SerializedName("category")
+        @SerializedName("category")
     val category: Category,
 
-    @SerializedName("description")
+        @SerializedName("description")
     val description: String,
 
-    @SerializedName("image")
+        @SerializedName("image")
     val image: String,
 
-    @SerializedName("countInStock")
+        @SerializedName("countInStock")
     val countInStock: Int,
 
-    @SerializedName("numReviews")
+        @SerializedName("numReviews")
     val numReviews: Int,
 
-    @SerializedName("reviews")
-    val reviews: ReviewsList,
+        @SerializedName("reviews")
+    val reviews: List<Review>,
 
-    @SerializedName("rating")
+        @SerializedName("rating")
     val rating: Double,
 
-    @SerializedName("createdAt")
+        @SerializedName("createdAt")
     val createdAt: String,
 
-    @SerializedName("updatedAt")
+        @SerializedName("updatedAt")
     val updatedAt: String,
 
-    @SerializedName("user")
+        @SerializedName("user")
     val user: String
 
 )

@@ -15,24 +15,24 @@ import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
 
 class ProductAdapter(
-    val context: Context,
-    val productList: MutableList<Product>,
-    private val onProductClickListener: OnProductClickListener
+        val context: Context,
+        val productList: MutableList<Product>,
+        private val onProductClickListener: OnProductClickListener
 ): RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ProductViewHolder {
         val inflater = LayoutInflater.from(context)
-        val view: View = inflater.inflate(R.layout.categories_layout, parent, false)
+        val view: View = inflater.inflate(R.layout.products_layout, parent, false)
         return ProductViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.tvProductTitle.text = product.name
-        holder.tvProductPrice.text = product.price.toString()
-        holder.tvRating.text = "${product.rating} stars"
+        holder.tvProductTitle?.text = product.name
+        holder.tvProductPrice?.text = product.price.toString()
+        holder.tvRating?.text = "${product.rating} stars"
 
         val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -50,7 +50,7 @@ class ProductAdapter(
 
     override fun getItemCount(): Int  = productList.size
 
-    class ProductViewHolder(  view: View) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder( view: View ) : RecyclerView.ViewHolder(view) {
 
         var imgProduct: ImageView = itemView.findViewById(R.id.imgProduct)
         var tvProductTitle: TextView = itemView.findViewById(R.id.tvProductTitle)

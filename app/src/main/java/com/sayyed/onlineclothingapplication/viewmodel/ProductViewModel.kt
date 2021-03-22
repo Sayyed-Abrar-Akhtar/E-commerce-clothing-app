@@ -21,17 +21,26 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
     }
 
     fun getAllProducts() = liveData(Dispatchers.IO) {
+
+
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = productRepository.getAllProducts()))
+            val data = productRepository.getAllProducts()
+            println("****************************************${data}")
+            println("****************************************${data}")
+            emit(Resource.success(data = data))
         } catch (ex: Exception) {
+            println("****************************************")
+            println("***********************erooor*****************")
+            println("****************************************")
+            println("error message=>${ex.message}")
             emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
         }
     }
 
     fun insertProductToRoom() = viewModelScope.launch {
         try {
-            val productLive = productRepository.getAllProducts().Product
+            val productLive = productRepository.getAllProducts().product
             for(product in productLive) {
                 productRepository.insertProductIntoRoom(product)
             }
