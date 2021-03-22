@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
-import com.sayyed.onlineclothingapplication.entities.Product
+import com.sayyed.onlineclothingapplication.models.Product
+import com.sayyed.onlineclothingapplication.utils.Converters
 
 
 @Database(
@@ -13,6 +15,8 @@ import com.sayyed.onlineclothingapplication.entities.Product
         version = 1,
         exportSchema = false
 )
+@TypeConverters(Converters::class)
+
 abstract class ProductDB : RoomDatabase() {
 
     abstract val productDAO: ProductDAO

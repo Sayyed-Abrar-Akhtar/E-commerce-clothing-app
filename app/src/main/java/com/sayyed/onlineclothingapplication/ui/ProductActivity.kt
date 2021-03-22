@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
-import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.database.ProductDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductBinding
 
@@ -39,7 +38,7 @@ class ProductActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
 
-        productViewModel.addProduct()
+
         initRecyclerView()
 
 
@@ -54,10 +53,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun displayProductList() {
-        productViewModel.products.observe(this, Observer {
-            Log.i("MYTAG", it.toString())
-            binding.recyclerViewProduct.adapter = ProductAdapter(it, this@ProductActivity)
-        })
+
     }
 
 

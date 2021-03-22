@@ -1,26 +1,44 @@
 package com.sayyed.onlineclothingapplication.repository
 
 import androidx.lifecycle.ViewModel
+import com.sayyed.onlineclothingapplication.api.ApiRequest
+import com.sayyed.onlineclothingapplication.api.ProductApi
+import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
-import com.sayyed.onlineclothingapplication.entities.Product
+import com.sayyed.onlineclothingapplication.models.Product
+import com.sayyed.onlineclothingapplication.response.ProductResponse
 
-class ProductRepository(private val productDAO: ProductDAO) /*: ViewModel()*/ {
+class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
 
+    private val productApi = ServiceBuilder.buildService(ProductApi::class.java)
 
-    val products = productDAO.getProducts()
+    suspend fun getProductsOfCategory(category: String): ProductResponse {
+        return apiRequest {
+            productApi.getProductsOfCategory(category)
+        }
+    }
 
-    suspend fun insert(product:Product) {
-        productDAO.insertProduct(product)
+    suspend fun getAllProducts(): ProductResponse {
+        return apiRequest {
+            productApi.getAllProducts()
+        }
+    }
+
+    suspend fun insertProductIntoRoom(product: Product) {
+        productDAO.createProduct(product)
     }
 
 
-    suspend fun update(product: Product) {
+    suspend fun updateProductsInRoom(product: Product) {
         productDAO.updateProduct(product)
     }
 
 
-    suspend fun delete(product: Product) {
-        productDAO.deleteProduct(product)
+    suspend fun deleteProductsFromRoom() {
+        productDAO.deleteAllProduct()
     }
+
+    val retrieveProductsFromRoom = productDAO.retrieveProducts()
+    fun retrieveCategorizedProductsFromRoom(category: String) = productDAO.retrieveProductsOfCategory(category)
 
 }

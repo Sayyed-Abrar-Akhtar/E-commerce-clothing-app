@@ -40,7 +40,7 @@ data class Product (
     val numReviews: Int,
 
     @SerializedName("reviews")
-    val reviews: List<Any>,
+    val reviews: ReviewsList,
 
     @SerializedName("rating")
     val rating: Double,
