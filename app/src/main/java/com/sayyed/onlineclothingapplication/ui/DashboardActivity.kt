@@ -4,16 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.database.CategoryDB
+import com.sayyed.onlineclothingapplication.databinding.ActivityDashboardBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
@@ -24,9 +24,10 @@ import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
 
 class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
-    private lateinit var recyclerViewCategory: RecyclerView
-    private lateinit var dashboardBottomNav: BottomNavigationView
-    private lateinit var progressBar: ProgressBar
+    private lateinit var binding: ActivityDashboardBinding
+    private lateinit var navigationDrawerSetup: NavigationDrawerSetup
+    private lateinit var toggle: ActionBarDrawerToggle
+
 
     private lateinit var listCategory: MutableList<Category>
     private lateinit var adapter: CategoryAdapter
@@ -38,18 +39,47 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        recyclerViewCategory = findViewById(R.id.recyclerViewCategory)
-        dashboardBottomNav = findViewById(R.id.dashboardBottomNav)
-        progressBar = findViewById(R.id.progressBar)
-        dashboardBottomNav.setOnNavigationItemSelectedListener(bottomNavigation)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+
+        /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(
+                this@DashboardActivity,
+                binding.drawer,
+                binding.toolbar,
+                R.string.open,
+                R.string.close
+        )
+        binding.drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        /*----------------------------------------NAVIGATION DRAWER LAYOUT----------------------------------------*/
+        navigationDrawerSetup = NavigationDrawerSetup()
+        navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "Online Clothing")
+        navigationDrawerSetup.addHeaderText(
+                this@DashboardActivity,
+                binding.navigationView,
+                "Sayyed",
+                "+977-9821117484",
+                "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
+        navigationDrawerSetup.addEventListenerToNavItems(this@DashboardActivity, binding.navigationView)
 
         setupUI()
+
         setupViewModel()
 
         loadFromRoomOrAPi()
 
     }
 
+    /*----------------------------------EVENT LISTENER ON CATEGORY ITEM CLICK-------------------------------------*/
+    override fun OnCategoryItemClick(position: Int, category: String) {
+        val intent = Intent(this, ProductActivity::class.java)
+        intent.putExtra("categoryName", "$category")
+        startActivity(intent)
+    }
+
+    /*-------------------------------------CHECK NETWORK TO DISPLAY DATA------------------------------------------*/
     private fun loadFromRoomOrAPi() {
         when (Network.isNetworkAvailable(this@DashboardActivity)) {
             true -> setupCategoryObservers()
@@ -57,45 +87,46 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         }
     }
 
-
+    /*-------------------------------------GET DATA FROM ROOM TO DISPLAY------------------------------------------*/
     private fun loadCategoryFromRoom() {
         categoryViewModel.categoryFromRoom.observe(this, {
             it?.let { category ->
-                progressBar.visibility = View.GONE
-                recyclerViewCategory.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+                binding.recyclerViewCategory.visibility = View.VISIBLE
                 listCategory.clear()
                 listCategory.addAll(category)
                 adapter.notifyDataSetChanged()
-                Log.i("CategoryTAG", "------------------LOADED FROM ROOM----------------")
+                Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM ROOM")
             }
         })
     }
 
+    /*-------------------------------------GET DATA FROM API TO DISPLAY-------------------------------------------*/
     private fun setupCategoryObservers() {
         categoryViewModel.getCategory().observe(this, {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        progressBar.visibility = View.GONE
-                        recyclerViewCategory.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
+                        binding.recyclerViewCategory.visibility = View.VISIBLE
 
                         resource.data?.let { category ->
                             listCategory.clear()
                             listCategory.addAll(category.category)
                             adapter.notifyDataSetChanged()
                             categoryViewModel.deleteAllCategory()
-                            Log.i("CategoryTAG", "------------------LOADED FROM API----------------")
+                            Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM API")
                         }
                     }
 
                     Status.ERROR -> {
-                        recyclerViewCategory.visibility = View.VISIBLE
-                        progressBar.visibility = View.GONE
+                        binding.recyclerViewCategory.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.GONE
                     }
 
                     Status.LOADING -> {
-                        progressBar.visibility = View.VISIBLE
-                        recyclerViewCategory.visibility = View.GONE
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.recyclerViewCategory.visibility = View.GONE
                     }
                 }
 
@@ -104,14 +135,15 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     }
 
-
+    /*---------------------------------------------SET UP UI------------------------------------------------------*/
     private fun setupUI() {
-        recyclerViewCategory.layoutManager =LinearLayoutManager(this@DashboardActivity)
+        binding.recyclerViewCategory.layoutManager =LinearLayoutManager(this@DashboardActivity)
         listCategory = mutableListOf<Category>()
         adapter =CategoryAdapter(this, listCategory, this)
-        recyclerViewCategory.adapter = adapter
+        binding.recyclerViewCategory.adapter = adapter
     }
 
+    /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
         val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
         val repository =  CategoryRepository(categoryDAO)
@@ -119,39 +151,5 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
         categoryViewModel.insertCategoryIntoRoom()
     }
-
-    override fun OnCategoryItemClick(position: Int, category: String) {
-        val intent = Intent(this, ProductActivity::class.java)
-        intent.putExtra("categoryName", "$category")
-        startActivity(intent)
-    }
-
-    private val bottomNavigation = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.dashboard -> {
-                return@OnNavigationItemSelectedListener false
-            }
-            R.id.cart -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.account -> {
-                val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
-                startActivity(intent)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.info -> {
-                val intent = Intent(this@DashboardActivity, InformationActivity::class.java)
-                startActivity(intent)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-
-    }
-
-
-
-
-
 
 }

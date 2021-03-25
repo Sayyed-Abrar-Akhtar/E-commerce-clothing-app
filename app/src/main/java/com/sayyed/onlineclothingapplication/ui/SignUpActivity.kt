@@ -1,15 +1,26 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
+import com.google.android.material.navigation.NavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.database.UserDB
+import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.repository.UserRepository
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,13 +29,11 @@ import java.lang.Exception
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var etFirstName : EditText
-    private lateinit var etLastName : EditText
-    private lateinit var etEmail : EditText
-    private lateinit var etUsername : EditText
-    private lateinit var etPassword : EditText
-    private lateinit var etConfirmPassword : EditText
-    private lateinit var btnSignUp : Button
+
+    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var navigationDrawerSetup: NavigationDrawerSetup
+    private lateinit var toggle: ActionBarDrawerToggle
+
 
 
 
@@ -32,28 +41,45 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        etFirstName = findViewById(R.id.etFirstName)
-        etLastName = findViewById(R.id.etLastName)
-        etEmail = findViewById(R.id.etEmail)
-        etUsername = findViewById(R.id.etUsername)
-        etPassword = findViewById(R.id.etPassword)
-        etConfirmPassword = findViewById(R.id.etConfirmPassword)
-        btnSignUp = findViewById(R.id.btnSignUp)
+        binding = DataBindingUtil.setContentView(this@SignUpActivity, R.layout.activity_sign_up)
 
+        /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(
+                this@SignUpActivity,
+                binding.drawer,
+                binding.toolbar,
+                R.string.open,
+                R.string.close
+        )
+        binding.drawer.addDrawerListener(toggle)
+        toggle.syncState()
 
-        btnSignUp.setOnClickListener {
+        /*----------------------------------------NAVIGATION DRAWER LAYOUT----------------------------------------*/
+        navigationDrawerSetup = NavigationDrawerSetup()
+        navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "Create New Account")
+        navigationDrawerSetup.addHeaderText(
+                this@SignUpActivity,
+                binding.navigationView,
+                "",
+                "",
+                ""
+        )
+        navigationDrawerSetup.addEventListenerToNavItems(this@SignUpActivity, binding.navigationView)
 
-            val firstName = etFirstName.text.toString()
-            val lastName = etLastName.text.toString()
-            val email = etEmail.text.toString()
-            val username = etUsername.text.toString()
-            val password = etPassword.text.toString()
-            val confirmPassword = etConfirmPassword.text.toString()
+        /*-----------------------------------SIGN UP BUTTON CLICK LISTENER----------------------------------------*/
+        binding.btnSignUp.setOnClickListener {
 
+            val firstName = binding.etFirstName.text.toString()
+            val lastName = binding.etLastName.text.toString()
+            val email = binding.etEmail.text.toString()
+            val username = binding.etUsername.text.toString()
+            val password = binding.etPassword.text.toString()
+            val confirmPassword = binding.etConfirmPassword.text.toString()
 
             if (password != confirmPassword) {
-                etConfirmPassword.error = "Password did not matched!!"
-                etConfirmPassword.requestFocus()
+                binding.etConfirmPassword.error = "Password did not matched!!"
+                binding.etConfirmPassword.requestFocus()
                 return@setOnClickListener
             } else {
                 /*
@@ -111,17 +137,16 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
+    /*----------------------------------CLEAR VIEWS---------------------------------------------------------------*/
     private fun clearFields() {
-        etFirstName.text.clear()
-        etLastName.text.clear()
-        etEmail.text.clear()
-        etUsername.text.clear()
-        etPassword.text.clear()
-        etConfirmPassword.text.clear()
+        binding.etFirstName.text.clear()
+        binding.etLastName.text.clear()
+        binding.etEmail.text.clear()
+        binding.etUsername.text.clear()
+        binding.etPassword.text.clear()
+        binding.etConfirmPassword.text.clear()
 
     }
 }

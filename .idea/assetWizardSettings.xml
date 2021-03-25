@@ -79,7 +79,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\sabra\Downloads\icons8-shopping-bag-64.png" />
+                                                <entry key="imagePath" value="C:\Users\sabra\AndroidStudioProjects\OnlineClothingApplication\app\src\main\res\drawable-v24\online_clothing_logo.png" />
+                                                <entry key="scalingPercent" value="65" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -300,7 +301,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/info/baseline_info_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/person_outline/baseline_person_outline_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -310,7 +311,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_info_24" />
+                            <entry key="color" value="1b16f0" />
+                            <entry key="outputName" value="user" />
                             <entry key="sourceFile" value="D:\SAYYED\DOWNLOADS\SVG\Endless-Constellation.svg" />
                           </map>
                         </option>
