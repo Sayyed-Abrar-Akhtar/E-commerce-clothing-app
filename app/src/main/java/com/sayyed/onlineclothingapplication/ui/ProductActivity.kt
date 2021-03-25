@@ -1,35 +1,27 @@
 package com.sayyed.onlineclothingapplication.ui
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.google.android.material.navigation.NavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.database.ProductDB
-import com.sayyed.onlineclothingapplication.databinding.ActivityDashboardBinding
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
-
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
+import com.sayyed.onlineclothingapplication.response.ProductResponse
+import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
-import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 class ProductActivity : AppCompatActivity(), OnProductClickListener {
 
@@ -70,14 +62,14 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         if (categoryName === null || categoryName === "") { // --check if showing categorised products or all products--
             navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "All Products")
         } else {
-            navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "${categoryName.capitalize()}")
+            navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, categoryName.capitalize(Locale.ROOT))
         }
         navigationDrawerSetup.addHeaderText(
                 this@ProductActivity,
                 binding.navigationView,
                 "",
                 "",
-            "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
+                "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
         navigationDrawerSetup.addEventListenerToNavItems(this@ProductActivity, binding.navigationView)
 
         /*-----------------------------------RECYCLER VIEW AND ADAPTER SETUP--------------------------------------*/
@@ -87,24 +79,32 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         setupViewModel()
 
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
+        if (categoryName === null || categoryName === "") { // --check if showing categorised products or all products--
+            setupProductObservers()
+            return
+        }
         setupCategorizedProductObservers("$categoryName")
+
+
 
     }
 
+    /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/
     override fun OnProductItemClick(position: Int, product: String) {
         //val intent = Intent(this, DashboardActivity::class.java)
         //intent.putExtra("productid", "id")
     }
 
-
+    /*---------------------------------------------SET UP UI------------------------------------------------------*/
     private fun setupUI() {
         binding.recyclerViewProduct.layoutManager = GridLayoutManager(
                 this@ProductActivity, 2, GridLayoutManager.VERTICAL, false)
-        listProduct = mutableListOf<Product>()
+        listProduct = mutableListOf()
         adapter = ProductAdapter(this, listProduct, this)
         binding.recyclerViewProduct.adapter = adapter
     }
 
+    /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
         val productDao: ProductDAO = ProductDB.getInstance(application).productDAO
         val repository = ProductRepository(productDao)
@@ -114,36 +114,47 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
 
     }
 
+    /*-------------------------------------SET DATA FROM API TO DISPLAY-------------------------------------------*/
     private fun setupCategorizedProductObservers(category: String) {
         productViewModel.getProductsOfCategory(category).observe(this, {
+            it.loadApiData()
+        })
+    }
 
-            it?.let { resource ->
-                when (resource.status ) {
-                    Status.SUCCESS -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.recyclerViewProduct.visibility = View.VISIBLE
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun setupProductObservers() {
+        productViewModel.getAllProducts().observe(this, {
+            it.loadApiData()
+        })
+    }
 
-                        resource.data?.let { product ->
-                            listProduct.clear()
-                            listProduct.addAll(product.product)
-                            adapter.notifyDataSetChanged()
-                            println("$product")
-                            Log.i("productTag", "==>LOADED PRODUCT DATA FROM API")
-                        }
-                    }
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun Resource<ProductResponse>.loadApiData() {
+        let { resource ->
+            when (resource.status ) {
+                Status.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.recyclerViewProduct.visibility = View.VISIBLE
 
-                    Status.ERROR -> {
-                        binding.recyclerViewProduct.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                    }
-
-                    Status.LOADING -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.recyclerViewProduct.visibility = View.GONE
+                    resource.data?.let { product ->
+                        listProduct.clear()
+                        listProduct.addAll(product.product)
+                        adapter.notifyDataSetChanged()
+                        println("$product")
+                        Log.i("productTag", "==>LOADED PRODUCT DATA FROM API")
                     }
                 }
-            }
-        })
 
+                Status.ERROR -> {
+                    binding.recyclerViewProduct.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                }
+
+                Status.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.recyclerViewProduct.visibility = View.GONE
+                }
+            }
+        }
     }
 }

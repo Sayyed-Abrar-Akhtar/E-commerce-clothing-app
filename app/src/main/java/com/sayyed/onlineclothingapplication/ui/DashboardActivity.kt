@@ -17,7 +17,9 @@ import com.sayyed.onlineclothingapplication.databinding.ActivityDashboardBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
+import com.sayyed.onlineclothingapplication.response.CategoryResponse
 import com.sayyed.onlineclothingapplication.utils.Network
+import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
@@ -72,10 +74,27 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     }
 
+    /*---------------------------------------------SET UP UI------------------------------------------------------*/
+    private fun setupUI() {
+        binding.recyclerViewCategory.layoutManager =LinearLayoutManager(this@DashboardActivity)
+        listCategory = mutableListOf()
+        adapter =CategoryAdapter(this, listCategory, this)
+        binding.recyclerViewCategory.adapter = adapter
+    }
+
+    /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
+    private fun setupViewModel() {
+        val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
+        val repository =  CategoryRepository(categoryDAO)
+        val factory = CategoryViewModelFactory(repository)
+        categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
+        categoryViewModel.insertCategoryIntoRoom()
+    }
+
     /*----------------------------------EVENT LISTENER ON CATEGORY ITEM CLICK-------------------------------------*/
     override fun OnCategoryItemClick(position: Int, category: String) {
         val intent = Intent(this, ProductActivity::class.java)
-        intent.putExtra("categoryName", "$category")
+        intent.putExtra("categoryName", category)
         startActivity(intent)
     }
 
@@ -101,55 +120,38 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         })
     }
 
-    /*-------------------------------------GET DATA FROM API TO DISPLAY-------------------------------------------*/
+    /*-------------------------------------SET DATA FROM API TO DISPLAY-------------------------------------------*/
     private fun setupCategoryObservers() {
         categoryViewModel.getCategory().observe(this, {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.recyclerViewCategory.visibility = View.VISIBLE
+            it.loadApiData()
+        })
+    }
 
-                        resource.data?.let { category ->
-                            listCategory.clear()
-                            listCategory.addAll(category.category)
-                            adapter.notifyDataSetChanged()
-                            categoryViewModel.deleteAllCategory()
-                            Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM API")
-                        }
-                    }
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun Resource<CategoryResponse>.loadApiData() {
+        let { resource ->
+            when (resource.status ) {
+                Status.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.recyclerViewCategory.visibility = View.VISIBLE
 
-                    Status.ERROR -> {
-                        binding.recyclerViewCategory.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                    }
-
-                    Status.LOADING -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.recyclerViewCategory.visibility = View.GONE
+                    resource.data?.let { category ->
+                        listCategory.clear()
+                        listCategory.addAll(category.category)
+                        adapter.notifyDataSetChanged()
+                        categoryViewModel.deleteAllCategory()
+                        Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM API")
                     }
                 }
-
+                Status.ERROR -> {
+                    binding.recyclerViewCategory.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                }
+                Status.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.recyclerViewCategory.visibility = View.GONE
+                }
             }
-        })
-
+        }
     }
-
-    /*---------------------------------------------SET UP UI------------------------------------------------------*/
-    private fun setupUI() {
-        binding.recyclerViewCategory.layoutManager =LinearLayoutManager(this@DashboardActivity)
-        listCategory = mutableListOf<Category>()
-        adapter =CategoryAdapter(this, listCategory, this)
-        binding.recyclerViewCategory.adapter = adapter
-    }
-
-    /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
-    private fun setupViewModel() {
-        val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
-        val repository =  CategoryRepository(categoryDAO)
-        val factory = CategoryViewModelFactory(repository)
-        categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
-        categoryViewModel.insertCategoryIntoRoom()
-    }
-
 }
