@@ -80,7 +80,22 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         setupViewModel()
 
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
-        loadFromRoomOrApi(categoryName.toString())
+        when (Network.isNetworkAvailable(this)) {
+            true -> {
+                if (categoryName === "" || categoryName === null) {
+                    setupProductObservers()
+                } else {
+                    setupCategorizedProductObservers(categoryName)
+                }
+            }
+            false -> {
+                if (categoryName === "" || categoryName === null) {
+                    loadProductFromRoom()
+                } else {
+                    loadCategorisedProductFromRoom(categoryName)
+                }
+            }
+        }
     }
 
     /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/
@@ -108,21 +123,22 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
     }
 
     /*-------------------------------------CHECK NETWORK TO DISPLAY DATA------------------------------------------*/
-    private fun loadFromRoomOrApi(category: String) {
-        when(Network.isNetworkAvailable(this@ProductActivity)) {
+    private fun loadFromRoomOrApi(categoryName: String) {
+        when (Network.isNetworkAvailable(this)) {
             true -> {
-                when (category) {
-                    "" -> setupCategorizedProductObservers(category)
-                    else -> setupProductObservers()
+                if (categoryName === "" || categoryName === null) {
+                    setupProductObservers()
+                } else {
+                    setupCategorizedProductObservers(categoryName)
                 }
             }
             false -> {
-                when (category) {
-                    "" -> loadCategorisedProductFromRoom(category)
-                    else -> loadProductFromRoom()
+                if (categoryName === "" || categoryName === null) {
+                    loadProductFromRoom()
+                } else {
+                    loadCategorisedProductFromRoom(categoryName)
                 }
             }
-
         }
     }
 
@@ -180,7 +196,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
                         listProduct.clear()
                         listProduct.addAll(product.product)
                         adapter.notifyDataSetChanged()
-                        println("$product")
+                        println("${listProduct}")
                         Log.i("productTag", "==>LOADED PRODUCT DATA FROM API")
                     }
                 }

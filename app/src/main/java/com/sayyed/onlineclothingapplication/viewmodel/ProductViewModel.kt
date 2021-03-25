@@ -26,6 +26,7 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         emit(Resource.loading(data = null))
         try {
             val data = productRepository.getAllProducts()
+            println(data)
             emit(Resource.success(data = data))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")
@@ -35,6 +36,7 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
 
     fun insertProductToRoom() = viewModelScope.launch {
         try {
+
             val productLive = productRepository.getAllProducts().product
             for(product in productLive) {
                 productRepository.insertProductIntoRoom(product)
