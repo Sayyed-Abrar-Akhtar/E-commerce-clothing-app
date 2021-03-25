@@ -115,7 +115,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                 listCategory.clear()
                 listCategory.addAll(category)
                 adapter.notifyDataSetChanged()
-                Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM ROOM")
+                Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM ROOM")
             }
         })
     }
@@ -140,7 +140,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                         listCategory.addAll(category.category)
                         adapter.notifyDataSetChanged()
                         categoryViewModel.deleteAllCategory()
-                        Log.i("CategoryTAG", "==>LOADED PRODUCT DATA FROM API")
+                        Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM API")
                     }
                 }
                 Status.ERROR -> {

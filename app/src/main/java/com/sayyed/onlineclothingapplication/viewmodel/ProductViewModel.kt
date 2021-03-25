@@ -26,13 +26,8 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         emit(Resource.loading(data = null))
         try {
             val data = productRepository.getAllProducts()
-            println("****************************************${data}")
-            println("****************************************${data}")
             emit(Resource.success(data = data))
         } catch (ex: Exception) {
-            println("****************************************")
-            println("***********************erooor*****************")
-            println("****************************************")
             println("error message=>${ex.message}")
             emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
         }

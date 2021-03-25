@@ -17,6 +17,7 @@ import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
 import com.sayyed.onlineclothingapplication.response.ProductResponse
+import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
@@ -79,14 +80,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         setupViewModel()
 
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
-        if (categoryName === null || categoryName === "") { // --check if showing categorised products or all products--
-            setupProductObservers()
-            return
-        }
-        setupCategorizedProductObservers("$categoryName")
-
-
-
+        loadFromRoomOrApi(categoryName.toString())
     }
 
     /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/
@@ -110,8 +104,54 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         val repository = ProductRepository(productDao)
         val factory = ProductViewModelFactory(repository)
         productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
+        productViewModel.insertProductToRoom()
+    }
 
+    /*-------------------------------------CHECK NETWORK TO DISPLAY DATA------------------------------------------*/
+    private fun loadFromRoomOrApi(category: String) {
+        when(Network.isNetworkAvailable(this@ProductActivity)) {
+            true -> {
+                when (category) {
+                    "" -> setupCategorizedProductObservers(category)
+                    else -> setupProductObservers()
+                }
+            }
+            false -> {
+                when (category) {
+                    "" -> loadCategorisedProductFromRoom(category)
+                    else -> loadProductFromRoom()
+                }
+            }
 
+        }
+    }
+
+    /*----------------------------------GET PRODUCT FROM ROOM TO DISPLAY------------------------------------------*/
+    private fun loadProductFromRoom() {
+        productViewModel.retrieveProductsFromRoom.observe(this, {
+            it?.let { product ->
+                binding.recyclerViewProduct.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+                listProduct.clear()
+                listProduct.addAll(product)
+                adapter.notifyDataSetChanged()
+                Log.i("ProductTAG", "==>LOADED PRODUCT DATA FROM ROOM")
+            }
+        })
+    }
+
+    /*-----------------------GET CATEGORISED PRODUCT FROM ROOM TO DISPLAY------------------------------------------*/
+    private fun loadCategorisedProductFromRoom(category: String) {
+        productViewModel.retrieveCategorizedProductsFromRoom(category).observe(this, {
+            it?.let { product ->
+                binding.recyclerViewProduct.visibility = View. VISIBLE
+                binding.progressBar.visibility = View.GONE
+                listProduct.clear()
+                listProduct.addAll(product)
+                adapter.notifyDataSetChanged()
+                Log.i("ProductTAG", "==>LOADED CATEGORIZED PRODUCT DATA FROM ROOM")
+            }
+        })
     }
 
     /*-------------------------------------SET DATA FROM API TO DISPLAY-------------------------------------------*/
