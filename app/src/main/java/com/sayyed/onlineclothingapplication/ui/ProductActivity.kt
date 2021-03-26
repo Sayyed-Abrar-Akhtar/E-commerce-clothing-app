@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
-import com.sayyed.onlineclothingapplication.database.ProductDB
+import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
@@ -115,7 +115,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
 
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
-        val productDao: ProductDAO = ProductDB.getInstance(application).productDAO
+        val productDao: ProductDAO = OnlineClothingDB.getInstance(application).productDAO
         val repository = ProductRepository(productDao)
         val factory = ProductViewModelFactory(repository)
         productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.CategoryAdapter
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
-import com.sayyed.onlineclothingapplication.database.CategoryDB
+import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityDashboardBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
@@ -84,7 +84,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
-        val categoryDAO: CategoryDAO = CategoryDB.getInstance(application).categoryDAO
+        val categoryDAO: CategoryDAO = OnlineClothingDB.getInstance(application).categoryDAO
         val repository =  CategoryRepository(categoryDAO)
         val factory = CategoryViewModelFactory(repository)
         categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
@@ -108,7 +108,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     /*-------------------------------------GET DATA FROM ROOM TO DISPLAY------------------------------------------*/
     private fun loadCategoryFromRoom() {
-        categoryViewModel.categoryFromRoom.observe(this, {
+        categoryViewModel.categoryFromRoom.observe(this@DashboardActivity, {
             it?.let { category ->
                 binding.progressBar.visibility = View.GONE
                 binding.recyclerViewCategory.visibility = View.VISIBLE
@@ -116,6 +116,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                 listCategory.addAll(category)
                 adapter.notifyDataSetChanged()
                 Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM ROOM")
+                println(category)
             }
         })
     }

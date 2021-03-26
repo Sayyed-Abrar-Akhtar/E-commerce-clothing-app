@@ -1,26 +1,19 @@
 package com.sayyed.onlineclothingapplication.ui
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
-import com.bumptech.glide.Glide
-import com.google.android.material.navigation.NavigationView
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
-import com.sayyed.onlineclothingapplication.database.UserDB
+import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityLoginBinding
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.repository.UserRepository
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -151,8 +144,8 @@ class LoginActivity : AppCompatActivity() {
 
         var user: User? = null
         CoroutineScope(Dispatchers.IO).launch {
-            user = UserDB.getInstance(this@LoginActivity)
-                    .getUserDao()
+            user = OnlineClothingDB.getInstance(this@LoginActivity)
+                    .userDAO
                     .isUserValid(username, password)
             if (user == null) {
                 withContext(Dispatchers.Main) {
