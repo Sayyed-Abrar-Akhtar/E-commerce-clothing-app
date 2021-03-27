@@ -4,12 +4,16 @@ import androidx.databinding.Observable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
+import com.sayyed.onlineclothingapplication.response.ProductResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductViewModel(private val productRepository: ProductRepository): ViewModel(), Observable {
+
+    lateinit var product: Product
 
     fun getProductsOfCategory(category: String) = liveData(Dispatchers.IO){
         emit(Resource.loading(data = null))
@@ -20,13 +24,24 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         }
     }
 
-    fun getAllProducts() = liveData(Dispatchers.IO) {
+    fun getProductsById(id: String)  = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            product = productRepository.getProductById(id).product
+            emit(Resource.success(data = product))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
 
+
+
+    fun getAllProducts() = liveData(Dispatchers.IO) {
 
         emit(Resource.loading(data = null))
         try {
             val data = productRepository.getAllProducts()
-            println(data)
             emit(Resource.success(data = data))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")

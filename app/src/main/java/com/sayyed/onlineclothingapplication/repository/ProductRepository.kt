@@ -1,11 +1,12 @@
 package com.sayyed.onlineclothingapplication.repository
 
-import androidx.lifecycle.ViewModel
+
 import com.sayyed.onlineclothingapplication.api.ApiRequest
 import com.sayyed.onlineclothingapplication.api.ProductApi
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.models.Product
+import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
 import com.sayyed.onlineclothingapplication.response.ProductResponse
 
 class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
@@ -15,6 +16,12 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
     suspend fun getProductsOfCategory(category: String): ProductResponse {
         return apiRequest {
             productApi.getProductsOfCategory(category)
+        }
+    }
+
+    suspend fun getProductById(id: String): ProductDetailResponse {
+        return apiRequest {
+            productApi.getProductById(id)
         }
     }
 

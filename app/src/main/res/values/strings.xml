@@ -27,4 +27,5 @@
     <string name="checkout">checkout</string>
     <string name="quantity">Quantity</string>
     <string name="brand">Brand</string>
+    <string name="reviews"><u>Reviews &#x261F;</u></string>
 </resources>
