@@ -6,5 +6,5 @@ data class Review(
         val _id: String,
         val comment: String,
         val name: String,
-        val rating: Int
+        val rating: Double
 )

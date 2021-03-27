@@ -3,13 +3,16 @@ package com.sayyed.onlineclothingapplication.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Adapter
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
+import com.sayyed.onlineclothingapplication.adapter.ReviewAdapter
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductDetailBinding
@@ -29,6 +32,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProductDetailBinding
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var reviewAdapter: ReviewAdapter
 
 
 
@@ -79,6 +83,8 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun setupUI(product: Product) {
         val stock = product.countInStock
         val price = product.price.toDouble()
+
+        // SETTING UP TEXT ON PRODUCT DETAIL VIEWS
         binding.tvProductTitle.text = product.name
         binding.tvProductPrice.text = price.toString()
         binding.tvProductBrand.text = product.brand
@@ -86,13 +92,22 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.npProductQty.maxValue = product.countInStock
         binding.ratingBarProduct.rating = product.rating.toFloat()
         binding.imgProduct.contentDescription = product.name
+
+        // LOADING PRODUCT IMAGE FROM API USING GLIDE
         Glide.with(this@ProductDetailActivity)
             .load(product.image)
             .into(binding.imgProduct)
 
-        println(product.reviews)
+        // DISPLAYED CUSTOMER REVIEWS LIST USING RECYCLER VIEW
+        binding.recyclerViewReviews.layoutManager = LinearLayoutManager(this@ProductDetailActivity)
+        reviewAdapter = ReviewAdapter(this@ProductDetailActivity, product.reviews)
+        binding.recyclerViewReviews.adapter = reviewAdapter
+        reviewAdapter.notifyDataSetChanged()
+
+        // TOGGLE FUNCTION TO SHOW HIDE VIEWS
         toggleProductDescription()
         toggleCheckoutBtn(stock)
+        toggleReviews()
     }
 
     /*------------------------------------DESCRIPTION TOGGLE------------------------------------------------------*/
@@ -116,6 +131,15 @@ class ProductDetailActivity : AppCompatActivity() {
 
     }
 
-
+    /*------------------------------------REVIEWS TOGGLE---------------------------------------------------------*/
+    private fun toggleReviews() {
+        binding.tvProductReviewToggle.setOnClickListener {
+            if(binding.recyclerViewReviews.visibility == View.GONE) {
+                binding.recyclerViewReviews.visibility = View.VISIBLE
+            } else {
+                binding.recyclerViewReviews.visibility = View.GONE
+            }
+        }
+    }
 
 }

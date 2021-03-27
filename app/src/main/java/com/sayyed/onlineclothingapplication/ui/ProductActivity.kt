@@ -111,7 +111,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         binding.recyclerViewProduct.layoutManager = GridLayoutManager(
                 this@ProductActivity, 2, GridLayoutManager.VERTICAL, false)
         listProduct = mutableListOf()
-        adapter = ProductAdapter(this, listProduct, this)
+        adapter = ProductAdapter(this@ProductActivity, listProduct, this@ProductActivity)
         binding.recyclerViewProduct.adapter = adapter
     }
 

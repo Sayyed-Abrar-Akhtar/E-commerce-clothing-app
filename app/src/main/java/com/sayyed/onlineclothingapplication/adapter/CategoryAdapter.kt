@@ -46,19 +46,15 @@ class CategoryAdapter (
         }
     }
 
-    override fun getItemCount(): Int {
-        return categoryList.size
-    }
+    override fun getItemCount(): Int = categoryList.size
 
 
-    class CategoryViewHolder(  view: View) : RecyclerView.ViewHolder(view) {
+
+    class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var tvCategoryName: TextView = itemView.findViewById(R.id.tvCategoryName)
         var imageViewCategoryImg: ImageView = itemView.findViewById(R.id.imageViewCategoryImg)
 
     }
-
-
-
 }
 

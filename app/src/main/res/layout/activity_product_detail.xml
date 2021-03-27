@@ -27,7 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/png_src"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:contentDescription="@{}" />
 
             <TextView
                 android:id="@+id/tvProductTitle"
@@ -173,7 +174,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="25dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="15dp"
                 android:letterSpacing="0.05"
                 android:text="@string/description"
                 android:textColor="#333"
@@ -185,7 +186,6 @@
                 android:id="@+id/tvProductDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="-50dp"
                 android:layout_marginBottom="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
@@ -193,6 +193,7 @@
                 android:lineSpacingExtra="5dp"
                 android:textColor="#333"
                 android:textSize="17sp"
+                android:visibility="gone"
                 tools:targetApi="lollipop"/>
 
             <TextView
@@ -201,14 +202,23 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="25dp"
                 android:letterSpacing="0.05"
                 android:text="@string/reviews"
                 android:textColor="#333"
                 android:textSize="21sp"
                 android:textStyle="bold"
                 tools:targetApi="lollipop"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-25dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="25dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </ScrollView>
