@@ -55,6 +55,7 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         }
     }
 
+
     val retrieveProductsFromRoom = productRepository.retrieveProductsFromRoom
     fun retrieveCategorizedProductsFromRoom(category: String) = productRepository.retrieveCategorizedProductsFromRoom(category)
 

@@ -44,7 +44,7 @@ class ProductAdapter(
                 .into(holder.imgProduct)
 
         holder.itemView.setOnClickListener {
-            onProductClickListener.OnProductItemClick(position, "${holder.tvProductTitle.text}")
+            onProductClickListener.OnProductItemClick(position, "${product._id}")
         }
     }
 

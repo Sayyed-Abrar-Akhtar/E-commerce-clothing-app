@@ -22,4 +22,9 @@
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>
     <string name="sign_up_logo">Sign up logo</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="description"><u>Product Description &#x261F;</u></string>
+    <string name="checkout">checkout</string>
+    <string name="quantity">Quantity</string>
+    <string name="brand">Brand</string>
 </resources>

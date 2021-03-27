@@ -1,5 +1,6 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -100,8 +101,9 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
 
     /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/
     override fun OnProductItemClick(position: Int, product: String) {
-        //val intent = Intent(this, DashboardActivity::class.java)
-        //intent.putExtra("productid", "id")
+        val intent = Intent(this, ProductDetailActivity::class.java)
+        intent.putExtra("product_id", product)
+        startActivity(intent)
     }
 
     /*---------------------------------------------SET UP UI------------------------------------------------------*/

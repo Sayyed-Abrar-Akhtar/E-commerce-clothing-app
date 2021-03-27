@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="productViewModel"
+            type="com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="true"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".ui.ProductDetailActivity">
+
+            <ImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/png_src"
+                android:contentDescription="@{}"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tvProductTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:letterSpacing="0.05"
+                android:text="@{ productTitle -> productViewModel.productTitle }"
+                android:textAllCaps="true"
+                android:textColor="#333"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:targetApi="lollipop" />
+
+            <TextView
+                android:id="@+id/tvProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:letterSpacing="0.05"
+                android:text="@{}"
+                android:textAllCaps="true"
+                android:textColor="#333"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                tools:targetApi="lollipop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/design_default_color_primary"
+                android:letterSpacing="0.05"
+                android:paddingStart="4dp"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="4dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
+                android:text="@string/brand"
+                android:textColor="#eee"
+                android:textSize="17sp"
+                tools:targetApi="lollipop"/>
+
+            <TextView
+                android:id="@+id/tvProductBrand"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="90dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="-28dp"
+                android:letterSpacing="0.05"
+                android:paddingStart="4dp"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="4dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
+                android:text="@{}"
+                android:textColor="#333"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:targetApi="lollipop"/>
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="155dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="60dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:letterSpacing="0.05"
+                android:paddingStart="4dp"
+                android:paddingLeft="4dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="4dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="2dp"
+                android:text="@string/quantity"
+                android:textColor="#333"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:targetApi="lollipop"/>
+
+            <NumberPicker
+                android:id="@+id/npProductQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="120dp"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="-100dp"
+                android:orientation="vertical"
+                app:maxValue="@{10}"
+                app:minValue="@{1}"
+                app:value="@{1}" />
+
+            <Button
+                android:id="@+id/btnAddToCart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="155dp"
+                android:layout_marginTop="25dp"
+                android:backgroundTint="#fff"
+                android:text="@string/add_to_cart"
+                android:textColor="#333"
+                android:textStyle="bold"
+                app:strokeColor="#333"
+                app:strokeWidth="3dp"
+                tools:targetApi="lollipop"/>
+
+            <Button
+                android:id="@+id/btnCheckout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="175dp"
+                android:layout_marginLeft="175dp"
+                android:layout_marginTop="-47dp"
+                android:backgroundTint="#333"
+                android:text="@string/checkout"
+                android:textColor="#eee"
+                android:textStyle="bold"
+                tools:targetApi="lollipop" />
+
+            <TextView
+                android:id="@+id/tvProductDescriptionToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="60dp"
+                android:letterSpacing="0.05"
+                android:text="@string/description"
+                android:textColor="#333"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                tools:targetApi="lollipop"/>
+
+            <TextView
+                android:id="@+id/tvProductDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-50dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:letterSpacing="0.075"
+                android:lineSpacingExtra="5dp"
+                android:text="@string/description_about_us"
+                android:textColor="#333"
+                android:textSize="17sp"
+                tools:targetApi="lollipop"/>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

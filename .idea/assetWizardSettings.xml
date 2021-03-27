@@ -307,7 +307,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/person_outline/baseline_person_outline_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/add/baseline_add_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -317,8 +317,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="1b16f0" />
-                            <entry key="outputName" value="user" />
+                            <entry key="color" value="eeeeee" />
+                            <entry key="outputName" value="ic_plus_24" />
                             <entry key="sourceFile" value="D:\SAYYED\DOWNLOADS\SVG\Endless-Constellation.svg" />
                           </map>
                         </option>
