@@ -4,16 +4,25 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
+import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityLoginBinding
 import com.sayyed.onlineclothingapplication.entities.User
+import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.repository.UserRepository
+import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
+import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
+import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
+import com.sayyed.onlineclothingapplication.viewmodel.UserViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
 
+    private lateinit var userViewModel: UserViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,9 +83,10 @@ class LoginActivity : AppCompatActivity() {
         getSharedPref()
 
 
+        setupViewModel()
         /*-----------------------------------LOGIN BTN CLICK LISTENER---------------------------------------------*/
         binding.btnLogin.setOnClickListener {
-
+            authorizedLogin(binding.etUsername.text.toString(), binding.etPassword.text.toString())
         }
 
         /*----------------------------------SIGN UP BTN CLICK LISTENER--------------------------------------------*/
@@ -85,32 +96,25 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+    /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
+    private fun setupViewModel() {
+        val repository =  UserRepository()
+        val factory = UserViewModelFactory(repository)
+        userViewModel = ViewModelProvider(this, factory).get(UserViewModel::class.java)
+    }
+
     /*-----------------------------------CHECK USER DATA FROM API-------------------------------------------------*/
 
 
-    /*-----------------------------------CHECK USER DATA FROM API-------------------------------------------------*/
-    private fun login() {
-        val username = binding.etUsername.text.toString()
-        val password = binding.etPassword.text.toString()
-
-        var user: User? = null
-        CoroutineScope(Dispatchers.IO).launch {
-            user = OnlineClothingDB.getInstance(this@LoginActivity)
-                    .userDAO
-                    .isUserValid(username, password)
-            if (user == null) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@LoginActivity, "Invalid credentials", Toast.LENGTH_SHORT)
-                            .show()
-                }
-            } else {
-                startActivity(Intent(this@LoginActivity,
-                        DashboardActivity::class.java))
-                saveSharedPref()
-
+    /*-----------------------------------AUTHORIZED LOGIN---------------------------------------------------------*/
+    private fun authorizedLogin(email: String, password: String) {
+        userViewModel.authLogin(email, password).observe(this@LoginActivity, {
+            it?.let { user ->
+                println("&^*^&%^%%&^^%^&%%%$%^%^%&^")
+                println(user.data)
+                println("&^*^&%^%%&^^%^&%%%$%^%^%&^")
             }
-        }
-
+        })
     }
 
     /*----------shared preferences-------------- */

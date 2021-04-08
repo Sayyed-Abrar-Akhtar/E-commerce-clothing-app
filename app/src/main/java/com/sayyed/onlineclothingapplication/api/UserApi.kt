@@ -2,11 +2,9 @@ package com.sayyed.onlineclothingapplication.api
 
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.response.LoginResponse
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface UserApi {
 
@@ -14,13 +12,13 @@ interface UserApi {
     @POST("user/new")
     suspend fun newAccount(
             @Body user: User
-    ): Response<LoginResponse>
+    ): Response<UserResponse>
 
     // Login
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("/api/users/login")
     suspend fun authLogin(
             @Field("email") email :String,
             @Field("password") password :String
-    ): Response<LoginResponse>
+    ): Response<UserResponse>
 }

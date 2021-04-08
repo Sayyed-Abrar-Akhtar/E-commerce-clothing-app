@@ -1,8 +1,8 @@
 package com.sayyed.onlineclothingapplication.response
 
-import com.sayyed.onlineclothingapplication.models.UserLoggedIn
+import com.sayyed.onlineclothingapplication.models.UserProfile
 
 data class UserResponse (
         val success: Boolean,
-        val userLoggedIn: UserLoggedIn
+        val userProfile: UserProfile
 )
