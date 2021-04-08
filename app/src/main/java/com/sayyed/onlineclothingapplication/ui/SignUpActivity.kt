@@ -93,38 +93,7 @@ class SignUpActivity : AppCompatActivity() {
                 */
                 val user = User(firstName = firstName, lastName = lastName, contact = "02312", email= email, username= username, password=password, role = "admin")
 
-                // Api code goes here
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-
-                        val repository = UserRepository()
-                        val response = repository.registerUser(user)
-
-                        if (response.success == true) {
-
-                            /*
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(this@SignUpActivity, "User registered", Toast.LENGTH_LONG).show()
                             }
-
-                            */
-
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(this@SignUpActivity, "User data inserted Successfully!!", Toast.LENGTH_SHORT).show()
-
-                                startActivity(Intent(this@SignUpActivity,
-                                        LoginActivity::class.java))
-
-                                clearFields()
-                            }
-                        }
-                    } catch (ex: Exception) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(this@SignUpActivity, " error occured: $ex", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }
         }
     }
 

@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 
         /*-----------------------------------LOGIN BTN CLICK LISTENER---------------------------------------------*/
         binding.btnLogin.setOnClickListener {
-            loginApiRequest()
+
         }
 
         /*----------------------------------SIGN UP BTN CLICK LISTENER--------------------------------------------*/
@@ -86,56 +86,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     /*-----------------------------------CHECK USER DATA FROM API-------------------------------------------------*/
-    private fun loginApiRequest() {
-        val username = binding.etUsername.text.toString()
-        val password = binding.etPassword.text.toString()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val repository = UserRepository()
-                val response = repository.checkUser(username, password)
-                
-                if(response.success == true) {
-                    ServiceBuilder.token = "Bearer ${response.token}"
-                    startActivity(
-                            Intent(
-                                    this@LoginActivity, DashboardActivity::class.java
-                            )
-                    )
-                    finish()
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(
-                                this@LoginActivity,
-                                "Invalid credentials!!",
-                                Toast.LENGTH_SHORT
-                        ).show()
-                        /*
-                        val snack =
-                                Snackbar.make(
-                                        linearLayout,
-                                        "Invalid credentials!!",
-                                        Snackbar.LENGTH_LONG
-                                )
-                        snack.setAction("OK", View.OnClickListener {
-                            snack.dismiss()
-                        })
-                        snack.show()
-                        */
-                    }
-                }
-
-            } catch (ex: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                            this@LoginActivity,
-                            ex.toString(),
-                            Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
 
     /*-----------------------------------CHECK USER DATA FROM API-------------------------------------------------*/
     private fun login() {
