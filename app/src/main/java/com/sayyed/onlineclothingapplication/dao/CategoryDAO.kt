@@ -8,7 +8,7 @@ import com.sayyed.onlineclothingapplication.models.Category
 @Dao
 interface CategoryDAO {
 
-    @Query("SELECT * FROM Category ORDER BY id LIMIT 10")
+    @Query("SELECT * FROM Category ORDER BY createdAt")
     fun retrieveCategory():LiveData<List<Category>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE )

@@ -11,6 +11,9 @@ interface ProductDAO {
     @Query("SELECT * FROM Product")
     fun retrieveProducts():LiveData<List<Product>>
 
+    @Query("SELECT * FROM Product WHERE _id=(:id)")
+    fun retrieveProductById(id: String):LiveData<Product>
+
     @Query("SELECT * FROM Product WHERE category LIKE '%' || :category || '%'")
     fun retrieveProductsOfCategory(category: String):LiveData<List<Product>>
 

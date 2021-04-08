@@ -9,8 +9,8 @@ import retrofit2.http.Path
 
 interface ProductApi {
 
-    @GET("/api/category/{category}")
-    suspend fun getProductsOfCategory(@Path("category") category: String): Response<ProductResponse>
+    @GET("/api/products/category/{id}")
+    suspend fun getProductsOfCategory(@Path("id") id: String): Response<ProductResponse>
 
     @GET("/api/products/")
     suspend fun getAllProducts():Response<ProductResponse>

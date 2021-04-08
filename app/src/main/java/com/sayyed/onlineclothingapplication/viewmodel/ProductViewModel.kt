@@ -15,10 +15,10 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
 
     lateinit var product: Product
 
-    fun getProductsOfCategory(category: String) = liveData(Dispatchers.IO){
+    fun getProductsOfCategory(id: String) = liveData(Dispatchers.IO){
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = productRepository.getProductsOfCategory(category)))
+            emit(Resource.success(data = productRepository.getProductsOfCategory(id)))
         } catch (ex: Exception) {
             emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!" ))
         }
@@ -73,6 +73,7 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
 
     val retrieveProductsFromRoom = productRepository.retrieveProductsFromRoom
     fun retrieveCategorizedProductsFromRoom(category: String) = productRepository.retrieveCategorizedProductsFromRoom(category)
+    fun retrieveProductByIdFromRoom(id: String) = productRepository.retrieveProductByIdFromRoom(id)
 
 
 

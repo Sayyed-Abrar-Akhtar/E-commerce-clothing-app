@@ -13,9 +13,9 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
 
     private val productApi = ServiceBuilder.buildService(ProductApi::class.java)
 
-    suspend fun getProductsOfCategory(category: String): ProductResponse {
+    suspend fun getProductsOfCategory(id: String): ProductResponse {
         return apiRequest {
-            productApi.getProductsOfCategory(category)
+            productApi.getProductsOfCategory(id)
         }
     }
 
@@ -46,6 +46,7 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
     }
 
     val retrieveProductsFromRoom = productDAO.retrieveProducts()
+    fun retrieveProductByIdFromRoom(id:String) = productDAO.retrieveProductById(id)
     fun retrieveCategorizedProductsFromRoom(category: String) = productDAO.retrieveProductsOfCategory(category)
 
 }

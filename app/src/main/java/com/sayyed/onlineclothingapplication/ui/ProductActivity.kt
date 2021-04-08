@@ -47,6 +47,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
 
         /*-----------------------GET CATEGORY DATA FROM DASHBOARD ACTIVITY THROUGH INTENT-------------------------*/
         val categoryName = intent.getStringExtra("categoryName")
+        val categoryId = intent.getStringExtra("categoryId")
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -83,17 +84,17 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
         when (Network.isNetworkAvailable(this)) {
             true -> {
-                if (categoryName === "" || categoryName === null) {
+                if (categoryId === "" || categoryId === null) {
                     setupProductObservers()
                 } else {
-                    setupCategorizedProductObservers(categoryName)
+                    setupCategorizedProductObservers("$categoryId")
                 }
             }
             false -> {
-                if (categoryName === "" || categoryName === null) {
+                if (categoryId === "" || categoryId === null) {
                     loadProductFromRoom()
                 } else {
-                    loadCategorisedProductFromRoom(categoryName)
+                    loadCategorisedProductFromRoom("$categoryId")
                 }
             }
         }
@@ -173,8 +174,8 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
     }
 
     /*-------------------------------------SET DATA FROM API TO DISPLAY-------------------------------------------*/
-    private fun setupCategorizedProductObservers(category: String) {
-        productViewModel.getProductsOfCategory(category).observe(this, {
+    private fun setupCategorizedProductObservers(categoryId: String) {
+        productViewModel.getProductsOfCategory(categoryId).observe(this, {
             it.loadApiData()
         })
     }

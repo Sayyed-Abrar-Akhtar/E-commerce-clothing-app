@@ -42,7 +42,7 @@ class CategoryAdapter (
 
 
         holder.itemView.setOnClickListener {
-            onCategoryClickListener.OnCategoryItemClick(position, "${holder.tvCategoryName.text}")
+            onCategoryClickListener.OnCategoryItemClick(position, category.name, category._id)
         }
     }
 

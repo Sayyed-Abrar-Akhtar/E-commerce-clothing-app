@@ -92,9 +92,10 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     }
 
     /*----------------------------------EVENT LISTENER ON CATEGORY ITEM CLICK-------------------------------------*/
-    override fun OnCategoryItemClick(position: Int, category: String) {
+    override fun OnCategoryItemClick(position: Int, categoryName: String, categoryId:String) {
         val intent = Intent(this, ProductActivity::class.java)
-        intent.putExtra("categoryName", category)
+        intent.putExtra("categoryName", categoryName)
+        intent.putExtra("categoryId", categoryId)
         startActivity(intent)
     }
 

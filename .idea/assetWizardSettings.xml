@@ -307,7 +307,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialiconsoutlined/edit/outline_edit_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialiconsoutlined/admin_panel_settings/outline_admin_panel_settings_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -317,8 +317,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="1b16f0" />
-                            <entry key="outputName" value="ic_outline_edit_24" />
+                            <entry key="color" value="333333" />
+                            <entry key="outputName" value="admin" />
                             <entry key="sourceFile" value="D:\SAYYED\DOWNLOADS\SVG\Endless-Constellation.svg" />
                           </map>
                         </option>

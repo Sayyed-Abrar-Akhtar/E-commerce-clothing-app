@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Product (
-
     @SerializedName("__v")
     val __v: Int,
 
@@ -25,7 +24,7 @@ data class Product (
     val brand: String,
 
     @SerializedName("category")
-    val category: Category,
+    val category: String,
 
     @SerializedName("description")
     val description: String,
@@ -53,5 +52,4 @@ data class Product (
 
     @SerializedName("user")
     val user: String
-
 )

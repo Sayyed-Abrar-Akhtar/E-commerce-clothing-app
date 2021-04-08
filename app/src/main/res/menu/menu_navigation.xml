@@ -5,15 +5,20 @@
             <item
                 android:id="@+id/dashboard"
                 android:title="@string/home"
-                android:icon="@drawable/ic_baseline_home_24"/>
+                android:icon="@drawable/home"/>
             <item
                 android:id="@+id/account_signUp"
                 android:title="@string/account_sign_up"
-                android:icon="@drawable/ic_baseline_supervisor_account_24"/>
+                android:icon="@drawable/sign_up"/>
             <item
                 android:id="@+id/account_login"
                 android:title="@string/account_log_in"
-                android:icon="@drawable/ic_baseline_supervisor_account_24"/>
+                android:icon="@drawable/login"/>
+            <item
+                android:id="@+id/account_admin"
+                android:title="@string/admin"
+                android:icon="@drawable/admin"
+                android:visible="false"/>
         </menu>
     </item>
 
@@ -22,13 +27,13 @@
             <item
                 android:id="@+id/all_products"
                 android:title="@string/all_products"
-                android:icon="@drawable/ic_baseline_shopping_cart_24"/>
+                android:icon="@drawable/product"/>
 
 
             <item
                 android:id="@+id/cart"
                 android:title="@string/cart"
-                android:icon="@drawable/ic_baseline_shopping_cart_24"/>
+                android:icon="@drawable/cart"/>
         </menu>
     </item>
 
@@ -37,11 +42,11 @@
             <item
                 android:id="@+id/about_us"
                 android:title="@string/info_about_us"
-                android:icon="@drawable/ic_baseline_info_24"/>
+                android:icon="@drawable/info"/>
             <item
                 android:id="@+id/locate_us"
                 android:title="@string/info_locate_us"
-                android:icon="@drawable/ic_baseline_info_24"/>
+                android:icon="@drawable/locate_us"/>
         </menu>
     </item>
 

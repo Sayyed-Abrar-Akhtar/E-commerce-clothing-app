@@ -10,13 +10,6 @@ import java.util.*
 
 
 class Converters {
-    @TypeConverter
-    fun categoryToString(category: Category): String = Gson().toJson(category)
-
-    @TypeConverter
-    fun stringToCategory(string: String): Category = Gson().fromJson(string, Category::class.java)
-
-
 
     @TypeConverter
     fun stringToSomeObjectList(data: String?): List<Review?>? {

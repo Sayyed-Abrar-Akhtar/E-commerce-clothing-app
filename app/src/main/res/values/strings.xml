@@ -29,4 +29,5 @@
     <string name="brand">Brand</string>
     <string name="reviews"><u>Reviews &#x261F;</u></string>
     <string name="items_in_your_cart">Items in your cart</string>
+    <string name="admin">Admin</string>
 </resources>

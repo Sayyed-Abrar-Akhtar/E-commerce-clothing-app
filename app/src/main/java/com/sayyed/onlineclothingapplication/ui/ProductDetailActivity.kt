@@ -2,6 +2,7 @@ package com.sayyed.onlineclothingapplication.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Adapter
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -52,6 +53,15 @@ class ProductDetailActivity : AppCompatActivity() {
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
         setProductObserver(productId.toString())
 
+        when (Network.isNetworkAvailable(this)) {
+            true -> {
+                setProductObserver(productId.toString())
+            }
+            false -> {
+                loadCategorisedProductFromRoom(productId.toString())
+            }
+        }
+
     }
 
 
@@ -75,6 +85,16 @@ class ProductDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
+            }
+        })
+    }
+
+
+    /*-----------------------GET PRODUCTS OF ID FROM ROOM TO DISPLAY--------------------------------------------*/
+    private fun loadCategorisedProductFromRoom(productId: String) {
+        productViewModel.retrieveProductByIdFromRoom(productId).observe(this, {
+            it?.let { product ->
+                setupUI(product)
             }
         })
     }
