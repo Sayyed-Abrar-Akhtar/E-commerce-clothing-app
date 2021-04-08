@@ -37,6 +37,10 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private var firstNameSharedPref : String? = ""
+    private var lastNameSharedPref : String? = ""
+    private var imageSharedPref : String? = ""
+    private  var contactSharedPref : String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +48,9 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         setContentView(R.layout.activity_product)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product)
+
+        /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
+        getSharedPref()
 
         /*-----------------------GET CATEGORY DATA FROM DASHBOARD ACTIVITY THROUGH INTENT-------------------------*/
         val categoryName = intent.getStringExtra("categoryName")
@@ -70,9 +77,10 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         navigationDrawerSetup.addHeaderText(
                 this@ProductActivity,
                 binding.navigationView,
-                "",
-                "",
-                "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
+                "$firstNameSharedPref $lastNameSharedPref",
+                "$contactSharedPref",
+                "$imageSharedPref"
+        )
         navigationDrawerSetup.addEventListenerToNavItems(this@ProductActivity, binding.navigationView)
 
         /*-----------------------------------RECYCLER VIEW AND ADAPTER SETUP--------------------------------------*/
@@ -98,6 +106,15 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
                 }
             }
         }
+    }
+
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun getSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        firstNameSharedPref = sharedPref.getString("firstName", "")
+        lastNameSharedPref = sharedPref.getString("lastName", "")
+        imageSharedPref = sharedPref.getString("image", "")
+        contactSharedPref = sharedPref.getString("contact", "")
     }
 
     /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/

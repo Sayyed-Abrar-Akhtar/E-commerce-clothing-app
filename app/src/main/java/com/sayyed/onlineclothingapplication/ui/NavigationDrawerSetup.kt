@@ -32,6 +32,7 @@ class NavigationDrawerSetup : AppCompatActivity() {
         val tvName: TextView = view.findViewById(R.id.tvName)
         val imgDrawerLayoutUserProfile: CircleImageView = view.findViewById(R.id.imgDrawerLayoutUserProfile)
 
+
         tvName.text = name
         tvContact.text = contact
 
@@ -55,8 +56,8 @@ class NavigationDrawerSetup : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.all_products -> {
-                    val intent = Intent(context, ProductActivity::class.java)
+                R.id.account_signUp -> {
+                    val intent = Intent(context, SignUpActivity::class.java)
                     context.startActivity(intent)
                     finish()
                     true
@@ -67,8 +68,20 @@ class NavigationDrawerSetup : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.account_signUp -> {
-                    val intent = Intent(context, SignUpActivity::class.java)
+                R.id.account_admin -> {
+                    val intent = Intent(context, AdminActivity::class.java)
+                    context.startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.all_products -> {
+                    val intent = Intent(context, ProductActivity::class.java)
+                    context.startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.cart -> {
+                    val intent = Intent(context, CartActivity::class.java)
                     context.startActivity(intent)
                     finish()
                     true

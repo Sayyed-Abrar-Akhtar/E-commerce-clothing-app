@@ -17,7 +17,7 @@
     <string name="product">Product</string>
     <string name="user">User</string>
     <string name="nav_drawer_user_name">Name</string>
-    <string name="enter_username">Enter Username</string>
+    <string name="enter_email">Enter Email Address</string>
     <string name="enter_password">Enter Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="login">Login</string>

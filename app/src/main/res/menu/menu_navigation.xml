@@ -17,8 +17,7 @@
             <item
                 android:id="@+id/account_admin"
                 android:title="@string/admin"
-                android:icon="@drawable/admin"
-                android:visible="false"/>
+                android:icon="@drawable/admin"/>
         </menu>
     </item>
 

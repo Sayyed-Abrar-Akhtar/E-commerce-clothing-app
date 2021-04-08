@@ -23,6 +23,10 @@ class InformationActivity : AppCompatActivity() {
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private var firstNameSharedPref : String? = ""
+    private var lastNameSharedPref : String? = ""
+    private var imageSharedPref : String? = ""
+    private  var contactSharedPref : String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +34,9 @@ class InformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_information)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_information)
+
+        /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
+        getSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -49,12 +56,23 @@ class InformationActivity : AppCompatActivity() {
         navigationDrawerSetup.addHeaderText(
                 this@InformationActivity,
                 binding.navigationView,
-                "",
-                "",
-                "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
+                "$firstNameSharedPref $lastNameSharedPref",
+                "$contactSharedPref",
+                "$imageSharedPref"
+                )
         navigationDrawerSetup.addEventListenerToNavItems(this@InformationActivity, binding.navigationView)
 
     }
+
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun getSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        firstNameSharedPref = sharedPref.getString("firstName", "")
+        lastNameSharedPref = sharedPref.getString("lastName", "")
+        imageSharedPref = sharedPref.getString("image", "")
+        contactSharedPref = sharedPref.getString("contact", "")
+    }
+
 
 
 }

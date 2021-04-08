@@ -1,11 +1,13 @@
 package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,12 +38,26 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     private lateinit var categoryViewModel: CategoryViewModel
 
 
+    private lateinit var firstNameSharedPref : String
+    private lateinit var lastNameSharedPref : String
+    private lateinit var imageSharedPref : String
+    private lateinit var contactSharedPref : String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+
+        /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
+
+
+        firstNameSharedPref = intent.getStringExtra("name").toString()
+        imageSharedPref = intent.getStringExtra("image").toString()
+        contactSharedPref = intent.getStringExtra("contact").toString()
+
+        getSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -61,18 +77,64 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         navigationDrawerSetup.addHeaderText(
                 this@DashboardActivity,
                 binding.navigationView,
-                "Sayyed",
-                "+977-9821117484",
-                "https://i.pinimg.com/280x280_RS/45/57/31/455731391ed7c0b084f935d32a0f2612.jpg")
+                "$firstNameSharedPref $lastNameSharedPref",
+                "$contactSharedPref",
+                "$imageSharedPref"
+        )
         navigationDrawerSetup.addEventListenerToNavItems(this@DashboardActivity, binding.navigationView)
 
         setupUI()
 
         setupViewModel()
 
+        /*----------------------------------------ASK FOR PERMISSIONS---------------------------------------------*/
+        if (!hasPermission()) {
+            requestPermission()
+        }
+
         loadFromRoomOrAPi()
 
     }
+
+    /*-------------------------------------REQUEST PERMISSIONS----------------------------------------------------*/
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+                this@DashboardActivity,
+                permissions, 234
+        )
+    }
+
+    /*-------------------------------------CHECK Permissions------------------------------------------------------*/
+    private fun hasPermission(): Boolean {
+        var hasPermission = true
+        for (permission in permissions) {
+            if (ActivityCompat.checkSelfPermission(
+                            this,
+                            permission
+                    ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                hasPermission = false
+            }
+        }
+        return hasPermission
+    }
+
+    /*-------------------------------------ASK PERMISSIONS--------------------------------------------------------*/
+    private val permissions = arrayOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun getSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        firstNameSharedPref = sharedPref.getString("firstName", "").toString()
+        lastNameSharedPref = sharedPref.getString("lastName", "").toString()
+        imageSharedPref = sharedPref.getString("image", "").toString()
+        contactSharedPref = sharedPref.getString("contact", "").toString()
+    }
+
 
     /*---------------------------------------------SET UP UI------------------------------------------------------*/
     private fun setupUI() {
