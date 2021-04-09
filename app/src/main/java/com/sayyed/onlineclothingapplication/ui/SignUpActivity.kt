@@ -10,6 +10,7 @@ import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.repository.UserRepository
+import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +24,20 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private lateinit var userViewModel: UserViewModel
+
+
+    private var idSharedPref : String? = ""
+    private var firstNameSharedPref : String? = ""
+    private var lastNameSharedPref : String? = ""
+    private var imageSharedPref : String? = ""
+    private  var emailSharedPref : String? = ""
+    private  var passwordSharedPref : String? = ""
+    private  var tokenSharedPref : String? = ""
+    private  var isAdminSharedPref : Boolean = false
+    private  var contactSharedPref : String? = ""
+    private var isSuccess: Boolean =  false
+    private var isLoading: Boolean =  false
 
 
 
@@ -93,10 +108,34 @@ class SignUpActivity : AppCompatActivity() {
                 }
 
                 */
-                val user = User(firstName = firstName, lastName = lastName, contact = "02312", email= email, username= username, password=password, role = "admin")
 
                             }
         }
+    }
+
+
+    private fun userProfileDetail() {
+
+        var userPassword: String = ""
+        val passwordInput = binding.etPassword.text.toString()
+        val confirmPasswordInput = binding.etConfirmPassword.text.toString()
+        if (passwordInput === confirmPasswordInput) {
+            userPassword = passwordInput
+        } else {
+            binding.etConfirmPassword.error = "Passwords did not matched"
+            binding.etConfirmPassword.requestFocus()
+        }
+
+        val user = User(
+                firstName = binding.etFirstName.text.toString(),
+                lastName= binding.etLastName.text.toString(),
+                image= binding.etFirstName.text.toString(),
+                contact= binding.et.text.toString(),
+                username= binding.etUsername.text.toString(),
+                email= binding.etEmail.text.toString(),
+                password= userPassword,
+        )
+
     }
 
     /*----------------------------------CLEAR VIEWS---------------------------------------------------------------*/

@@ -30,4 +30,6 @@
     <string name="reviews"><u>Reviews &#x261F;</u></string>
     <string name="items_in_your_cart">Items in your cart</string>
     <string name="admin">Admin</string>
+    <string name="loading">Loading...</string>
+    <string name="no_internet">No internet connection &#128532;</string>
 </resources>

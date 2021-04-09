@@ -3,7 +3,10 @@ package com.sayyed.onlineclothingapplication.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
@@ -16,6 +19,7 @@ import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModelFactory
+import com.sayyed.onlineclothingapplication.utils.Network
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,13 +30,17 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
 
 
+    private var idSharedPref : String? = ""
     private var firstNameSharedPref : String? = ""
     private var lastNameSharedPref : String? = ""
     private var imageSharedPref : String? = ""
+    private  var emailSharedPref : String? = ""
+    private  var passwordSharedPref : String? = ""
+    private  var tokenSharedPref : String? = ""
+    private  var isAdminSharedPref : Boolean = false
     private  var contactSharedPref : String? = ""
-
-
-
+    private var isSuccess: Boolean =  false
+    private var isLoading: Boolean =  false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +49,14 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this@LoginActivity, R.layout.activity_login)
 
+
+
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
+
         toggle = ActionBarDrawerToggle(
                 this@LoginActivity,
                 binding.drawer,
@@ -70,28 +81,32 @@ class LoginActivity : AppCompatActivity() {
 
         setupViewModel()
 
-
-
+        getSharedPref()
 
         /*-----------------------------------LOGIN BTN CLICK LISTENER---------------------------------------------*/
         binding.btnLogin.setOnClickListener {
-            if(binding.etEmail.text.toString() !== "" && binding.etPassword.text.toString() !== "") {
+            if(checkNetwork()) {
+                ifFieldEmpty()
                 authorizedLogin(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
-                val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
-                intent.putExtra("name", "$firstNameSharedPref $lastNameSharedPref")
-                intent.putExtra("image", "$imageSharedPref")
-                intent.putExtra("contact", "$contactSharedPref")
-                startActivity(intent)
-
-                Toast.makeText(this@LoginActivity, "Logged in Successfully", Toast.LENGTH_LONG)
-                    .show()
-
+                binding.btnLogin.text = getString(R.string.loading)
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    if (isSuccess) {
+                        Toast.makeText(this@LoginActivity, "Logged in successfully", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        binding.btnLogin.text = getString(R.string.login)
+                        Toast.makeText(this@LoginActivity, "Invalid credentials", Toast.LENGTH_LONG).show()
+                    }
+                }, 1500)
             } else {
-                Toast.makeText(this@LoginActivity, "Please fill the credentials", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(this@LoginActivity, getString(R.string.no_internet), Toast.LENGTH_LONG).show()
             }
+
         }
+
 
         /*----------------------------------SIGN UP BTN CLICK LISTENER--------------------------------------------*/
         binding.btnSignUp.setOnClickListener {
@@ -99,6 +114,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /*--------------------------------------------CHECK NETWORK---------------------------------------------------*/
+    private fun checkNetwork(): Boolean{
+        return Network.isNetworkAvailable(this@LoginActivity)
+    }
+
+
+    /*--------------------------------------------CHECK EMPTY FIELD-----------------------------------------------*/
+    private fun ifFieldEmpty() {
+        if (binding.etEmail.text.toString() == "") {
+            binding.etEmail.error = "Please enter email address"
+            binding.etEmail.requestFocus()
+            return
+        }
+        if (binding.etPassword.text.toString() == "") {
+            binding.etPassword.error = "Please enter password"
+            binding.etPassword.requestFocus()
+            return
+        }
+    }
 
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
@@ -116,35 +150,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /*----------------------------SAVE SHARED PREFERENCES---------------------------------------------------------*/
-    private fun saveSharedPref(
-        id: String,
-        firstName: String,
-        lastName: String,
-        image: String,
-        contact: String,
-        email: String,
-        token: String,
-        isAdmin: Boolean,
-        isSuccess: Boolean
-    ) {
-
+    private fun saveSharedPref() {
         val password = binding.etPassword.text.toString()
         val sharedPref = getSharedPreferences("LoginPreference",
                 MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putString("id", id)
-        editor.putString("firstName", firstName)
-        editor.putString("lastName", lastName)
-        editor.putString("image", image)
-        editor.putString("contact", contact)
-        editor.putString("email", email)
+        editor.putString("id", idSharedPref)
+        editor.putString("firstName", firstNameSharedPref)
+        editor.putString("lastName", lastNameSharedPref)
+        editor.putString("image", imageSharedPref)
+        editor.putString("contact", contactSharedPref)
+        editor.putString("email", emailSharedPref)
         editor.putString("password", password)
-        editor.putString("token", token)
-        editor.putBoolean("isAdmin", isAdmin)
+        editor.putString("token", tokenSharedPref)
+        editor.putBoolean("isAdmin", isAdminSharedPref)
         editor.putBoolean("isSuccess", isSuccess)
 
         editor.apply()
-
     }
 
     /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
@@ -170,36 +192,30 @@ class LoginActivity : AppCompatActivity() {
                     resource.data?.let { data ->
                         val (success, userProfile) = data
 
-                        val password = binding.etPassword.text.toString()
-                        val sharedPref = getSharedPreferences("LoginPreference",
-                            MODE_PRIVATE)
-                        val editor = sharedPref.edit()
-                        editor.putString("id", userProfile._id)
-                        editor.putString("firstName", userProfile.firstName)
-                        editor.putString("lastName", userProfile.lastName)
-                        editor.putString("image", userProfile.image)
-                        editor.putString("contact", userProfile.contact)
-                        editor.putString("email", userProfile.email)
-                        editor.putString("password", password)
-                        editor.putString("token", userProfile.token)
-                        editor.putBoolean("isAdmin", userProfile.isAdmin)
-                        editor.putBoolean("isSuccess", success)
+                        if(success && userProfile.token !== "") {
+                            idSharedPref =userProfile._id
+                            firstNameSharedPref = userProfile.firstName
+                            lastNameSharedPref = userProfile.lastName
+                            imageSharedPref = userProfile.image
+                            contactSharedPref = userProfile.contact
+                            emailSharedPref = userProfile.email
+                            passwordSharedPref = binding.etPassword.text.toString()
+                            tokenSharedPref = userProfile.token
+                            isAdminSharedPref = userProfile.isAdmin
+                            isSuccess = success
+                            isLoading = false
+                            saveSharedPref()
+                        }
 
-                        editor.apply()
-
-                        firstNameSharedPref = userProfile.firstName
-                        lastNameSharedPref = userProfile.lastName
-                        imageSharedPref = userProfile.image
-                        contactSharedPref = userProfile.contact
 
                         Log.i("USER-TAG", "==>LOADED USER PROFILE FROM API")
                     }
                 }
                 Status.ERROR -> {
-                    println(resource.message)
+                    isLoading = false
                 }
                 Status.LOADING -> {
-                    println("Loading to authorised user via /api/users/login/")
+                    isLoading = true
                 }
             }
         }

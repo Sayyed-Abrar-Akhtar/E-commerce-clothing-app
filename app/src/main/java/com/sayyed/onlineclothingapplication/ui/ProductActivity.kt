@@ -142,25 +142,6 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         productViewModel.insertProductToRoom()
     }
 
-    /*-------------------------------------CHECK NETWORK TO DISPLAY DATA------------------------------------------*/
-    private fun loadFromRoomOrApi(categoryName: String) {
-        when (Network.isNetworkAvailable(this)) {
-            true -> {
-                if (categoryName === "" || categoryName === null) {
-                    setupProductObservers()
-                } else {
-                    setupCategorizedProductObservers(categoryName)
-                }
-            }
-            false -> {
-                if (categoryName === "" || categoryName === null) {
-                    loadProductFromRoom()
-                } else {
-                    loadCategorisedProductFromRoom(categoryName)
-                }
-            }
-        }
-    }
 
     /*----------------------------------GET PRODUCT FROM ROOM TO DISPLAY------------------------------------------*/
     private fun loadProductFromRoom() {
