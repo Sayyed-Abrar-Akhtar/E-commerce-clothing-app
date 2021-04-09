@@ -27,6 +27,7 @@ class InformationActivity : AppCompatActivity() {
     private var lastNameSharedPref : String? = ""
     private var imageSharedPref : String? = ""
     private  var contactSharedPref : String? = ""
+    private  var isAdminSharedPref : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +61,7 @@ class InformationActivity : AppCompatActivity() {
                 "$contactSharedPref",
                 "$imageSharedPref"
                 )
-        navigationDrawerSetup.addEventListenerToNavItems(this@InformationActivity, binding.navigationView)
+        navigationDrawerSetup.addEventListenerToNavItems(this@InformationActivity, binding.navigationView, isAdminSharedPref)
 
     }
 
@@ -71,6 +72,7 @@ class InformationActivity : AppCompatActivity() {
         lastNameSharedPref = sharedPref.getString("lastName", "")
         imageSharedPref = sharedPref.getString("image", "")
         contactSharedPref = sharedPref.getString("contact", "")
+        isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
     }
 
 

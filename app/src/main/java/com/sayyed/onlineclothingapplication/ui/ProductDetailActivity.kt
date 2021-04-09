@@ -37,6 +37,8 @@ class ProductDetailActivity : AppCompatActivity() {
 
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
@@ -52,6 +54,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
         setProductObserver(productId.toString())
+
 
         when (Network.isNetworkAvailable(this)) {
             true -> {
@@ -88,6 +91,9 @@ class ProductDetailActivity : AppCompatActivity() {
             }
         })
     }
+
+
+
 
 
     /*-----------------------GET PRODUCTS OF ID FROM ROOM TO DISPLAY--------------------------------------------*/

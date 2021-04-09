@@ -13,6 +13,12 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
 
     private val productApi = ServiceBuilder.buildService(ProductApi::class.java)
 
+    suspend fun addProduct(token: String): ProductDetailResponse {
+        return apiRequest {
+            productApi.addProduct(token)
+        }
+    }
+
     suspend fun getProductsOfCategory(id: String): ProductResponse {
         return apiRequest {
             productApi.getProductsOfCategory(id)

@@ -71,7 +71,7 @@ class SignUpActivity : AppCompatActivity() {
                 "",
 
         )
-        navigationDrawerSetup.addEventListenerToNavItems(this@SignUpActivity, binding.navigationView)
+        navigationDrawerSetup.addEventListenerToNavItems(this@SignUpActivity, binding.navigationView, isAdminSharedPref)
 
         /*-----------------------------------SIGN UP BUTTON CLICK LISTENER----------------------------------------*/
         binding.btnSignUp.setOnClickListener {
@@ -129,8 +129,8 @@ class SignUpActivity : AppCompatActivity() {
         val user = User(
                 firstName = binding.etFirstName.text.toString(),
                 lastName= binding.etLastName.text.toString(),
-                image= binding.etFirstName.text.toString(),
-                contact= binding.et.text.toString(),
+                //image= binding.etFirstName.text.toString(),
+                //contact= binding.et.text.toString(),
                 username= binding.etUsername.text.toString(),
                 email= binding.etEmail.text.toString(),
                 password= userPassword,

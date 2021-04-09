@@ -41,6 +41,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
     private var lastNameSharedPref : String? = ""
     private var imageSharedPref : String? = ""
     private  var contactSharedPref : String? = ""
+    private  var isAdminSharedPref : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +82,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
                 "$contactSharedPref",
                 "$imageSharedPref"
         )
-        navigationDrawerSetup.addEventListenerToNavItems(this@ProductActivity, binding.navigationView)
+        navigationDrawerSetup.addEventListenerToNavItems(this@ProductActivity, binding.navigationView, isAdminSharedPref)
 
         /*-----------------------------------RECYCLER VIEW AND ADAPTER SETUP--------------------------------------*/
         setupUI()
@@ -115,6 +116,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         lastNameSharedPref = sharedPref.getString("lastName", "")
         imageSharedPref = sharedPref.getString("image", "")
         contactSharedPref = sharedPref.getString("contact", "")
+        isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
     }
 
     /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/

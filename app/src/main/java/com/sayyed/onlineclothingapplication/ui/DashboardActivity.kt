@@ -42,6 +42,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     private lateinit var lastNameSharedPref : String
     private lateinit var imageSharedPref : String
     private lateinit var contactSharedPref : String
+    private  var isAdminSharedPref : Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +82,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                 "$contactSharedPref",
                 "$imageSharedPref"
         )
-        navigationDrawerSetup.addEventListenerToNavItems(this@DashboardActivity, binding.navigationView)
+        navigationDrawerSetup.addEventListenerToNavItems(this@DashboardActivity, binding.navigationView, isAdminSharedPref)
 
         setupUI()
 
@@ -133,6 +134,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         lastNameSharedPref = sharedPref.getString("lastName", "").toString()
         imageSharedPref = sharedPref.getString("image", "").toString()
         contactSharedPref = sharedPref.getString("contact", "").toString()
+        isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
     }
 
 

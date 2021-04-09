@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
@@ -46,6 +47,7 @@ class NavigationDrawerSetup : AppCompatActivity() {
     fun addEventListenerToNavItems(
             context: Context,
             navigationView: NavigationView,
+            isAdmin: Boolean = false,
     ) {
 
         navigationView.setNavigationItemSelectedListener {
@@ -69,9 +71,13 @@ class NavigationDrawerSetup : AppCompatActivity() {
                     true
                 }
                 R.id.account_admin -> {
-                    val intent = Intent(context, AdminActivity::class.java)
-                    context.startActivity(intent)
-                    finish()
+                    if (isAdmin) {
+                        val intent = Intent(context, AdminActivity::class.java)
+                        context.startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(context, "Only ADMINS are authorised!!", Toast.LENGTH_LONG).show()
+                    }
                     true
                 }
                 R.id.all_products -> {

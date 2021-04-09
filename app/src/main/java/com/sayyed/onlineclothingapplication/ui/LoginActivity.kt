@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
             "$imageSharedPref"
         )
         navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle,  "Login")
-        navigationDrawerSetup.addEventListenerToNavItems(this@LoginActivity, binding.navigationView )
+        navigationDrawerSetup.addEventListenerToNavItems(this@LoginActivity, binding.navigationView, isAdminSharedPref )
 
         setupViewModel()
 
@@ -178,6 +178,7 @@ class LoginActivity : AppCompatActivity() {
         lastNameSharedPref = sharedPref.getString("lastName", "")
         imageSharedPref = sharedPref.getString("image", "")
         contactSharedPref = sharedPref.getString("contact", "")
+        isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
         if(emailSharedPref !== "" && passwordSharedPref !== "") {
             binding.etEmail.setText(emailSharedPref)
             binding.etPassword.setText(passwordSharedPref)

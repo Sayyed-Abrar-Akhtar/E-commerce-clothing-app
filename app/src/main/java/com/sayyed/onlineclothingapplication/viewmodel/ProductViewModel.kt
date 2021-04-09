@@ -24,6 +24,17 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         }
     }
 
+    fun addProduct(token: String)  = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            product = productRepository.addProduct(token).product
+            emit(Resource.success(data = product))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
     fun getProductsById(id: String)  = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
