@@ -46,19 +46,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(
             MarkerOptions().position(LatLng(27.7061949, 85.3300394))
                 .title("My Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
         )
 
         mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(LatLng(27.7061949, 85.3300394), 17F), 4000, null
+            CameraUpdateFactory.newLatLngZoom(LatLng(23.253380, 77.401570), 17F), 4000, null
         )
         mMap.uiSettings.isZoomControlsEnabled = true
     }
 
     fun loadMultipleLocation() {
 
-        listLatLon.add(LatitudeLongitude(27.7061949, 85.3300394, "My College"))
-        listLatLon.add(LatitudeLongitude(27.70465, 85.329471, "My House"))
+        listLatLon.add(LatitudeLongitude(27.033333, 85.000000, "Kalaiya store"))
+        listLatLon.add(LatitudeLongitude(27.712020, 85.312950, "Gongabu store"))
 
         for (location in listLatLon) {
             mMap.addMarker(
@@ -69,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(LatLng(27.7061949, 85.3300394), 17F), 4000, null
+            CameraUpdateFactory.newLatLngZoom(LatLng(23.253380, 77.401570), 17F), 4000, null
         )
         mMap.uiSettings.isZoomControlsEnabled = true
     }

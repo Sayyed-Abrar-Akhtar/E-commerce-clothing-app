@@ -50,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this@LoginActivity, R.layout.activity_login)
 
-        val action = intent.getStringExtra("logout")
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()

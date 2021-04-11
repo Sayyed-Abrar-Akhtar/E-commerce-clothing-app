@@ -1,5 +1,6 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +36,26 @@ class ProductDetailActivity : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
     private lateinit var reviewAdapter: ReviewAdapter
 
+    private var maxStock: Int = 0
+    private var qtySelected: Int = 1
+
+    private var idSharedPref : String? = ""
+    private var firstNameSharedPref : String? = ""
+    private var lastNameSharedPref : String? = ""
+    private var imageSharedPref : String? = ""
+    private  var usernameSharedPref : String? = ""
+    private  var emailSharedPref : String? = ""
+    private  var passwordSharedPref : String? = ""
+    private  var tokenSharedPref : String? = ""
+    private  var isAdminSharedPref : Boolean = false
+    private  var contactSharedPref : String? = ""
+    private var isSuccess: Boolean =  false
+    private var isLoading: Boolean =  false
+
+    private var product_image: String = ""
+    private var product_title: String = ""
+    private var product_price: Float = 0f
+
 
 
 
@@ -44,6 +65,9 @@ class ProductDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_detail)
 
         binding = DataBindingUtil.setContentView(this@ProductDetailActivity, R.layout.activity_product_detail)
+
+        /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
+        getSharedPref()
 
         /*-----------------------GET CATEGORY DATA FROM DASHBOARD ACTIVITY THROUGH INTENT-------------------------*/
         val productId = intent.getStringExtra("product_id")
@@ -65,6 +89,32 @@ class ProductDetailActivity : AppCompatActivity() {
             }
         }
 
+        /*--------------------------------INCREASE QTY------------------------------------------------------------*/
+        binding.imgIncreaseQty.setOnClickListener{
+            if(qtySelected <= maxStock && maxStock > 0) {
+                qtySelected += 1
+                binding.tvQty.text = qtySelected.toString()
+            }
+        }
+
+        /*--------------------------------DECREASE QTY------------------------------------------------------------*/
+        binding.imgDecreaseQty.setOnClickListener{
+            if(qtySelected > 1 && maxStock > 0) {
+                qtySelected -= 1
+                binding.tvQty.text = qtySelected.toString()
+            }
+        }
+
+        /*--------------------------------CHECKOUT CLICK----------------------------------------------------------*/
+
+        binding.btnCheckout.setOnClickListener {
+            val intent = Intent(this@ProductDetailActivity, CartActivity::class.java)
+            intent.putExtra("product_title", "$product_title")
+            intent.putExtra("product_image", "$product_image")
+            intent.putExtra("product_price", "$product_price")
+            intent.putExtra("product_qty", "${binding.tvQty.text}")
+            startActivity(intent)
+        }
     }
 
 
@@ -93,6 +143,22 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
 
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun getSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        idSharedPref = sharedPref.getString("_id", "")
+        emailSharedPref = sharedPref.getString("email", "")
+        usernameSharedPref = sharedPref.getString("username", "")
+        passwordSharedPref = sharedPref.getString("password", "")
+        firstNameSharedPref = sharedPref.getString("firstName", "")
+        lastNameSharedPref = sharedPref.getString("lastName", "")
+        imageSharedPref = sharedPref.getString("image", "")
+        contactSharedPref = sharedPref.getString("contact", "")
+        isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
+        tokenSharedPref = sharedPref.getString("token", "")
+
+    }
+
 
 
 
@@ -109,15 +175,21 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun setupUI(product: Product) {
         val stock = product.countInStock
         val price = product.price.toDouble()
+        maxStock = product.countInStock
 
         // SETTING UP TEXT ON PRODUCT DETAIL VIEWS
         binding.tvProductTitle.text = product.name
         binding.tvProductPrice.text = price.toString()
         binding.tvProductBrand.text = product.brand
         binding.tvProductDescription.text = product.description
-        binding.npProductQty.maxValue = product.countInStock
+        binding.tvQty.text = qtySelected.toString()
         binding.ratingBarProduct.rating = product.rating.toFloat()
         binding.imgProduct.contentDescription = product.name
+
+        product_title = product.name
+        product_price = product.price.toFloat()
+        product_image = product.image
+
 
         // LOADING PRODUCT IMAGE FROM API USING GLIDE
         Glide.with(this@ProductDetailActivity)

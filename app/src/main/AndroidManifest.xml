@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineClothingApplication"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ProductCreateUpdateActivity"></activity>
+        <activity android:name=".ui.ShippingActivity"></activity>
+        <activity android:name=".ui.ShowAllActivity" />
+        <activity android:name=".ui.ProductCreateUpdateActivity" />
         <activity android:name=".ui.AdminActivity" />
         <activity android:name=".ui.CartActivity" />
         <!--
@@ -35,6 +37,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".ui.MapsActivity"

@@ -38,4 +38,16 @@
     <string name="all_orders">All orders</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
+    <string name="price">Price</string>
+    <string name="decrease_qty">Decrease qty</string>
+    <string name="increase_qty">Increase Qty</string>
+    <string name="total_price">Total price</string>
+    <string name="continue_payment">Continue payment</string>
+    <string name="order_message">
+        <strong>Thank you for shopping with us!</strong>
+        <br/>
+        Our team will contact soon to inform you about the delievery details.
+        <br />
+        You can also visit our store.
+    </string>
 </resources>
