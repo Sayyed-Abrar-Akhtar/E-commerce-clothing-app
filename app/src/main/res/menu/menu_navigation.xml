@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/user">
+    <item android:title="@string/product">
         <menu>
             <item
                 android:id="@+id/dashboard"
                 android:title="@string/home"
                 android:icon="@drawable/home"/>
             <item
-                android:id="@+id/account_signUp"
-                android:title="@string/account_sign_up"
-                android:icon="@drawable/sign_up"/>
+                android:id="@+id/all_products"
+                android:title="@string/all_products"
+                android:icon="@drawable/product"/>
             <item
-                android:id="@+id/account_login"
-                android:title="@string/account_log_in"
-                android:icon="@drawable/login"/>
+                android:id="@+id/cart"
+                android:title="@string/cart"
+                android:icon="@drawable/cart"/>
             <item
                 android:id="@+id/account_admin"
                 android:title="@string/admin"
                 android:icon="@drawable/admin"/>
         </menu>
     </item>
-
-    <item android:title="@string/product">
+    <item android:title="@string/user">
         <menu>
             <item
-                android:id="@+id/all_products"
-                android:title="@string/all_products"
-                android:icon="@drawable/product"/>
-
-
+                android:id="@+id/account_login"
+                android:title="@string/account_log_in"
+                android:icon="@drawable/login"/>
             <item
-                android:id="@+id/cart"
-                android:title="@string/cart"
-                android:icon="@drawable/cart"/>
+                android:id="@+id/account_signUp"
+                android:title="@string/account_sign_up"
+                android:icon="@drawable/sign_up"/>
+            <item
+                android:id="@+id/account_profile"
+                android:title="@string/profile"
+                android:icon="@drawable/profile"/>
+            <item
+                android:id="@+id/account_logout"
+                android:title="@string/logout"
+                android:icon="@drawable/logout"/>
         </menu>
     </item>
-
     <item android:title="@string/info_about_us">
         <menu>
             <item
@@ -48,5 +52,4 @@
                 android:icon="@drawable/locate_us"/>
         </menu>
     </item>
-
 </menu>

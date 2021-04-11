@@ -47,11 +47,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        //TODO("redundant shared pref getdharedpref 57 & 86")
 
         binding = DataBindingUtil.setContentView(this@LoginActivity, R.layout.activity_login)
 
-
+        val action = intent.getStringExtra("logout")
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
@@ -82,8 +81,6 @@ class LoginActivity : AppCompatActivity() {
         navigationDrawerSetup.addEventListenerToNavItems(this@LoginActivity, binding.navigationView, isAdminSharedPref )
 
         setupViewModel()
-
-        getSharedPref()
 
         /*-----------------------------------LOGIN BTN CLICK LISTENER---------------------------------------------*/
         binding.btnLogin.setOnClickListener {

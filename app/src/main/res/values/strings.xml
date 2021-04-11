@@ -36,4 +36,6 @@
     <string name="all_categories">All category</string>
     <string name="all_users">All users</string>
     <string name="all_orders">All orders</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
 </resources>

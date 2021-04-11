@@ -31,4 +31,26 @@ interface UserApi {
             @Field("email") email :String,
             @Field("password") password :String
     ): Response<UserResponse>
+
+
+    // Update
+    @FormUrlEncoded
+    @PUT("/api/users/profile")
+    suspend fun updateUser(
+            @Header("Authorization") token: String,
+            @Field("firstName") firstName: String,
+            @Field("lastName") lastName: String,
+            @Field("contact") contact: String,
+            @Field("username") username: String,
+            @Field("email") email: String,
+            @Field("password") password: String,
+            @Field("image") image: String,
+    ): Response<UserResponse>
+
+
+    @PUT("/api/users/{id}")
+    suspend fun deleteUser(
+            @Header("Authorization") token: String,
+            @Path("id") id: String,
+    ): Response<UserResponse>
 }

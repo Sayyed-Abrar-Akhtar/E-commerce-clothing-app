@@ -307,7 +307,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialiconsoutlined/cloud_upload/outline_cloud_upload_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/logout/baseline_logout_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -318,7 +318,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="333333" />
-                            <entry key="outputName" value="cloud_upload" />
+                            <entry key="outputName" value="logout" />
                             <entry key="sourceFile" value="D:\SAYYED\DOWNLOADS\SVG\Endless-Constellation.svg" />
                           </map>
                         </option>

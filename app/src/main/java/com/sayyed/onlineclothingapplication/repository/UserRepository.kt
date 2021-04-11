@@ -13,6 +13,12 @@ class UserRepository: ApiRequest() {
     private val userApi = ServiceBuilder.buildService(UserApi::class.java)
 
 
+    suspend fun authLogin(email: String, password: String): UserResponse {
+        return apiRequest {
+            userApi.authLogin(email, password)
+        }
+    }
+
     suspend fun newAccount(
             firstName: RequestBody,
             lastName: RequestBody,
@@ -27,10 +33,27 @@ class UserRepository: ApiRequest() {
         }
     }
 
-
-    suspend fun authLogin(email: String, password: String): UserResponse {
+    suspend fun updateUser(
+            token: String,
+            firstName: String,
+            lastName: String,
+            contact: String,
+            username: String,
+            email: String,
+            password: String,
+            image: String
+    ): UserResponse {
         return apiRequest {
-            userApi.authLogin(email, password)
+            userApi.updateUser(
+                token,
+                firstName,
+                lastName,
+                contact,
+                username,
+                email,
+                password,
+                image,
+            )
         }
     }
 

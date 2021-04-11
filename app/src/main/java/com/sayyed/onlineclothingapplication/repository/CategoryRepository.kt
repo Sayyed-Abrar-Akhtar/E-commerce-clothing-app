@@ -27,4 +27,5 @@ class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
     }
 
     val retrieveCategoryFromRoom = categoryDAO.retrieveCategory()
+
 }

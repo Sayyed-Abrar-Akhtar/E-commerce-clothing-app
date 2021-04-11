@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,6 +26,7 @@ import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
+import java.lang.Exception
 
 class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
@@ -93,8 +95,13 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
             requestPermission()
         }
 
-        loadFromRoomOrAPi()
-
+        when (Network.isNetworkAvailable(this@DashboardActivity)) {
+            true -> setupCategoryObservers()
+            false -> {
+                Toast.makeText(this@DashboardActivity, "No internet connection!!", Toast.LENGTH_SHORT).show()
+                loadCategoryFromRoom()
+            }
+        }
     }
 
     /*-------------------------------------REQUEST PERMISSIONS----------------------------------------------------*/
@@ -163,27 +170,26 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         startActivity(intent)
     }
 
-    /*-------------------------------------CHECK NETWORK TO DISPLAY DATA------------------------------------------*/
-    private fun loadFromRoomOrAPi() {
-        when (Network.isNetworkAvailable(this@DashboardActivity)) {
-            true -> setupCategoryObservers()
-            false -> loadCategoryFromRoom()
-        }
-    }
+
 
     /*-------------------------------------GET DATA FROM ROOM TO DISPLAY------------------------------------------*/
     private fun loadCategoryFromRoom() {
-        categoryViewModel.categoryFromRoom.observe(this@DashboardActivity, {
-            it?.let { category ->
-                binding.progressBar.visibility = View.GONE
-                binding.recyclerViewCategory.visibility = View.VISIBLE
-                listCategory.clear()
-                listCategory.addAll(category)
-                adapter.notifyDataSetChanged()
-                Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM ROOM")
-                println(category)
-            }
-        })
+        try {
+            categoryViewModel.categoryFromRoom.observe(this@DashboardActivity, {
+                it?.let { category ->
+                    println("=========================> $category")
+                    binding.progressBar.visibility = View.GONE
+                    binding.recyclerViewCategory.visibility = View.VISIBLE
+                    listCategory.clear()
+                    listCategory.addAll(category)
+                    adapter.notifyDataSetChanged()
+                    Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM ROOM")
+                    println(category)
+                }
+            })
+        } catch (ex: Exception) {
+            println(ex)
+        }
     }
 
     /*-------------------------------------SET DATA FROM API TO DISPLAY-------------------------------------------*/
@@ -206,6 +212,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                         listCategory.addAll(category.category)
                         adapter.notifyDataSetChanged()
                         categoryViewModel.deleteAllCategory()
+                        println(category)
                         Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM API")
                     }
                 }

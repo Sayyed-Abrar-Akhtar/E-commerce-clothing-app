@@ -2,6 +2,7 @@ package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -9,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.sayyed.onlineclothingapplication.R
+import com.sayyed.onlineclothingapplication.utils.FileUpload
 import de.hdodenhof.circleimageview.CircleImageView
+
 
 class NavigationDrawerSetup : AppCompatActivity() {
 
@@ -36,9 +39,9 @@ class NavigationDrawerSetup : AppCompatActivity() {
 
         tvName.text = name
         tvContact.text = contact
-
+        val image = FileUpload.checkImageString(profileImg)
         Glide.with(context)
-                .load(profileImg)
+                .load(image)
                 .into(imgDrawerLayoutUserProfile)
 
     }
@@ -64,7 +67,21 @@ class NavigationDrawerSetup : AppCompatActivity() {
                     finish()
                     true
                 }
+                R.id.account_profile -> {
+                    val intent = Intent(context, SignUpActivity::class.java)
+                    intent.putExtra("btnText", "Update")
+                    context.startActivity(intent)
+                    finish()
+                    true
+                }
                 R.id.account_login -> {
+                    val intent = Intent(context, LoginActivity::class.java)
+                    context.startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.account_logout -> {
+                    logout(context)
                     val intent = Intent(context, LoginActivity::class.java)
                     context.startActivity(intent)
                     finish()
@@ -109,4 +126,8 @@ class NavigationDrawerSetup : AppCompatActivity() {
         }
     }
 
+    private fun logout(context: Context) {
+        val settings: SharedPreferences = context.getSharedPreferences("LoginPreference", MODE_PRIVATE)
+        settings.edit().clear().commit()
+    }
 }

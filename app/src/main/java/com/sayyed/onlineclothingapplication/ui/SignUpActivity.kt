@@ -11,10 +11,12 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
 import com.sayyed.onlineclothingapplication.entities.User
@@ -45,6 +47,8 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private var headerText: String = "Create New Account"
+
     private lateinit var userViewModel: UserViewModel
 
 
@@ -53,6 +57,7 @@ class SignUpActivity : AppCompatActivity() {
     private var lastNameSharedPref : String? = ""
     private var imageSharedPref : String? = ""
     private  var emailSharedPref : String? = ""
+    private  var usernameSharedPref : String? = ""
     private  var passwordSharedPref : String? = ""
     private  var tokenSharedPref : String? = ""
     private  var isAdminSharedPref : Boolean = false
@@ -79,6 +84,24 @@ class SignUpActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this@SignUpActivity, R.layout.activity_sign_up)
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
+        val btnText = intent.getStringExtra("btnText")
+
+        /*--------------------------SETUP UPDATE SCREEN-----------------------------------------------------------*/
+        if(btnText == "Update" || btnText == "update") {
+            binding.btnSignUp.text = btnText
+            initializeSharedPref()
+            headerText = "Update"
+            val glideImg= FileUpload.checkImageString("$imageSharedPref")
+
+            Glide.with(this@SignUpActivity)
+                    .load(glideImg)
+                    .into(binding.imgUserProfile)
+
+        } else {
+            binding.btnSignUp.text = "Sign up"
+        }
+
+        /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
@@ -95,7 +118,7 @@ class SignUpActivity : AppCompatActivity() {
 
         /*----------------------------------------NAVIGATION DRAWER LAYOUT----------------------------------------*/
         navigationDrawerSetup = NavigationDrawerSetup()
-        navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "Create New Account")
+        navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, headerText)
         navigationDrawerSetup.addHeaderText(
                 this@SignUpActivity,
                 binding.navigationView,
@@ -106,6 +129,7 @@ class SignUpActivity : AppCompatActivity() {
                 )
         navigationDrawerSetup.addEventListenerToNavItems(this@SignUpActivity, binding.navigationView, isAdminSharedPref)
 
+
         setupViewModel()
 
         /*-----------------------------------IMAGE VIEW CLICK LISTENER--------------------------------------------*/
@@ -114,30 +138,60 @@ class SignUpActivity : AppCompatActivity() {
         }
         /*-----------------------------------SIGN UP BUTTON CLICK LISTENER----------------------------------------*/
         binding.btnSignUp.setOnClickListener {
-            userProfileDetail()
-            val body = FileUpload.setMimeType(imageUrl)
-            userViewModel.newAccount(
-                    firstNamePart,
-                    lastNamePart,
-                    contactPart,
-                    usernamePart,
-                    emailPart,
-                    passwordPart,
-                    body
-            ).observe(this@SignUpActivity, {
-                it.apiCall()
+
+            if (binding.btnSignUp.text == "Update") {
+                userViewModel.updateUser(
+                        "Bearer $tokenSharedPref",
+                        "${binding.etFirstName.text}",
+                        "${binding.etLastName.text}",
+                        "${binding.etContact.text}",
+                        "${binding.etUsername.text}",
+                        "$emailSharedPref",
+                        "$passwordSharedPref",
+                        "$imageSharedPref"
+                ).observe(this@SignUpActivity, {
+                    it.apiCall()
+                })
+
+
                 val handler = Handler(Looper.getMainLooper())
                 handler.postDelayed({
-                    if(isSuccess){
-                        Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
-                        val intent  = Intent(this, DashboardActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                }, 900)
-            })
+
+                Toast.makeText(this@SignUpActivity, "User updated successfully", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+                finish()
+
+                    }, 800)
+                }
+
+            if (binding.btnSignUp.text == "Sign up") {
+                userProfileDetail()
+                val body = FileUpload.setMimeType(imageUrl)
+                userViewModel.newAccount(
+                        firstNamePart,
+                        lastNamePart,
+                        contactPart,
+                        usernamePart,
+                        emailPart,
+                        passwordPart,
+                        body
+                ).observe(this@SignUpActivity, {
+                    it.apiCall()
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        if (isSuccess) {
+                            Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, DashboardActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }, 800)
+                })
+            }
         }
     }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -166,6 +220,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
 
+
+
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
     private fun setupViewModel() {
         val repository =  UserRepository()
@@ -189,12 +245,26 @@ class SignUpActivity : AppCompatActivity() {
             binding.etConfirmPassword.requestFocus()
             return
         }
-        firstNamePart = firstName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        lastNamePart = lastName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        contactPart = contact.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        usernamePart = username.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        emailPart = email.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        passwordPart = password.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+        setRequestBody(firstName, lastName, contact, username, email, password)
+
+    }
+
+    /*--------------------------------------SET UP REQUEST BODY---------------------------------------------------*/
+    private fun setRequestBody(
+            setFirstName: String,
+            setLastName: String,
+            setContact: String,
+            setUsername: String,
+            setEmail: String = "$emailSharedPref",
+            setPassword: String = "$passwordSharedPref"
+    ) {
+        firstNamePart = setFirstName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        lastNamePart = setLastName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        contactPart = setContact.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        usernamePart = setUsername.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        emailPart = setEmail.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        passwordPart = setPassword.toRequestBody("multipart/form-data".toMediaTypeOrNull())
     }
 
 
@@ -205,11 +275,10 @@ class SignUpActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     resource.data?.let { data ->
                         val (success, userProfile) = data
-
-                        if(success && userProfile.token !== "") {
+                        isSuccess = success
+                        if (success && userProfile.token !== "") {
                             saveSharedPref(userProfile, success)
                             isLoading = false
-                            isSuccess = success
                         }
                         clearFields()
                         Log.i("USER-TAG", "==>LOADED USER PROFILE FROM API ==> $data")
@@ -233,9 +302,10 @@ class SignUpActivity : AppCompatActivity() {
         editor.putString("id", userProfile._id)
         editor.putString("firstName", userProfile.firstName)
         editor.putString("lastName", userProfile.lastName)
-        editor.putString("image", "http://192.168.1.69:90/${userProfile.image}")
+        editor.putString("image", userProfile.image)
         editor.putString("contact", userProfile.contact)
         editor.putString("email", userProfile.email)
+        editor.putString("username", userProfile.username)
         editor.putString("password", binding.etPassword.text.toString())
         editor.putString("token", userProfile.token)
         editor.putBoolean("isAdmin", userProfile.isAdmin)
@@ -245,10 +315,29 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun initializeSharedPref() {
+        val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
+
+        binding.etFirstName.setText(sharedPref.getString("firstName", ""))
+        binding.etLastName.setText(sharedPref.getString("lastName", ""))
+        binding.etContact.setText(sharedPref.getString("contact", ""))
+        binding.etUsername.setText(sharedPref.getString("username", ""))
+        binding.etPassword.setText(sharedPref.getString("password", ""))
+        idSharedPref = sharedPref.getString("_id", "")
+        imageSharedPref = sharedPref.getString("image", "")
+        tokenSharedPref = sharedPref.getString("token", "")
+
+        binding.etEmail.visibility = View.GONE
+        binding.etConfirmPassword.visibility = View.GONE
+        Glide.with(this@SignUpActivity).load(imageSharedPref).into(binding.imgUserProfile)
+    }
+
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
     private fun getSharedPref() {
         val sharedPref = getSharedPreferences("LoginPreference", MODE_PRIVATE)
         idSharedPref = sharedPref.getString("_id", "")
         emailSharedPref = sharedPref.getString("email", "")
+        usernameSharedPref = sharedPref.getString("username", "")
         passwordSharedPref = sharedPref.getString("password", "")
         firstNameSharedPref = sharedPref.getString("firstName", "")
         lastNameSharedPref = sharedPref.getString("lastName", "")

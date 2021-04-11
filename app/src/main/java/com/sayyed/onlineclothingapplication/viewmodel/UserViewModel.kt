@@ -11,8 +11,16 @@ import okhttp3.RequestBody
 
 class UserViewModel(private val userRepository: UserRepository): ViewModel(), Observable {
 
-
-
+    fun authLogin(email: String, password:String) = liveData {
+        emit( Resource.loading(data = null))
+        try {
+            val user = userRepository.authLogin(email, password)
+            emit(Resource.success(data = user))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
 
     fun newAccount(
             firstName: RequestBody,
@@ -33,16 +41,27 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
         }
     }
 
-    fun authLogin(email: String, password:String) = liveData {
+    fun updateUser(
+            token: String,
+            firstName: String,
+            lastName: String,
+            contact: String,
+            username: String,
+            email: String,
+            password: String,
+            image: String
+    ) = liveData {
         emit( Resource.loading(data = null))
         try {
-             val user = userRepository.authLogin(email, password)
+            val user = userRepository.updateUser(token, firstName, lastName, contact, username, email, password, image)
             emit(Resource.success(data = user))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")
             emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
         }
     }
+
+
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
 
     }

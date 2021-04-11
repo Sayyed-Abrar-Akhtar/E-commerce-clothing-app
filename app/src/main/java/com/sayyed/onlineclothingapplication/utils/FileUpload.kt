@@ -88,5 +88,13 @@ class FileUpload: AppCompatActivity() {
             }
         }
 
+        /*--------------------------------------------CHECK HTTPS-----------------------------------------------------*/
+        fun checkImageString(imgString: String): String {
+            if (imgString.contains("uploads/")) {
+                return "http://192.168.1.69:90/$imgString"
+            }
+            return imgString
+        }
+
     }
 }
