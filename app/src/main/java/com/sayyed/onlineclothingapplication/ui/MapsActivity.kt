@@ -69,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(LatLng(23.253380, 77.401570), 17F), 4000, null
+            CameraUpdateFactory.newLatLngZoom(LatLng(27.033333, 85.000000), 17F), 4000, null
         )
         mMap.uiSettings.isZoomControlsEnabled = true
     }
