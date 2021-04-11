@@ -42,12 +42,12 @@
 
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imgUserProfile"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="30dp"
                 android:contentDescription="@string/sign_up_logo"
-                android:src="@drawable/sign_up"
+                android:src="@drawable/cloud_upload"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
                 android:paddingBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imgUserProfile"
                 app:layout_constraintWidth_percent=".8" />
 
             <EditText

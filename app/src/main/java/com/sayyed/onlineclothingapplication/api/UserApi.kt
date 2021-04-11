@@ -3,16 +3,26 @@ package com.sayyed.onlineclothingapplication.api
 
 import com.sayyed.onlineclothingapplication.models.UserProfile
 import com.sayyed.onlineclothingapplication.response.UserResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
 interface UserApi {
 
     //Register User
-    @POST("user/new")
+    @Multipart
+    @POST("/api/users/")
     suspend fun newAccount(
-            @Body userProfile: UserProfile
+            @Part("firstName") firstName: RequestBody,
+            @Part("lastName") lastName: RequestBody,
+            @Part("contact") contact: RequestBody,
+            @Part("username") username: RequestBody,
+            @Part("email") email: RequestBody,
+            @Part("password") password: RequestBody,
+            @Part image: MultipartBody.Part,
     ): Response<UserResponse>
+
 
     // Login
     @FormUrlEncoded
