@@ -21,6 +21,24 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository): Vie
         }
     }
 
+    fun getCategoryName() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = categoryRepository.getCategoryName()))
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!" ))
+        }
+    }
+
+    fun getCategoryId(name: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = categoryRepository.getCategoryId(name)))
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!" ))
+        }
+    }
+
     fun insertCategoryIntoRoom() = viewModelScope.launch {
         try {
             val categoriesLive = categoryRepository.getCategory().category

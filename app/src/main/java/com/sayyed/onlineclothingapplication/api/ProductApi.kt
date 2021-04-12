@@ -3,11 +3,9 @@ package com.sayyed.onlineclothingapplication.api
 
 import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
 import com.sayyed.onlineclothingapplication.response.ProductResponse
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ProductApi {
 
@@ -24,6 +22,20 @@ interface ProductApi {
     suspend fun addProduct(
             @Header("Authorization") token: String
     ):Response<ProductDetailResponse>
+
+
+    @FormUrlEncoded
+    @PUT("/api/products/{id}")
+    suspend fun updateProduct(
+            @Header("Authorization") token: String,
+            @Path("id", encoded = false) id: String,
+            @Field("name") name: String,
+            @Field("price") price: Int,
+            @Field("description") description: String,
+            @Field("image") image: String,
+            @Field("brand") brand: String,
+            @Field("countInStock") countInStock: Int,
+    ): Response<ProductDetailResponse>
 
 
 }

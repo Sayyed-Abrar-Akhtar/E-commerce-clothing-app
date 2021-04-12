@@ -20,6 +20,7 @@ import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductDetailBinding
 import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
+import com.sayyed.onlineclothingapplication.utils.FileUpload
 import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
@@ -137,6 +138,17 @@ class ProductDetailActivity : AppCompatActivity() {
                         setupUI(product)
                         }
                     }
+                    Status.ERROR -> {
+                        println("=========================ERROR====================")
+                        println(resource.data)
+                        println(resource.message)
+                        println("==================================================")
+                    }
+                    Status.LOADING -> {
+                        println("=========================LOADER====================")
+                        println("!!! LOADING... !!!")
+                        println("===================================================")
+                    }
                 }
             }
         })
@@ -188,12 +200,12 @@ class ProductDetailActivity : AppCompatActivity() {
 
         product_title = product.name
         product_price = product.price.toFloat()
-        product_image = product.image
+        product_image = FileUpload.checkImageString(product.image)
 
 
         // LOADING PRODUCT IMAGE FROM API USING GLIDE
         Glide.with(this@ProductDetailActivity)
-            .load(product.image)
+            .load(product_image)
             .into(binding.imgProduct)
 
         // DISPLAYED CUSTOMER REVIEWS LIST USING RECYCLER VIEW

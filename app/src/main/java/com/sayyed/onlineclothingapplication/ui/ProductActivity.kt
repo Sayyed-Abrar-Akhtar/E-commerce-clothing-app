@@ -207,11 +207,18 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
                 Status.ERROR -> {
                     binding.recyclerViewProduct.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
                 }
 
                 Status.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.recyclerViewProduct.visibility = View.GONE
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
                 }
             }
         }

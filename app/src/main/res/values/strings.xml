@@ -29,7 +29,7 @@
     <string name="reviews"><u>Reviews &#x261F;</u></string>
     <string name="items_in_your_cart">Items in your cart</string>
     <string name="admin">Admin</string>
-    <string name="loading">Loading...</string>
+    <string name="loading"><strong>Loading...</strong></string>
     <string name="no_internet">No internet connection &#128532;</string>
     <string name="add_new_product">Add new product</string>
     <string name="add_new_category">Add new category</string>
@@ -45,9 +45,15 @@
     <string name="continue_payment">Continue payment</string>
     <string name="order_message">
         <strong>Thank you for shopping with us!</strong>
-        <br/>
+        <br />
         Our team will contact soon to inform you about the delievery details.
         <br />
         You can also visit our store.
     </string>
+    <string name="shop_online">Shop online from home at your finger tips</string>
+    <string name="update">Update</string>
+    <string name="enter_product_name">Enter product name</string>
+    <string name="enter_product_price">Enter product price</string>
+    <string name="product_image">Product image</string>
+
 </resources>

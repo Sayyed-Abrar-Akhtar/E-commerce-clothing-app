@@ -212,9 +212,16 @@ class LoginActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     isLoading = false
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
                 }
                 Status.LOADING -> {
                     isLoading = true
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
                 }
             }
         }

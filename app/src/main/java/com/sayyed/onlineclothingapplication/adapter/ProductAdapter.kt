@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
+import com.sayyed.onlineclothingapplication.utils.FileUpload
 
 class ProductAdapter(
         val context: Context,
@@ -32,14 +34,14 @@ class ProductAdapter(
         val product = productList[position]
         holder.tvProductTitle?.text = product.name
         holder.tvProductPrice?.text = product.price.toString()
-        holder.tvRating?.text = "${product.rating} stars"
+        holder.productRating.rating = product.rating.toFloat()
 
         val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .override(300, 450)
 
         Glide.with(context)
-                .load(product.image)
+                .load(FileUpload.checkImageString(product.image))
                 .apply(requestOptions)
                 .into(holder.imgProduct)
 
@@ -55,7 +57,7 @@ class ProductAdapter(
         var imgProduct: ImageView = itemView.findViewById(R.id.imgProduct)
         var tvProductTitle: TextView = itemView.findViewById(R.id.tvProductTitle)
         var tvProductPrice: TextView = itemView.findViewById(R.id.tvProductPrice)
-        var tvRating: TextView = itemView.findViewById(R.id.tvRating)
+        var productRating: RatingBar = itemView.findViewById(R.id.productRating)
 
     }
 }

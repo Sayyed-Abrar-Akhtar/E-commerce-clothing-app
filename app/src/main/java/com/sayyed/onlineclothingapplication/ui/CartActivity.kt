@@ -52,10 +52,10 @@ class CartActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this@CartActivity, R.layout.activity_cart)
 
 
-        val product_title = intent.getStringExtra("product_title")
-        val product_image = intent.getStringExtra("product_image")
-        val product_price = intent.getStringExtra("product_price")
-        val product_qty = intent.getStringExtra("product_qty")
+        product_title = intent.getStringExtra("product_title").toString()
+        product_image = intent.getStringExtra("product_image").toString()
+        product_price = intent.getStringExtra("product_price").toString()
+        product_qty = intent.getStringExtra("product_qty").toString()
 
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
@@ -140,7 +140,7 @@ class CartActivity : AppCompatActivity() {
         val notification = NotificationCompat.Builder(this, notificationChannels.CHANNEL_LOW)
             .setSmallIcon(R.drawable.notification)
             .setContentTitle("ORDER CREATED")
-            .setContentText("$product_qty of$product_title order created")
+            .setContentText("$product_qty items of $product_title ordered")
             .setColor(Color.BLUE)
             .setContentIntent(pendingIntent)
             .build()

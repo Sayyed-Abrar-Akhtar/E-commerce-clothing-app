@@ -177,7 +177,6 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         try {
             categoryViewModel.categoryFromRoom.observe(this@DashboardActivity, {
                 it?.let { category ->
-                    println("=========================> $category")
                     binding.progressBar.visibility = View.GONE
                     binding.recyclerViewCategory.visibility = View.VISIBLE
                     listCategory.clear()
@@ -219,11 +218,19 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                 Status.ERROR -> {
                     binding.recyclerViewCategory.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
                 }
                 Status.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.recyclerViewCategory.visibility = View.GONE
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
                 }
+
             }
         }
     }

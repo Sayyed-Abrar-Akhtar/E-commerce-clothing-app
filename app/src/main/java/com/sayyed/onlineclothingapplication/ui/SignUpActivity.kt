@@ -25,6 +25,7 @@ import com.sayyed.onlineclothingapplication.repository.UserRepository
 import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothingapplication.utils.FileUpload
+import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
@@ -141,63 +142,67 @@ class SignUpActivity : AppCompatActivity() {
         }
         /*-----------------------------------SIGN UP BUTTON CLICK LISTENER----------------------------------------*/
         binding.btnSignUp.setOnClickListener {
+            if (Network.isNetworkAvailable(this@SignUpActivity)) {
 
-            if (binding.btnSignUp.text == "Update") {
-                userViewModel.updateUser(
-                        "Bearer $tokenSharedPref",
-                        "${binding.etFirstName.text}",
-                        "${binding.etLastName.text}",
-                        "${binding.etContact.text}",
-                        "${binding.etUsername.text}",
-                        "$emailSharedPref",
-                        "$passwordSharedPref",
-                        "$imageSharedPref"
-                ).observe(this@SignUpActivity, {
-                    it.apiCall()
-                })
+                if (binding.btnSignUp.text == "Update") {
+                    userViewModel.updateUser(
+                            "Bearer $tokenSharedPref",
+                            "${binding.etFirstName.text}",
+                            "${binding.etLastName.text}",
+                            "${binding.etContact.text}",
+                            "${binding.etUsername.text}",
+                            "$emailSharedPref",
+                            "$passwordSharedPref",
+                            "$imageSharedPref"
+                    ).observe(this@SignUpActivity, {
+                        it.apiCall()
+                    })
 
 
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
 
-                Toast.makeText(this@SignUpActivity, "User updated successfully", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-                finish()
+                        Toast.makeText(this@SignUpActivity, "User updated successfully", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
 
                     }, 800)
                 }
 
-            if (binding.btnSignUp.text == "Sign up") {
-                userProfileDetail()
-                val body = FileUpload.setMimeType(imageUrl)
+                if (binding.btnSignUp.text == "Sign up") {
+                    userProfileDetail()
+                    val body = FileUpload.setMimeType(imageUrl)
 
-                userViewModel.uploadImage(body).observe(this@SignUpActivity, {
-                    it.apiUploadCall()
-                })
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    if (isSuccessfulUploadImage) {
-                        userViewModel.newAccount(
-                                firstNameField,
-                                lastNameField,
-                                imageResponseFromApi,
-                                contactField,
-                                usernameField,
-                                emailField,
-                                passwordField
-                        ).observe(this@SignUpActivity, {
-                            it.apiCall()
+                    userViewModel.uploadImage(body).observe(this@SignUpActivity, {
+                        it.apiUploadCall()
+                    })
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        if (isSuccessfulUploadImage) {
+                            userViewModel.newAccount(
+                                    firstNameField,
+                                    lastNameField,
+                                    imageResponseFromApi,
+                                    contactField,
+                                    usernameField,
+                                    emailField,
+                                    passwordField
+                            ).observe(this@SignUpActivity, {
+                                it.apiCall()
                                 if (isSuccessfulUserProfile) {
                                     Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this, DashboardActivity::class.java)
                                     startActivity(intent)
                                     finish()
                                 }
-                        })
-                    }
-                }, 500)
+                            })
+                        }
+                    }, 500)
 
+                }
+            } else {
+                Toast.makeText(this@SignUpActivity, "No internet connection", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -295,9 +300,16 @@ class SignUpActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     isLoading = false
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
                 }
                 Status.LOADING -> {
                     isLoading = true
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
                 }
             }
         }
@@ -323,9 +335,16 @@ class SignUpActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     isLoading = false
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
                 }
                 Status.LOADING -> {
                     isLoading = true
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
                 }
             }
         }
