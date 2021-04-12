@@ -11,6 +11,18 @@ import okhttp3.RequestBody
 
 class UserViewModel(private val userRepository: UserRepository): ViewModel(), Observable {
 
+    fun uploadImage(body: MultipartBody.Part) = liveData {
+        emit (Resource.loading(data = null))
+        try {
+            val image = userRepository.uploadImage(body)
+            println("error message=>$image")
+            emit(Resource.success(data= image))
+        } catch (ex: java.lang.Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
     fun authLogin(email: String, password:String) = liveData {
         emit( Resource.loading(data = null))
         try {
@@ -23,17 +35,17 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
     }
 
     fun newAccount(
-            firstName: RequestBody,
-            lastName: RequestBody,
-            contact: RequestBody,
-            username: RequestBody,
-            email: RequestBody,
-            password: RequestBody,
-            body: MultipartBody.Part
+            firstName: String,
+            lastName: String,
+            image: String,
+            contact: String,
+            username: String,
+            email: String,
+            password: String,
     ) = liveData {
         emit( Resource.loading(data = null))
         try {
-            val user = userRepository.newAccount(firstName, lastName, contact, username, email, password, body)
+            val user = userRepository.newAccount(firstName, lastName, image, contact, username, email, password)
             emit(Resource.success(data = user))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")

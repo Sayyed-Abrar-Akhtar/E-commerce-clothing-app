@@ -124,6 +124,8 @@ class CartActivity : AppCompatActivity() {
         binding.tvProductTitle.text = title
         binding.tvQtySelected.text = qty
         binding.tvShowQtyPrice.text = "$qty * $price = ${(qty.toFloat()*price.toFloat())}"
+
+        println("$idSharedPref")
     }
 
     /*----------------------------SHOW ORDER NOTIFICATION-------------------------------------------------------*/

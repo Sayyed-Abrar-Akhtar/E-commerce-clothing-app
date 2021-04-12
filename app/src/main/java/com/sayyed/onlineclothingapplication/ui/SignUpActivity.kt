@@ -22,6 +22,7 @@ import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
 import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.models.UserProfile
 import com.sayyed.onlineclothingapplication.repository.UserRepository
+import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothingapplication.utils.FileUpload
 import com.sayyed.onlineclothingapplication.utils.Resource
@@ -62,19 +63,21 @@ class SignUpActivity : AppCompatActivity() {
     private  var tokenSharedPref : String? = ""
     private  var isAdminSharedPref : Boolean = false
     private  var contactSharedPref : String? = ""
-    private var isSuccess: Boolean =  false
+    private var isSuccessfulUserProfile: Boolean =  false
+    private var isSuccessfulUploadImage: Boolean =  false
     private var isLoading: Boolean =  false
 
     private var REQUEST_GALLERY_CODE = 1
     private var REQUEST_CAMERA_CODE = 0
     private var imageUrl: String? = null
 
-    private lateinit var firstNamePart: RequestBody
-    private lateinit var lastNamePart: RequestBody
-    private lateinit var contactPart: RequestBody
-    private lateinit var usernamePart: RequestBody
-    private lateinit var emailPart: RequestBody
-    private lateinit var passwordPart: RequestBody
+    private lateinit var firstNameField: String
+    private lateinit var lastNameField: String
+    private lateinit var contactField: String
+    private lateinit var usernameField: String
+    private lateinit var emailField: String
+    private lateinit var passwordField: String
+    private lateinit var imageResponseFromApi: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -168,30 +171,36 @@ class SignUpActivity : AppCompatActivity() {
             if (binding.btnSignUp.text == "Sign up") {
                 userProfileDetail()
                 val body = FileUpload.setMimeType(imageUrl)
-                userViewModel.newAccount(
-                        firstNamePart,
-                        lastNamePart,
-                        contactPart,
-                        usernamePart,
-                        emailPart,
-                        passwordPart,
-                        body
-                ).observe(this@SignUpActivity, {
-                    it.apiCall()
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
-                        if (isSuccess) {
-                            Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, DashboardActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                    }, 800)
+
+                userViewModel.uploadImage(body).observe(this@SignUpActivity, {
+                    it.apiUploadCall()
                 })
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    if (isSuccessfulUploadImage) {
+                        userViewModel.newAccount(
+                                firstNameField,
+                                lastNameField,
+                                imageResponseFromApi,
+                                contactField,
+                                usernameField,
+                                emailField,
+                                passwordField
+                        ).observe(this@SignUpActivity, {
+                            it.apiCall()
+                                if (isSuccessfulUserProfile) {
+                                    Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, DashboardActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                        })
+                    }
+                }, 500)
+
             }
         }
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -251,6 +260,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     /*--------------------------------------SET UP REQUEST BODY---------------------------------------------------*/
+
     private fun setRequestBody(
             setFirstName: String,
             setLastName: String,
@@ -259,13 +269,40 @@ class SignUpActivity : AppCompatActivity() {
             setEmail: String = "$emailSharedPref",
             setPassword: String = "$passwordSharedPref"
     ) {
-        firstNamePart = setFirstName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        lastNamePart = setLastName.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        contactPart = setContact.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        usernamePart = setUsername.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        emailPart = setEmail.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        passwordPart = setPassword.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        firstNameField = setFirstName
+        lastNameField = setLastName
+        contactField = setContact
+        usernameField = setUsername
+        emailField = setEmail
+        passwordField = setPassword
     }
+
+
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun Resource<UploadResponse>.apiUploadCall() {
+        let { resource ->
+            when (resource.status ) {
+                Status.SUCCESS -> {
+                    resource.data?.let { data ->
+                        val (success, image) = data
+                        isSuccessfulUploadImage = success
+                        if (success && image !== "") {
+                            imageResponseFromApi = image
+                        }
+                        clearFields()
+                        Log.i("USER-TAG", "==>LOADED USER PROFILE FROM API ==> $data")
+                    }
+                }
+                Status.ERROR -> {
+                    isLoading = false
+                }
+                Status.LOADING -> {
+                    isLoading = true
+                }
+            }
+        }
+    }
+
 
 
     /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
@@ -275,7 +312,7 @@ class SignUpActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     resource.data?.let { data ->
                         val (success, userProfile) = data
-                        isSuccess = success
+                        isSuccessfulUserProfile = success
                         if (success && userProfile.token !== "") {
                             saveSharedPref(userProfile, success)
                             isLoading = false

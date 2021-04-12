@@ -2,7 +2,9 @@ package com.sayyed.onlineclothingapplication.repository
 
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.ApiRequest
+import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.api.UserApi
+import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -11,7 +13,13 @@ import retrofit2.Response
 class UserRepository: ApiRequest() {
 
     private val userApi = ServiceBuilder.buildService(UserApi::class.java)
+    private val uploadApi = ServiceBuilder.buildService(UploadApi::class.java)
 
+    suspend fun uploadImage(body: MultipartBody.Part): UploadResponse {
+        return apiRequest {
+            uploadApi.uploadImage(body)
+        }
+    }
 
     suspend fun authLogin(email: String, password: String): UserResponse {
         return apiRequest {
@@ -20,16 +28,16 @@ class UserRepository: ApiRequest() {
     }
 
     suspend fun newAccount(
-            firstName: RequestBody,
-            lastName: RequestBody,
-            contact: RequestBody,
-            username: RequestBody,
-            email: RequestBody,
-            password: RequestBody,
-            body: MultipartBody.Part
+            firstName: String,
+            lastName: String,
+            image: String,
+            contact: String,
+            username: String,
+            email: String,
+            password: String,
     ): UserResponse {
         return apiRequest {
-            userApi.newAccount(firstName, lastName, contact, username, email, password, body)
+            userApi.newAccount(firstName, lastName, image, contact, username, email, password)
         }
     }
 
