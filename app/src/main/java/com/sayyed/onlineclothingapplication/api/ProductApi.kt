@@ -1,6 +1,7 @@
 package com.sayyed.onlineclothingapplication.api
 
 
+import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
 import com.sayyed.onlineclothingapplication.response.ProductResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
@@ -30,12 +31,18 @@ interface ProductApi {
             @Header("Authorization") token: String,
             @Path("id", encoded = false) id: String,
             @Field("name") name: String,
-            @Field("price") price: Int,
+            @Field("price") price: Double,
             @Field("description") description: String,
             @Field("image") image: String,
             @Field("brand") brand: String,
+            @Field("category") category: String,
             @Field("countInStock") countInStock: Int,
     ): Response<ProductDetailResponse>
 
+    @DELETE("/api/products/{id}")
+    suspend fun deleteProduct(
+            @Header("Authorization") token: String,
+            @Path("id", encoded = false) id: String,
+    ):Response<DeleteResponse>
 
 }

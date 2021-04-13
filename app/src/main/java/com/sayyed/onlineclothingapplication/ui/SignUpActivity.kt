@@ -145,6 +145,9 @@ class SignUpActivity : AppCompatActivity() {
             if (Network.isNetworkAvailable(this@SignUpActivity)) {
 
                 if (binding.btnSignUp.text == "Update") {
+                    if(isAdminSharedPref) {
+                        binding.tvAdmin.visibility = View.VISIBLE
+                    }
                     userViewModel.updateUser(
                             "Bearer $tokenSharedPref",
                             "${binding.etFirstName.text}",

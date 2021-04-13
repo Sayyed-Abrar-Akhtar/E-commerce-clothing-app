@@ -204,8 +204,6 @@ class AdminActivity : AppCompatActivity() {
             when (resource.status ) {
                 Status.SUCCESS -> {
                     resource.data?.let { data ->
-
-
                         Log.i("ADMIN-TAG", "==>LOADED DATA SUCCESSFULLY ==> $data")
                     }
                 }
@@ -230,7 +228,6 @@ class AdminActivity : AppCompatActivity() {
             when (resource.status ) {
                 Status.SUCCESS -> {
                     resource.data?.let { data ->
-
 
                         Log.i("ADMIN-TAG", "==>LOADED DATA SUCCESSFULLY ==> $data")
                     }

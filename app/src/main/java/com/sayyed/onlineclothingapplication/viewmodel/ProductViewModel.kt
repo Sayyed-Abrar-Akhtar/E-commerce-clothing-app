@@ -52,15 +52,16 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
             token: String,
             id: String,
             name: String,
-            price: Int,
+            price: Double,
             description: String,
             image: String,
             brand: String,
+            category: String,
             countInStock: Int
     )  = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            val product = productRepository.updateProduct(token, id, name, price, description, image, brand, countInStock)
+            val product = productRepository.updateProduct(token, id, name, price, description, image, brand, category, countInStock)
             emit(Resource.success(data = product))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")
@@ -93,6 +94,18 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
         }
     }
 
+
+    fun deleteProduct(token: String, id: String) = liveData {
+        emit(Resource.loading(data = null))
+        try {
+            val data = productRepository.deleteProduct(token, id)
+            emit(Resource.success(data = data))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
     fun insertProductToRoom() = viewModelScope.launch {
         try {
 
@@ -106,9 +119,9 @@ class ProductViewModel(private val productRepository: ProductRepository): ViewMo
     }
 
 
-    fun deleteProductsFromRoom() = viewModelScope.launch {
+    fun deleteProductFromRoom(id: String) = viewModelScope.launch {
         try {
-            productRepository.deleteProductsFromRoom()
+            productRepository.deleteProductFromRoom(id)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

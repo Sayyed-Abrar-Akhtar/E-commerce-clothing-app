@@ -99,7 +99,11 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
             true -> setupCategoryObservers()
             false -> {
                 Toast.makeText(this@DashboardActivity, "No internet connection!!", Toast.LENGTH_SHORT).show()
-                loadCategoryFromRoom()
+                try {
+                    loadCategoryFromRoom()
+                } catch (ex: Exception) {
+                    println("Error loading category data from database. ==> $ex")
+                }
             }
         }
     }

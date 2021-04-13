@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
     private var lastNameSharedPref : String? = ""
     private var imageSharedPref : String? = ""
     private  var emailSharedPref : String? = ""
+    private var usernameSharedPref: String? = ""
     private  var passwordSharedPref : String? = ""
     private  var tokenSharedPref : String? = ""
     private  var isAdminSharedPref : Boolean = false
@@ -156,6 +157,7 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("id", idSharedPref)
         editor.putString("firstName", firstNameSharedPref)
         editor.putString("lastName", lastNameSharedPref)
+        editor.putString("username", usernameSharedPref)
         editor.putString("image", imageSharedPref)
         editor.putString("contact", contactSharedPref)
         editor.putString("email", emailSharedPref)
@@ -176,6 +178,7 @@ class LoginActivity : AppCompatActivity() {
         lastNameSharedPref = sharedPref.getString("lastName", "")
         imageSharedPref = sharedPref.getString("image", "")
         contactSharedPref = sharedPref.getString("contact", "")
+        usernameSharedPref = sharedPref.getString("username", "")
         isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
         if(emailSharedPref !== "" && passwordSharedPref !== "") {
             binding.etEmail.setText(emailSharedPref)
@@ -198,6 +201,7 @@ class LoginActivity : AppCompatActivity() {
                             imageSharedPref = userProfile.image
                             contactSharedPref = userProfile.contact
                             emailSharedPref = userProfile.email
+                            usernameSharedPref = userProfile.username
                             passwordSharedPref = binding.etPassword.text.toString()
                             tokenSharedPref = userProfile.token
                             isAdminSharedPref = userProfile.isAdmin

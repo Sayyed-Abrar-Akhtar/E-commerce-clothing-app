@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
@@ -99,9 +100,15 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
         brandIntent = intent.getStringExtra("brandIntent").toString()
         descriptionIntent = intent.getStringExtra("descriptionIntent").toString()
         countInStockIntent = intent.getStringExtra("countInStockIntent").toString()
+        imageIntent = intent.getStringExtra("imageIntent").toString()
+
+        Glide.with(this@ProductCreateUpdateActivity)
+                .load(FileUpload.checkImageString(imageIntent))
+                .into(binding.imgProduct)
 
 
         header = intent.getStringExtra("header")
+        binding.btnCreateAndUpdate.text = header
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -145,7 +152,6 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
         }
 
         binding.btnCreateAndUpdate.setOnClickListener {
-            setupUI()
             updateProductObserver(imageIntent)
         }
 
@@ -261,15 +267,24 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
 
     /*-----------------------------------------CREATE NEW PRODUCT-------------------------------------------------*/
     private fun updateProductObserver(image: String){
+        val id: String = idIntent
+        val name: String = binding.etProductName.text.toString()
+        val price: Double = binding.etProductPrice.text.toString().toDouble()
+        val description: String = binding.etProductDescription.text.toString()
+        val brand: String = binding.etProductBrand.text.toString()
+        val qty: Int = binding.etProductStock.text.toString().toInt()
+
+
         productViewModel.updateProduct(
             "Bearer $tokenSharedPref",
-                idIntent,
-                binding.etProductName.text.toString(),
-                Integer.parseInt(binding.etProductPrice.text.toString()),
-                binding.etProductDescription.text.toString(),
+                id,
+                name,
+                price,
+                description,
                 image,
-                binding.etProductBrand.toString(),
-                Integer.parseInt(binding.etProductStock.text.toString())
+                brand,
+                categoryIntent,
+                qty
         ).observe(this, {
             it?.let { resource ->
                 when(resource.status) {

@@ -13,13 +13,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
+import com.sayyed.onlineclothingapplication.adapter.ProductAdminAdapter
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityAdminShowAllProductBinding
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductBinding
+import com.sayyed.onlineclothingapplication.eventlistener.OnAdminProductClickListener
 import com.sayyed.onlineclothingapplication.eventlistener.OnProductClickListener
 import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
+import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.ProductResponse
 import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Resource
@@ -28,13 +31,13 @@ import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
 import java.util.*
 
-class AdminShowAllProductActivity : AppCompatActivity(), OnProductClickListener {
+class AdminShowAllProductActivity : AppCompatActivity(), OnAdminProductClickListener {
 
     private lateinit var binding: ActivityAdminShowAllProductBinding
     private lateinit var productViewModel: ProductViewModel
 
     private lateinit var listProduct: MutableList<Product>
-    private lateinit var adapter: ProductAdapter
+    private lateinit var adapter: ProductAdminAdapter
 
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
@@ -44,6 +47,7 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnProductClickListener 
     private var imageSharedPref : String? = ""
     private  var contactSharedPref : String? = ""
     private  var isAdminSharedPref : Boolean = false
+    private  var tokenSharedPref : String? =  ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,20 +110,39 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnProductClickListener 
         imageSharedPref = sharedPref.getString("image", "")
         contactSharedPref = sharedPref.getString("contact", "")
         isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
+        tokenSharedPref = sharedPref.getString("token", "")
     }
 
-    /*----------------------CLICK LISTENER ON PRODUCTS IN RECYCLER VIEW-------------------------------------------*/
-    override fun OnProductItemClick(position: Int, product: String) {
-        val intent = Intent(this, ProductDetailActivity::class.java)
-        intent.putExtra("product_id", product)
+    /*----------------------CLICK LISTENER ON EDIT PRODUCT IN RECYCLER VIEW----------------------------------------*/
+    override fun OnProductEditClick(position: Int, product: Product) {
+        val intent = Intent(this@AdminShowAllProductActivity, ProductCreateUpdateActivity::class.java)
+        intent.putExtra("header", "Update Product")
+        intent.putExtra("idIntent", "${product._id}")
+        intent.putExtra("imageIntent", "${product.image}")
+        intent.putExtra("nameIntent", "${product.name}")
+        intent.putExtra("priceIntent", "${product.price}")
+        intent.putExtra("brandIntent", "${product.brand}")
+        intent.putExtra("descriptionIntent", "${product.description}")
+        intent.putExtra("countInStockIntent", "${product.countInStock}")
         startActivity(intent)
+        productViewModel.getAllProducts()
+    }
+
+    /*----------------------CLICK LISTENER ON DELETE PRODUCT IN RECYCLER VIEW--------------------------------------*/
+    override fun OnProductDeleteClick(position: Int, productId: String) {
+        productViewModel.deleteProduct("Bearer $tokenSharedPref", productId).observe(this@AdminShowAllProductActivity, {
+            it.loadApiToDelData()
+        })
+        productViewModel.deleteProductFromRoom(productId)
+        adapter.notifyDataSetChanged()
+        setupProductObservers()
     }
 
     /*---------------------------------------------SET UP UI------------------------------------------------------*/
     private fun setupUI() {
         binding.recyclerViewProductAdmin.layoutManager = LinearLayoutManager(this@AdminShowAllProductActivity)
         listProduct = mutableListOf()
-        adapter = ProductAdapter(this@AdminShowAllProductActivity, listProduct, this@AdminShowAllProductActivity)
+        adapter = ProductAdminAdapter(this@AdminShowAllProductActivity, listProduct, this@AdminShowAllProductActivity)
         binding.recyclerViewProductAdmin.adapter = adapter
     }
 
@@ -153,6 +176,40 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnProductClickListener 
                         adapter.notifyDataSetChanged()
                         println("${listProduct}")
                         Log.i("productTag", "==>LOADED PRODUCT DATA FROM API")
+                    }
+                }
+
+                Status.ERROR -> {
+                    binding.recyclerViewProductAdmin.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
+                }
+
+                Status.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.recyclerViewProductAdmin.visibility = View.GONE
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
+                }
+            }
+        }
+    }
+
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun Resource<DeleteResponse>.loadApiToDelData() {
+        let { resource ->
+            when (resource.status ) {
+                Status.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.recyclerViewProductAdmin.visibility = View.VISIBLE
+
+                    resource.data?.let { data ->
+                        Toast.makeText(this@AdminShowAllProductActivity, data.message, Toast.LENGTH_SHORT).show()
+                        Log.i("productDeleteTag", "==>PRODUCT DELETED FROM API")
                     }
                 }
 

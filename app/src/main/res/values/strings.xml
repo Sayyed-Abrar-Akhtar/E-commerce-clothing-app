@@ -28,7 +28,6 @@
     <string name="brand">Brand</string>
     <string name="reviews"><u>Reviews &#x261F;</u></string>
     <string name="items_in_your_cart">Items in your cart</string>
-    <string name="admin">Admin</string>
     <string name="loading"><strong>Loading...</strong></string>
     <string name="no_internet">No internet connection &#128532;</string>
     <string name="add_new_product">Add new product</string>
@@ -55,5 +54,12 @@
     <string name="enter_product_name">Enter product name</string>
     <string name="enter_product_price">Enter product price</string>
     <string name="product_image">Product image</string>
+    <string name="admin">Admin</string>
+    <string name="enter_first_name">Enter First Name</string>
+    <string name="enter_last_name">Enter Last Name</string>
+    <string name="enter_contact">Enter Contact</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_password_again">Enter password again</string>
+    <string name="tshirt">&#128090;</string>
 
 </resources>

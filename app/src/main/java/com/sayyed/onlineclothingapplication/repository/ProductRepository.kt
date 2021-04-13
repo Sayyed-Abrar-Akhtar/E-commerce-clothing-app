@@ -7,6 +7,7 @@ import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.models.Product
+import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
 import com.sayyed.onlineclothingapplication.response.ProductResponse
 import com.sayyed.onlineclothingapplication.response.UploadResponse
@@ -34,14 +35,21 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
         token: String,
         id: String,
         name: String,
-        price: Int,
+        price: Double,
         description: String,
         image: String,
         brand: String,
+        category: String,
         countInStock: Int
     ): ProductDetailResponse {
         return apiRequest {
-            productApi.updateProduct(token, id, name, price, description, image, brand, countInStock)
+            productApi.updateProduct(token, id, name, price, description, image, brand, category, countInStock)
+        }
+    }
+
+    suspend fun deleteProduct(token: String, id: String): DeleteResponse {
+        return apiRequest {
+            productApi.deleteProduct(token, id)
         }
     }
 
@@ -73,8 +81,8 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
     }
 
 
-    suspend fun deleteProductsFromRoom() {
-        productDAO.deleteAllProduct()
+    suspend fun deleteProductFromRoom(id: String) {
+        productDAO.deleteProduct(id)
     }
 
     val retrieveProductsFromRoom = productDAO.retrieveProducts()
