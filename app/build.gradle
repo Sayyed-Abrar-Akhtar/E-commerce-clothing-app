@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: "kotlin-kapt"
+kapt.includeCompileClasspath = false
 
 android {
     compileSdkVersion 30

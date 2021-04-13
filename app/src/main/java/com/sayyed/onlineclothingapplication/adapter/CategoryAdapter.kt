@@ -32,7 +32,7 @@ class CategoryAdapter (
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categoryList[position]
-        holder.tvCategoryName?.text = category.name
+        holder.tvCategoryName.text = category.name
         val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .override(600, 120)

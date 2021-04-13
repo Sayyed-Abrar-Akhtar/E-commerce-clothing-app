@@ -34,6 +34,29 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
         }
     }
 
+    fun allUsers(token: String) = liveData {
+        emit( Resource.loading(data = null))
+        try {
+            val user = userRepository.allUsers(token)
+            emit(Resource.success(data = user))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun deleteUser(token: String, id:String) = liveData {
+        emit( Resource.loading(data = null))
+        try {
+            val user = userRepository.deleteUser(token, id)
+            emit(Resource.success(data = user))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
+
     fun newAccount(
             firstName: String,
             lastName: String,
@@ -72,6 +95,8 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
             emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
         }
     }
+
+
 
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {

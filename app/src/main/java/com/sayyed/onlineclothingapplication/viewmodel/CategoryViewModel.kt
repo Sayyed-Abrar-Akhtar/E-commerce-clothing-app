@@ -70,6 +70,17 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository): Vie
         }
     }
 
+    fun deleteCategory(token: String, id: String) = liveData {
+        emit(Resource.loading(data = null))
+        try {
+            val data = categoryRepository.deleteCategory(token, id)
+            emit(Resource.success(data = data))
+        } catch (ex: Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
     fun insertCategoryIntoRoom() = viewModelScope.launch {
         try {
             val categoriesLive = categoryRepository.getCategory().category
@@ -81,9 +92,9 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository): Vie
         }
     }
 
-    fun deleteAllCategory() = viewModelScope.launch {
+    fun deleteCategoryFromRoom(id: String) = viewModelScope.launch {
         try {
-            categoryRepository.deleteCategoriesFromRoom()
+            categoryRepository.deleteCategoryFromRoom(id)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

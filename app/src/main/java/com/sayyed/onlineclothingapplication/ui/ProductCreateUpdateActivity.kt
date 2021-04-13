@@ -140,10 +140,7 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
         setupSpinner(listCategory)
 
         binding.imgProduct.setOnClickListener{
-
             FileUpload.loadPopUpMenu(this@ProductCreateUpdateActivity, this@ProductCreateUpdateActivity, binding.imgProduct)
-
-            //setupImageUploadObservers()
         }
 
         binding.btnCreateAndUpdate.setOnClickListener {
@@ -164,7 +161,7 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
                     finish()
                 }
 
-            }, 800)
+            }, 1000)
         }
 
     }

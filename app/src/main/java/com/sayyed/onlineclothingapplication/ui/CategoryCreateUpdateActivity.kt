@@ -125,9 +125,11 @@ class CategoryCreateUpdateActivity : AppCompatActivity() {
 
         binding.imgCategory.setOnClickListener{
 
-            FileUpload.loadPopUpMenu(this@CategoryCreateUpdateActivity, this@CategoryCreateUpdateActivity, binding.imgCategory)
-
-            //setupImageUploadObservers()
+            FileUpload.loadPopUpMenu(
+                this@CategoryCreateUpdateActivity,
+                this@CategoryCreateUpdateActivity,
+                binding.imgCategory
+            )
         }
 
         binding.btnCreateAndUpdate.setOnClickListener {
@@ -258,7 +260,7 @@ class CategoryCreateUpdateActivity : AppCompatActivity() {
                                 clearFields()
                                 binding.btnCreateAndUpdate.text = getString(R.string.loading)
                                 Toast.makeText(this@CategoryCreateUpdateActivity, "Success", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this@CategoryCreateUpdateActivity, ProductActivity::class.java)
+                                val intent = Intent(this@CategoryCreateUpdateActivity, DashboardActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }

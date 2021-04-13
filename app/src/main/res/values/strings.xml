@@ -62,6 +62,6 @@
     <string name="enter_password_again">Enter password again</string>
     <string name="tshirt">&#128090;</string>
     <string name="discard">Discard</string>
-    <string name="enter_category_name" >Enter category name</string>
+    <string name="enter_category_name">Enter category name</string>
 
 </resources>

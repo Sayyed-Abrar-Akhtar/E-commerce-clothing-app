@@ -32,8 +32,8 @@ class ProductAdapter(
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.tvProductTitle?.text = product.name
-        holder.tvProductPrice?.text = product.price.toString()
+        holder.tvProductTitle.text = product.name
+        holder.tvProductPrice.text = product.price.toString()
         holder.productRating.rating = product.rating.toFloat()
 
         val requestOptions = RequestOptions()

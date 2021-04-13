@@ -214,7 +214,6 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
                         listCategory.clear()
                         listCategory.addAll(category.category)
                         adapter.notifyDataSetChanged()
-                        categoryViewModel.deleteAllCategory()
                         println(category)
                         Log.i("CategoryTAG", "==>LOADED CATEGORY DATA FROM API")
                     }

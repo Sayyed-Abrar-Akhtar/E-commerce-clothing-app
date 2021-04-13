@@ -133,6 +133,18 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.btnAllCategory.setOnClickListener {
+            val intent = Intent(this@AdminActivity, AdminShowAllCategoryActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.btnAllUser.setOnClickListener {
+            val intent = Intent(this@AdminActivity, AdminShowAllUserActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/

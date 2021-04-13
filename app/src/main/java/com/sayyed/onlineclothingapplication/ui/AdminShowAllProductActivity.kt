@@ -60,7 +60,7 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnAdminProductClickList
 
         /*-----------------------GET CATEGORY DATA FROM DASHBOARD ACTIVITY THROUGH INTENT-------------------------*/
         val categoryName = intent.getStringExtra("categoryName")
-        val categoryId = intent.getStringExtra("categoryId")
+        //val categoryId = intent.getStringExtra("categoryId")
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -115,7 +115,7 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnAdminProductClickList
     }
 
     /*----------------------CLICK LISTENER ON EDIT PRODUCT IN RECYCLER VIEW----------------------------------------*/
-    override fun OnProductEditClick(position: Int, product: Product) {
+    override fun onProductEditClick(position: Int, product: Product) {
         val intent = Intent(this@AdminShowAllProductActivity, ProductCreateUpdateActivity::class.java)
         intent.putExtra("header", "Update Product")
         intent.putExtra("idIntent", "${product._id}")
@@ -126,11 +126,11 @@ class AdminShowAllProductActivity : AppCompatActivity(), OnAdminProductClickList
         intent.putExtra("descriptionIntent", "${product.description}")
         intent.putExtra("countInStockIntent", "${product.countInStock}")
         startActivity(intent)
-        productViewModel.getAllProducts()
+
     }
 
     /*----------------------CLICK LISTENER ON DELETE PRODUCT IN RECYCLER VIEW--------------------------------------*/
-    override fun OnProductDeleteClick(position: Int, productId: String) {
+    override fun onProductDeleteClick(position: Int, productId: String) {
         productViewModel.deleteProduct("Bearer $tokenSharedPref", productId).observe(this@AdminShowAllProductActivity, {
             it.loadApiToDelData()
         })

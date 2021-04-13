@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
-import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.models.UserProfile
 import com.sayyed.onlineclothingapplication.repository.UserRepository
 import com.sayyed.onlineclothingapplication.response.UploadResponse
@@ -30,15 +29,6 @@ import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -165,7 +155,7 @@ class SignUpActivity : AppCompatActivity() {
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
 
-                        Toast.makeText(this@SignUpActivity, "User updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignUpActivity, "com.sayyed.onlineclothingapplication.models.Users updated successfully", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, DashboardActivity::class.java)
                         startActivity(intent)
                         finish()

@@ -60,12 +60,18 @@ class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
         }
     }
 
+    suspend fun deleteCategory(token: String, id: String): DeleteResponse {
+        return apiRequest {
+            categoryApi.deleteCategory(token, id)
+        }
+    }
+
     suspend fun insertCategoryToRoom(category: Category) {
         categoryDAO.createCategory(category)
     }
 
-    suspend fun deleteCategoriesFromRoom() {
-        categoryDAO.deleteAllCategory()
+    suspend fun deleteCategoryFromRoom(id: String) {
+        categoryDAO.deleteCategory(id)
     }
 
     val retrieveCategoryFromRoom = categoryDAO.retrieveCategory()

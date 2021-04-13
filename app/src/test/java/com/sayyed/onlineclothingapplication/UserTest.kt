@@ -1,6 +1,5 @@
 package com.sayyed.onlineclothingapplication
 
-import com.sayyed.onlineclothingapplication.entities.User
 import com.sayyed.onlineclothingapplication.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -13,7 +12,7 @@ class UserTest {
     @Test
     fun checkUserLogin () = runBlocking {
         userRepository = UserRepository()
-        val response = userRepository.checkUser("sayyed", "sayyed123")
+        val response = userRepository.authLogin("akhtars10@uni.coventry.ac.uk", "sayyed-abrar")
         val expectedResult = true
         val actualResult = response.success
 
@@ -24,7 +23,15 @@ class UserTest {
     fun checkUserRegister () = runBlocking {
         userRepository = UserRepository()
 
-        val response =userRepository.registerUser(User("jkj", "sayyed", "Akhtar", "sayy@gmail.com", "sayyed.abrar", "sayyed") )
+        val response =userRepository.newAccount(
+            "Rehman",
+            "Khan",
+            "/uploads/no-image.png",
+            "980000000000",
+            "rehman",
+            "rehman@khan.com",
+            "rehman"
+        )
 
         val expectedResult = true
         val actualResult = response.success

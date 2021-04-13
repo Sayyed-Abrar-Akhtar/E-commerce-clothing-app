@@ -1,6 +1,8 @@
 package com.sayyed.onlineclothingapplication.api
 
 
+import com.sayyed.onlineclothingapplication.response.DeleteResponse
+import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -9,7 +11,7 @@ import retrofit2.http.*
 
 interface UserApi {
 
-    //Register User
+    //Register com.sayyed.onlineclothingapplication.models.Users
     @FormUrlEncoded
     @POST("/api/users/")
     suspend fun newAccount(
@@ -31,6 +33,10 @@ interface UserApi {
             @Field("password") password :String
     ): Response<UserResponse>
 
+    @GET("/api/users/")
+    suspend fun allUsers(
+        @Header("Authorization") token: String,
+    ): Response<UserDetailsResponse>
 
     // Update
     @FormUrlEncoded
@@ -47,9 +53,12 @@ interface UserApi {
     ): Response<UserResponse>
 
 
-    @PUT("/api/users/{id}")
+    @DELETE("/api/users/{id}")
     suspend fun deleteUser(
             @Header("Authorization") token: String,
             @Path("id") id: String,
-    ): Response<UserResponse>
+    ): Response<DeleteResponse>
+
+
+
 }

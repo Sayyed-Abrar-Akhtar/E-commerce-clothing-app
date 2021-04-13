@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -32,8 +31,8 @@ class ProductAdminAdapter (
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.tvItemName?.text = product.name
-        holder.tvItemQty?.text = "Rs${product.price} - ${product.countInStock} items"
+        holder.tvItemName.text = product.name
+        holder.tvItemQty.text = "Rs${product.price} - ${product.countInStock} items"
 
         val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -45,11 +44,11 @@ class ProductAdminAdapter (
                 .into(holder.imgProductItem)
 
         holder.ivItemEdit.setOnClickListener {
-            onAdminProductClickListener.OnProductEditClick(position, product)
+            onAdminProductClickListener.onProductEditClick(position, product)
         }
 
         holder.ivItemDelete.setOnClickListener {
-            onAdminProductClickListener.OnProductDeleteClick(position, "${product._id}")
+            onAdminProductClickListener.onProductDeleteClick(position, "${product._id}")
         }
     }
 

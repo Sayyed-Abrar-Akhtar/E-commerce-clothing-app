@@ -4,7 +4,9 @@ import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.ApiRequest
 import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.api.UserApi
+import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UploadResponse
+import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
 import com.sayyed.onlineclothingapplication.response.UserResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -24,6 +26,18 @@ class UserRepository: ApiRequest() {
     suspend fun authLogin(email: String, password: String): UserResponse {
         return apiRequest {
             userApi.authLogin(email, password)
+        }
+    }
+
+    suspend fun allUsers(token: String): UserDetailsResponse {
+        return apiRequest {
+            userApi.allUsers(token)
+        }
+    }
+
+    suspend fun deleteUser(token: String, id:String): DeleteResponse {
+        return apiRequest {
+            userApi.deleteUser(token, id)
         }
     }
 
