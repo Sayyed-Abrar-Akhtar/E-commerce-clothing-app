@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineClothingApplication"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.AdminShowAllProductActivity"></activity>
+        <activity android:name=".ui.CategoryCreateUpdateActivity"></activity>
+        <activity android:name=".ui.AdminShowAllProductActivity" />
         <activity android:name=".ui.ShippingActivity" />
         <activity android:name=".ui.ShowAllActivity" />
         <activity android:name=".ui.ProductCreateUpdateActivity" />

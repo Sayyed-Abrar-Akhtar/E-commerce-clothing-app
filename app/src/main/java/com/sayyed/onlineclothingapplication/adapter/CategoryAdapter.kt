@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
+import com.sayyed.onlineclothingapplication.utils.FileUpload
 import kotlin.collections.ArrayList
 
 class CategoryAdapter (
@@ -36,7 +37,7 @@ class CategoryAdapter (
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .override(600, 120)
         Glide.with(context)
-                .load(category.image)
+                .load(FileUpload.checkImageString(category.image))
                 .apply(requestOptions)
                 .into(holder.imageViewCategoryImg)
 

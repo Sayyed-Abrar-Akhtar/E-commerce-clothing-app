@@ -1,8 +1,10 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -130,4 +132,7 @@ class NavigationDrawerSetup : AppCompatActivity() {
         val settings: SharedPreferences = context.getSharedPreferences("LoginPreference", MODE_PRIVATE)
         settings.edit().clear().commit()
     }
+
+
+
 }

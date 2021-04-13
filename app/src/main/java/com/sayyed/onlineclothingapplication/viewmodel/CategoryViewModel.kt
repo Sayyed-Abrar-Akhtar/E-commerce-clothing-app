@@ -8,9 +8,40 @@ import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 
 class CategoryViewModel(private val categoryRepository: CategoryRepository): ViewModel(), Observable {
+
+    fun uploadImage(body: MultipartBody.Part) = liveData(Dispatchers.IO) {
+        emit (Resource.loading(data = null))
+        try {
+            val image = categoryRepository.uploadImage(body)
+            println("error message=>$image")
+            emit(Resource.success(data= image))
+        } catch (ex: java.lang.Exception) {
+            println("error message=>${ex.message}")
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!"))
+        }
+    }
+
+    fun createCategory(token: String, name: String, image: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = categoryRepository.createCategory(token, name, image)))
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!" ))
+        }
+    }
+
+    fun updateCategory(token: String, id: String, name: String, image: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = categoryRepository.updateCategory(token, id, name, image)))
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message ?: "Error Occurred!" ))
+        }
+    }
 
     fun getCategory() = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))

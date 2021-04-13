@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -27,10 +29,7 @@ import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
-import com.sayyed.onlineclothingapplication.response.CategoryIdResponse
-import com.sayyed.onlineclothingapplication.response.CategoryNameResponse
-import com.sayyed.onlineclothingapplication.response.CategoryResponse
-import com.sayyed.onlineclothingapplication.response.UploadResponse
+import com.sayyed.onlineclothingapplication.response.*
 import com.sayyed.onlineclothingapplication.utils.FileUpload
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
@@ -78,6 +77,7 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
     private var imageUrl: String? = null
 
     private var isSuccessfulUploadImage: Boolean =  false
+    private var isSuccess: Boolean = false
 
 
 
@@ -102,13 +102,8 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
         countInStockIntent = intent.getStringExtra("countInStockIntent").toString()
         imageIntent = intent.getStringExtra("imageIntent").toString()
 
-        Glide.with(this@ProductCreateUpdateActivity)
-                .load(FileUpload.checkImageString(imageIntent))
-                .into(binding.imgProduct)
-
 
         header = intent.getStringExtra("header")
-        binding.btnCreateAndUpdate.text = header
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -153,6 +148,23 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
 
         binding.btnCreateAndUpdate.setOnClickListener {
             updateProductObserver(imageIntent)
+        }
+
+        binding.btnDiscard.setOnClickListener {
+            productViewModel.deleteProduct("Bearer $tokenSharedPref", idIntent).observe(this@ProductCreateUpdateActivity, {
+                it.loadApiToDelData()
+            })
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                binding.btnDiscard.text = getString(R.string.loading)
+                if(isSuccess) {
+                    Toast.makeText(this@ProductCreateUpdateActivity, "Product discarded", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AdminActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
+            }, 800)
         }
 
     }
@@ -207,6 +219,13 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
         binding.etProductBrand.setText(brandIntent)
         binding.etProductDescription.setText(descriptionIntent)
         binding.etProductStock.setText(countInStockIntent)
+
+        if(imageIntent != "") {
+            Glide.with(this@ProductCreateUpdateActivity)
+                .load(FileUpload.checkImageString(imageIntent))
+                .into(binding.imgProduct)
+        }
+        binding.btnCreateAndUpdate.text = header
     }
 
 
@@ -222,7 +241,7 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
         }
     }
@@ -292,6 +311,7 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
                         resource.data?.let { product ->
                             if(product.success) {
                                 clearFields()
+                                binding.btnCreateAndUpdate.text = getString(R.string.loading)
                                 Toast.makeText(this@ProductCreateUpdateActivity, "Success", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@ProductCreateUpdateActivity, ProductActivity::class.java)
                                 startActivity(intent)
@@ -393,6 +413,33 @@ class ProductCreateUpdateActivity : AppCompatActivity() {
                     println(resource.message)
                     println("==================================================")
                 }
+                Status.LOADING -> {
+                    println("=========================LOADER====================")
+                    println("!!! LOADING... !!!")
+                    println("===================================================")
+                }
+            }
+        }
+    }
+
+    /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
+    private fun Resource<DeleteResponse>.loadApiToDelData() {
+        let { resource ->
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    resource.data?.let { data ->
+                        isSuccess = data.success
+                        Log.i("productDeleteTag", "==>PRODUCT DELETED FROM API")
+                    }
+                }
+
+                Status.ERROR -> {
+                    println("=========================ERROR====================")
+                    println(resource.data)
+                    println(resource.message)
+                    println("==================================================")
+                }
+
                 Status.LOADING -> {
                     println("=========================LOADER====================")
                     println("!!! LOADING... !!!")

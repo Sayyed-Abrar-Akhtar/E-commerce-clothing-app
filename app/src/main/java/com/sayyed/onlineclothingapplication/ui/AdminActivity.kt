@@ -123,6 +123,16 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.btnAddCategory.setOnClickListener {
+            val intent = Intent(this@AdminActivity, CategoryCreateUpdateActivity::class.java)
+            intent.putExtra("idIntent", "")
+            intent.putExtra("nameIntent", "")
+            intent.putExtra("imageIntent", "")
+            intent.putExtra("header", "Add Category")
+            startActivity(intent)
+            finish()
+        }
     }
 
     /*--------------------------------------------SET UP VIEW MODEL-----------------------------------------------*/
