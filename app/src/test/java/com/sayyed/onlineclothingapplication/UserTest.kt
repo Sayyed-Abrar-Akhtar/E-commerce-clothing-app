@@ -14,11 +14,9 @@ import org.junit.runner.manipulation.Ordering
 class UserTest {
 
     private lateinit var userRepository: UserRepository
-    private lateinit var categoryRepository: CategoryRepository
-    private lateinit var productRepository: ProductRepository
 
-    private lateinit var categoryDAO: CategoryDAO
 
+    private  val token: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNzU1MDI1NGQxNjQ1M2Y0MDQxNzQyZCIsImlhdCI6MTYxODQ4MTU0MCwiZXhwIjoxNjIxMDczNTQwfQ.Wag7vYxyhbTEorIMePpOqQCCNP9IWXGPY5Tqptna5wc"
 
     @Test
     fun checkUserLogin () = runBlocking {
@@ -51,5 +49,51 @@ class UserTest {
 
     }
 
+    @Test
+    fun checkUpdateUser() = runBlocking {
+        userRepository = UserRepository()
+        val response = userRepository.updateUser(
+            "Bearer $token",
+            "Sayyed Abrar",
+            "Akhtar",
+            "123456789",
+            "sayyed",
+            "",
+            "sayyed",
+            "https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561_960_720.png"
+        )
+
+        val expectedResult = true
+        val actualResult = response.success
+
+        Assert.assertEquals(expectedResult, actualResult)
+    }
+
+    @Test
+    fun checkRetrieveAllUsers() = runBlocking {
+        userRepository = UserRepository()
+        val response = userRepository.allUsers(
+            "Bearer $token"
+        )
+
+        val expectedResult = true
+        val actualResult = response.success
+
+        Assert.assertEquals(expectedResult, actualResult)
+    }
+
+    @Test
+    fun checkDeleteUser() = runBlocking {
+
+        userRepository = UserRepository()
+        val response = userRepository.deleteUser(
+            "Bearer $token",
+            "607881e15e83e027f850cf74"
+        )
+        val expectedResult = true
+        val actualResult = response.success
+
+        Assert.assertEquals(expectedResult, actualResult)
+    }
 
 }
