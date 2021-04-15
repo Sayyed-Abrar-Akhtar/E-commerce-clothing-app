@@ -20,7 +20,7 @@ import com.sayyed.onlineclothingapplication.databinding.ActivityDashboardBinding
 import com.sayyed.onlineclothingapplication.eventlistener.OnCategoryClickListener
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
-import com.sayyed.onlineclothingapplication.response.CategoryWearResponse
+import com.sayyed.onlineclothingapplication.response.CategoryResponse
 import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
@@ -203,7 +203,7 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
     }
 
     /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
-    private fun Resource<CategoryWearResponse>.loadApiData() {
+    private fun Resource<CategoryResponse>.loadApiData() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {

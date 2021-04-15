@@ -1,13 +1,13 @@
 package com.sayyed.onlineclothingapplication.repository
 
 import com.sayyed.onlineclothinglibrary.api.ApiRequest
-import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.api.UserApi
 import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
 import com.sayyed.onlineclothingapplication.response.UserWearResponse
+import com.sayyed.onlineclothinglibrary.api.ServiceBuilder
 import okhttp3.MultipartBody
 
 class UserRepository: ApiRequest() {

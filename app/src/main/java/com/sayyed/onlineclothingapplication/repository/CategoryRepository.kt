@@ -1,12 +1,12 @@
 package com.sayyed.onlineclothingapplication.repository
 
-import com.sayyed.onlineclothingapplication.api.ApiRequest
 import com.sayyed.onlineclothingapplication.api.CategoryApi
-import com.sayyed.onlineclothingapplication.api.ServiceBuilder
 import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.models.Category
 import com.sayyed.onlineclothingapplication.response.*
+import com.sayyed.onlineclothinglibrary.api.ApiRequest
+import com.sayyed.onlineclothinglibrary.api.ServiceBuilder
 import okhttp3.MultipartBody
 
 class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
@@ -43,7 +43,7 @@ class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
     }
 
 
-    suspend fun getCategory(): CategoryWearResponse {
+    suspend fun getCategory(): CategoryResponse {
         return apiRequest {
             categoryApi.getCategory()
         }

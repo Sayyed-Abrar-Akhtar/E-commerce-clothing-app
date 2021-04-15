@@ -18,7 +18,7 @@ import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
 import com.sayyed.onlineclothingapplication.repository.UserRepository
-import com.sayyed.onlineclothingapplication.response.CategoryWearResponse
+import com.sayyed.onlineclothingapplication.response.CategoryResponse
 import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
 import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
@@ -217,7 +217,7 @@ class AdminActivity : AppCompatActivity() {
 
 
     /*-------------------------------------GET CATEGORY DATA FROM API---------------------------------------------*/
-    private fun Resource<CategoryWearResponse>.apiCategoryCall() {
+    private fun Resource<CategoryResponse>.apiCategoryCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {
