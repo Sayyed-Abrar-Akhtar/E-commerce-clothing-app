@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
@@ -20,7 +18,6 @@ import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityCategoryCreateUpdateBinding
-import com.sayyed.onlineclothingapplication.databinding.ActivityProductCreateUpdateBinding
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.utils.FileUpload
@@ -28,7 +25,6 @@ import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
-import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 

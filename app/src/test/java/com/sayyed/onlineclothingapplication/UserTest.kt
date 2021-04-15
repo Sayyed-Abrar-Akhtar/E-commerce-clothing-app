@@ -1,13 +1,24 @@
 package com.sayyed.onlineclothingapplication
 
+import com.sayyed.onlineclothingapplication.dao.CategoryDAO
+import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
+import com.sayyed.onlineclothingapplication.repository.CategoryRepository
+import com.sayyed.onlineclothingapplication.repository.ProductRepository
 import com.sayyed.onlineclothingapplication.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.manipulation.Ordering
+
 
 class UserTest {
 
     private lateinit var userRepository: UserRepository
+    private lateinit var categoryRepository: CategoryRepository
+    private lateinit var productRepository: ProductRepository
+
+    private lateinit var categoryDAO: CategoryDAO
+
 
     @Test
     fun checkUserLogin () = runBlocking {
@@ -23,7 +34,7 @@ class UserTest {
     fun checkUserRegister () = runBlocking {
         userRepository = UserRepository()
 
-        val response =userRepository.newAccount(
+        val response = userRepository.newAccount(
             "Rehman",
             "Khan",
             "/uploads/no-image.png",
@@ -39,4 +50,6 @@ class UserTest {
         Assert.assertEquals(expectedResult, actualResult)
 
     }
+
+
 }

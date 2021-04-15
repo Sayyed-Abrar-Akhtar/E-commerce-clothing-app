@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
@@ -14,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.databinding.ActivityLoginBinding
 import com.sayyed.onlineclothingapplication.repository.UserRepository
-import com.sayyed.onlineclothingapplication.response.UserResponse
+import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.UserViewModel
@@ -187,7 +186,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
-    private fun Resource<UserResponse>.apiCall() {
+    private fun Resource<UserWearResponse>.apiCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {

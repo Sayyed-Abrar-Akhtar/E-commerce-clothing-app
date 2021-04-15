@@ -1,2 +1,4 @@
+include ':onlineclothinglibrary'
+include ':onlineclothingwear'
 include ':app'
 rootProject.name = "Online Clothing Application"

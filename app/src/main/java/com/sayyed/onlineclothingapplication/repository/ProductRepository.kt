@@ -76,11 +76,6 @@ class ProductRepository(private val productDAO: ProductDAO) : ApiRequest() {
     }
 
 
-    suspend fun updateProductsInRoom(product: Product) {
-        productDAO.updateProduct(product)
-    }
-
-
     suspend fun deleteProductFromRoom(id: String) {
         productDAO.deleteProduct(id)
     }

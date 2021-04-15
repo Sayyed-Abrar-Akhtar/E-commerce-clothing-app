@@ -12,6 +12,7 @@ import okhttp3.MultipartBody
 class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
     private val categoryApi = ServiceBuilder.buildService(CategoryApi::class.java)
     private val uploadApi = ServiceBuilder.buildService(UploadApi::class.java)
+    
 
     suspend fun uploadImage(body: MultipartBody.Part): UploadResponse {
         return apiRequest {
@@ -42,7 +43,7 @@ class CategoryRepository(private val categoryDAO: CategoryDAO): ApiRequest() {
     }
 
 
-    suspend fun getCategory(): CategoryResponse {
+    suspend fun getCategory(): CategoryWearResponse {
         return apiRequest {
             categoryApi.getCategory()
         }

@@ -1,16 +1,14 @@
 package com.sayyed.onlineclothingapplication.repository
 
+import com.sayyed.onlineclothinglibrary.api.ApiRequest
 import com.sayyed.onlineclothingapplication.api.ServiceBuilder
-import com.sayyed.onlineclothingapplication.api.ApiRequest
 import com.sayyed.onlineclothingapplication.api.UploadApi
 import com.sayyed.onlineclothingapplication.api.UserApi
 import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
-import com.sayyed.onlineclothingapplication.response.UserResponse
+import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.Response
 
 class UserRepository: ApiRequest() {
 
@@ -23,7 +21,7 @@ class UserRepository: ApiRequest() {
         }
     }
 
-    suspend fun authLogin(email: String, password: String): UserResponse {
+    suspend fun authLogin(email: String, password: String): UserWearResponse {
         return apiRequest {
             userApi.authLogin(email, password)
         }
@@ -49,7 +47,7 @@ class UserRepository: ApiRequest() {
             username: String,
             email: String,
             password: String,
-    ): UserResponse {
+    ): UserWearResponse {
         return apiRequest {
             userApi.newAccount(firstName, lastName, image, contact, username, email, password)
         }
@@ -64,7 +62,7 @@ class UserRepository: ApiRequest() {
             email: String,
             password: String,
             image: String
-    ): UserResponse {
+    ): UserWearResponse {
         return apiRequest {
             userApi.updateUser(
                 token,

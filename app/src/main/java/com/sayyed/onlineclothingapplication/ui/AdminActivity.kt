@@ -6,25 +6,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.sayyed.onlineclothingapplication.R
-import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityAdminBinding
-import com.sayyed.onlineclothingapplication.databinding.ActivityProductBinding
 import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
 import com.sayyed.onlineclothingapplication.repository.UserRepository
-import com.sayyed.onlineclothingapplication.response.CategoryResponse
+import com.sayyed.onlineclothingapplication.response.CategoryWearResponse
 import com.sayyed.onlineclothingapplication.response.ProductDetailResponse
-import com.sayyed.onlineclothingapplication.response.ProductResponse
-import com.sayyed.onlineclothingapplication.response.UserResponse
+import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.*
@@ -221,7 +217,7 @@ class AdminActivity : AppCompatActivity() {
 
 
     /*-------------------------------------GET CATEGORY DATA FROM API---------------------------------------------*/
-    private fun Resource<CategoryResponse>.apiCategoryCall() {
+    private fun Resource<CategoryWearResponse>.apiCategoryCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {
@@ -245,7 +241,7 @@ class AdminActivity : AppCompatActivity() {
     }
 
     /*-------------------------------------GET USER DATA FROM API------------------------------------------------*/
-    private fun Resource<UserResponse>.apiUserCall() {
+    private fun Resource<UserWearResponse>.apiUserCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {

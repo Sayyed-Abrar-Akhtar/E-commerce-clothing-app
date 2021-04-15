@@ -20,13 +20,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.sayyed.onlineclothingapplication.R
-import com.sayyed.onlineclothingapplication.adapter.ProductAdapter
 import com.sayyed.onlineclothingapplication.dao.CategoryDAO
 import com.sayyed.onlineclothingapplication.dao.ProductDAO
 import com.sayyed.onlineclothingapplication.database.OnlineClothingDB
 import com.sayyed.onlineclothingapplication.databinding.ActivityProductCreateUpdateBinding
-import com.sayyed.onlineclothingapplication.models.Category
-import com.sayyed.onlineclothingapplication.models.Product
 import com.sayyed.onlineclothingapplication.repository.CategoryRepository
 import com.sayyed.onlineclothingapplication.repository.ProductRepository
 import com.sayyed.onlineclothingapplication.response.*
@@ -39,7 +36,6 @@ import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ProductCreateUpdateActivity : AppCompatActivity() {
 

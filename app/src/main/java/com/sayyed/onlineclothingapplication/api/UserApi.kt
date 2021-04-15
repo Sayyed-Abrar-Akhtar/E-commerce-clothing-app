@@ -3,9 +3,7 @@ package com.sayyed.onlineclothingapplication.api
 
 import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
-import com.sayyed.onlineclothingapplication.response.UserResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -22,7 +20,7 @@ interface UserApi {
             @Field("username") username: String,
             @Field("email") email: String,
             @Field("password") password: String,
-    ): Response<UserResponse>
+    ): Response<UserWearResponse>
 
 
     // Login
@@ -31,7 +29,7 @@ interface UserApi {
     suspend fun authLogin(
             @Field("email") email :String,
             @Field("password") password :String
-    ): Response<UserResponse>
+    ): Response<UserWearResponse>
 
     @GET("/api/users/")
     suspend fun allUsers(
@@ -50,7 +48,7 @@ interface UserApi {
             @Field("email") email: String,
             @Field("password") password: String,
             @Field("image") image: String,
-    ): Response<UserResponse>
+    ): Response<UserWearResponse>
 
 
     @DELETE("/api/users/{id}")

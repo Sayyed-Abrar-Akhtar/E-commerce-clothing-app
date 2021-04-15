@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface CategoryApi {
 
     @GET("/api/category/")
-    suspend fun getCategory(): Response<CategoryResponse>
+    suspend fun getCategory(): Response<CategoryWearResponse>
 
     @GET("/api/category/name")
     suspend fun getCategoryName(): Response<CategoryNameResponse>

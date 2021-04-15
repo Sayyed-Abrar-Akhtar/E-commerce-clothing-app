@@ -4,10 +4,8 @@ import androidx.databinding.Observable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.sayyed.onlineclothingapplication.repository.UserRepository
-import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 class UserViewModel(private val userRepository: UserRepository): ViewModel(), Observable {
 

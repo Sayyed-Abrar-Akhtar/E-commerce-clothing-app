@@ -26,7 +26,6 @@
         <activity android:name=".ui.CategoryCreateUpdateActivity" />
         <activity android:name=".ui.AdminShowAllProductActivity" />
         <activity android:name=".ui.ShippingActivity" />
-        <activity android:name=".ui.ShowAllActivity" />
         <activity android:name=".ui.ProductCreateUpdateActivity" />
         <activity android:name=".ui.AdminActivity" />
         <activity android:name=".ui.CartActivity" />
