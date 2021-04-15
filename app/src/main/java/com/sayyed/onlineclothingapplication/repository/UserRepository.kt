@@ -6,7 +6,7 @@ import com.sayyed.onlineclothingapplication.api.UserApi
 import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UploadResponse
 import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
-import com.sayyed.onlineclothingapplication.response.UserWearResponse
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothinglibrary.api.ServiceBuilder
 import okhttp3.MultipartBody
 
@@ -21,7 +21,7 @@ class UserRepository: ApiRequest() {
         }
     }
 
-    suspend fun authLogin(email: String, password: String): UserWearResponse {
+    suspend fun authLogin(email: String, password: String): UserResponse {
         return apiRequest {
             userApi.authLogin(email, password)
         }
@@ -47,7 +47,7 @@ class UserRepository: ApiRequest() {
             username: String,
             email: String,
             password: String,
-    ): UserWearResponse {
+    ): UserResponse {
         return apiRequest {
             userApi.newAccount(firstName, lastName, image, contact, username, email, password)
         }
@@ -62,7 +62,7 @@ class UserRepository: ApiRequest() {
             email: String,
             password: String,
             image: String
-    ): UserWearResponse {
+    ): UserResponse {
         return apiRequest {
             userApi.updateUser(
                 token,

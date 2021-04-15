@@ -13,7 +13,7 @@ import com.sayyed.onlineclothingapplication.models.Review
 
 class ReviewAdapter(
     val context: Context,
-    val reviewsList: List<Review>
+    private val reviewsList: List<Review>
 ): RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
 

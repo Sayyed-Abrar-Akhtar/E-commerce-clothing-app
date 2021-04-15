@@ -2,6 +2,11 @@ package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,14 +31,16 @@ import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.CategoryViewModelFactory
-import java.lang.Exception
 
-class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
+
+class DashboardActivity : AppCompatActivity(), OnCategoryClickListener, SensorEventListener {
 
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var navigationDrawerSetup: NavigationDrawerSetup
     private lateinit var toggle: ActionBarDrawerToggle
 
+    private lateinit var sensorManager: SensorManager
+    private var sensor: Sensor? = null
 
     private lateinit var listCategory: MutableList<Category>
     private lateinit var adapter: CategoryAdapter
@@ -51,11 +58,11 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
-
-
         firstNameSharedPref = intent.getStringExtra("name").toString()
         imageSharedPref = intent.getStringExtra("image").toString()
         contactSharedPref = intent.getStringExtra("contact").toString()
@@ -65,30 +72,45 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
         toggle = ActionBarDrawerToggle(
-                this@DashboardActivity,
-                binding.drawer,
-                binding.toolbar,
-                R.string.open,
-                R.string.close
+            this@DashboardActivity,
+            binding.drawer,
+            binding.toolbar,
+            R.string.open,
+            R.string.close
         )
         binding.drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         /*----------------------------------------NAVIGATION DRAWER LAYOUT----------------------------------------*/
         navigationDrawerSetup = NavigationDrawerSetup()
-        navigationDrawerSetup.navDrawerLayoutInitialization(binding.tvToolbarTitle, "Online Clothing")
-        navigationDrawerSetup.addHeaderText(
-                this@DashboardActivity,
-                binding.navigationView,
-                "$firstNameSharedPref $lastNameSharedPref",
-                "$contactSharedPref",
-                "$imageSharedPref"
+        navigationDrawerSetup.navDrawerLayoutInitialization(
+            binding.tvToolbarTitle,
+            "Online Clothing"
         )
-        navigationDrawerSetup.addEventListenerToNavItems(this@DashboardActivity, binding.navigationView, isAdminSharedPref)
+        navigationDrawerSetup.addHeaderText(
+            this@DashboardActivity,
+            binding.navigationView,
+            "$firstNameSharedPref $lastNameSharedPref",
+            "$contactSharedPref",
+            "$imageSharedPref"
+        )
+        navigationDrawerSetup.addEventListenerToNavItems(
+            this@DashboardActivity,
+            binding.navigationView,
+            isAdminSharedPref
+        )
 
         setupUI()
 
         setupViewModel()
+
+        /*---------------------------------------SENSORS----------------------------------------------------------*/
+        if(!checkLightSensor()) {
+            return
+        } else {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
 
         /*----------------------------------------ASK FOR PERMISSIONS---------------------------------------------*/
         if (!hasPermission()) {
@@ -98,7 +120,11 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         when (Network.isNetworkAvailable(this@DashboardActivity)) {
             true -> setupCategoryObservers()
             false -> {
-                Toast.makeText(this@DashboardActivity, "No internet connection!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@DashboardActivity,
+                    "No internet connection!!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 try {
                     loadCategoryFromRoom()
                 } catch (ex: Exception) {
@@ -108,11 +134,45 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         }
     }
 
+
+
+
+
+    /*----------------------------------EVENT LISTENER ON CATEGORY ITEM CLICK-------------------------------------*/
+    override fun OnCategoryItemClick(position: Int, categoryName: String, categoryId: String) {
+        val intent = Intent(this, ProductActivity::class.java)
+        intent.putExtra("categoryName", categoryName)
+        intent.putExtra("categoryId", categoryId)
+        startActivity(intent)
+    }
+
+
+    /*----------------------------------LIGHT SENSOR---------------------------------------------------------*/
+    override fun onSensorChanged(event: SensorEvent?) {
+       val values = event!!.values[0]
+        if(values <= 1000 ){
+            binding.recyclerViewCategory.setBackgroundColor(0xFF222222.toInt())
+        } else {
+            binding.recyclerViewCategory.setBackgroundColor(Color.WHITE)
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    private fun checkLightSensor(): Boolean {
+        var flag = true
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) == null) {
+             flag = false
+        }
+        return flag
+    }
+
     /*-------------------------------------REQUEST PERMISSIONS----------------------------------------------------*/
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
-                this@DashboardActivity,
-                permissions, 234
+            this@DashboardActivity,
+            permissions, 234
         )
     }
 
@@ -121,9 +181,9 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         var hasPermission = true
         for (permission in permissions) {
             if (ActivityCompat.checkSelfPermission(
-                            this,
-                            permission
-                    ) != PackageManager.PERMISSION_GRANTED
+                    this,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 hasPermission = false
             }
@@ -133,9 +193,9 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
 
     /*-------------------------------------ASK PERMISSIONS--------------------------------------------------------*/
     private val permissions = arrayOf(
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+        android.Manifest.permission.CAMERA,
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
@@ -165,15 +225,6 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
         categoryViewModel = ViewModelProvider(this, factory).get(CategoryViewModel::class.java)
         categoryViewModel.insertCategoryIntoRoom()
     }
-
-    /*----------------------------------EVENT LISTENER ON CATEGORY ITEM CLICK-------------------------------------*/
-    override fun OnCategoryItemClick(position: Int, categoryName: String, categoryId:String) {
-        val intent = Intent(this, ProductActivity::class.java)
-        intent.putExtra("categoryName", categoryName)
-        intent.putExtra("categoryId", categoryId)
-        startActivity(intent)
-    }
-
 
 
     /*-------------------------------------GET DATA FROM ROOM TO DISPLAY------------------------------------------*/
@@ -237,4 +288,6 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener {
             }
         }
     }
+
+
 }

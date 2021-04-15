@@ -22,7 +22,7 @@ import com.sayyed.onlineclothingapplication.databinding.ActivitySignUpBinding
 import com.sayyed.onlineclothingapplication.models.UserProfile
 import com.sayyed.onlineclothingapplication.repository.UserRepository
 import com.sayyed.onlineclothingapplication.response.UploadResponse
-import com.sayyed.onlineclothingapplication.response.UserWearResponse
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothingapplication.utils.FileUpload
 import com.sayyed.onlineclothingapplication.utils.Network
 import com.sayyed.onlineclothingapplication.utils.Resource
@@ -311,7 +311,7 @@ class SignUpActivity : AppCompatActivity() {
 
 
     /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
-    private fun Resource<UserWearResponse>.apiCall() {
+    private fun Resource<UserResponse>.apiCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {

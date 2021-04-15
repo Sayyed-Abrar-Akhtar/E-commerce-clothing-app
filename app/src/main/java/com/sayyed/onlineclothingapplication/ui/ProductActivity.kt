@@ -1,6 +1,11 @@
 package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
+import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,11 +30,15 @@ import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
 import java.util.*
 
-class ProductActivity : AppCompatActivity(), OnProductClickListener {
+class ProductActivity : AppCompatActivity(), OnProductClickListener, SensorEventListener {
 
 
     private lateinit var binding: ActivityProductBinding
     private lateinit var productViewModel: ProductViewModel
+
+    private lateinit var sensorManager: SensorManager
+    private var sensor: Sensor? = null
+
 
     private lateinit var listProduct: MutableList<Product>
     private lateinit var adapter: ProductAdapter
@@ -49,6 +58,8 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         setContentView(R.layout.activity_product)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product)
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
@@ -90,6 +101,14 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
         /*----------------------PRODUCT ACTIVITY AND PRODUCT VIEW MODEL CONNECTION--------------------------------*/
         setupViewModel()
 
+        /*---------------------------------------SENSORS----------------------------------------------------------*/
+        if(!checkLightSensor()) {
+            return
+        } else {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
         when (Network.isNetworkAvailable(this)) {
             true -> {
@@ -107,6 +126,28 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener {
                 }
             }
         }
+    }
+
+    /*----------------------------------LIGHT SENSOR---------------------------------------------------------*/
+    override fun onSensorChanged(event: SensorEvent?) {
+        val values = event!!.values[0]
+        if(values <= 1000 ){
+            binding.recyclerViewProduct.setBackgroundColor(0xFF222222.toInt())
+
+        } else {
+            binding.recyclerViewProduct.setBackgroundColor(Color.WHITE)
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    private fun checkLightSensor(): Boolean {
+        var flag = true
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) == null) {
+            flag = false
+        }
+        return flag
     }
 
     /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/

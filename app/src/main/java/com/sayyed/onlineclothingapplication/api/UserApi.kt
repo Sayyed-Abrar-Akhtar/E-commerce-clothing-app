@@ -3,13 +3,13 @@ package com.sayyed.onlineclothingapplication.api
 
 import com.sayyed.onlineclothingapplication.response.DeleteResponse
 import com.sayyed.onlineclothingapplication.response.UserDetailsResponse
-import com.sayyed.onlineclothingapplication.response.UserWearResponse
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.*
 
 interface UserApi {
 
-    //Register com.sayyed.onlineclothingapplication.models.Users
+    //Register
     @FormUrlEncoded
     @POST("/api/users/")
     suspend fun newAccount(
@@ -20,7 +20,7 @@ interface UserApi {
             @Field("username") username: String,
             @Field("email") email: String,
             @Field("password") password: String,
-    ): Response<UserWearResponse>
+    ): Response<UserResponse>
 
 
     // Login
@@ -29,7 +29,7 @@ interface UserApi {
     suspend fun authLogin(
             @Field("email") email :String,
             @Field("password") password :String
-    ): Response<UserWearResponse>
+    ): Response<UserResponse>
 
     @GET("/api/users/")
     suspend fun allUsers(
@@ -48,7 +48,7 @@ interface UserApi {
             @Field("email") email: String,
             @Field("password") password: String,
             @Field("image") image: String,
-    ): Response<UserWearResponse>
+    ): Response<UserResponse>
 
 
     @DELETE("/api/users/{id}")

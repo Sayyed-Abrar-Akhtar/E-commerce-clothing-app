@@ -1,6 +1,7 @@
 package com.sayyed.onlineclothingapplication.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,7 @@ import com.sayyed.onlineclothingapplication.utils.FileUpload
 
 class ProductAdapter(
         val context: Context,
-        val productList: MutableList<Product>,
+        private val productList: MutableList<Product>,
         private val onProductClickListener: OnProductClickListener
 ): RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     override fun onCreateViewHolder(

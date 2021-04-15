@@ -1,6 +1,11 @@
 package com.sayyed.onlineclothingapplication.ui
 
 import android.content.Intent
+import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,11 +27,14 @@ import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
 import java.util.*
 
-class ProductDetailActivity : AppCompatActivity() {
+class ProductDetailActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityProductDetailBinding
     private lateinit var productViewModel: ProductViewModel
     private lateinit var reviewAdapter: ReviewAdapter
+
+    private lateinit var sensorManager: SensorManager
+    private var sensor: Sensor? = null
 
     private var maxStock: Int = 0
     private var qtySelected: Int = 1
@@ -57,6 +65,7 @@ class ProductDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_detail)
 
         binding = DataBindingUtil.setContentView(this@ProductDetailActivity, R.layout.activity_product_detail)
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
@@ -67,6 +76,15 @@ class ProductDetailActivity : AppCompatActivity() {
 
         /*----------------------PRODUCT ACTIVITY AND PRODUCT VIEW MODEL CONNECTION--------------------------------*/
         setupViewModel()
+
+        /*---------------------------------------SENSORS----------------------------------------------------------*/
+        if(!checkLightSensor()) {
+            return
+        } else {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
 
         /*------------------------FUNCTION CALLED AND DISPLAYED CATEGORIZED DATA----------------------------------*/
         setProductObserver(productId.toString())
@@ -107,6 +125,39 @@ class ProductDetailActivity : AppCompatActivity() {
             intent.putExtra("product_qty", "${binding.tvQty.text}")
             startActivity(intent)
         }
+    }
+
+    /*----------------------------------LIGHT SENSOR---------------------------------------------------------*/
+    override fun onSensorChanged(event: SensorEvent?) {
+        val values = event!!.values[0]
+        if(values <= 1000 ){
+            binding.linearLayout.setBackgroundColor(0xFF222222.toInt())
+            binding.tvProductDescription.setTextColor(Color.WHITE)
+            binding.tvQty.setTextColor(Color.WHITE)
+            binding.tvProductBrand.setTextColor(Color.WHITE)
+            binding.tvProductPrice.setTextColor(Color.WHITE)
+            binding.tvProductTitle.setTextColor(Color.WHITE)
+
+        } else {
+            binding.linearLayout.setBackgroundColor(Color.WHITE)
+            binding.tvProductDescription.setTextColor(Color.BLACK)
+            binding.tvQty.setTextColor(Color.BLACK)
+            binding.tvProductBrand.setTextColor(Color.BLACK)
+            binding.tvProductPrice.setTextColor(Color.BLACK)
+            binding.tvProductTitle.setTextColor(Color.BLACK)
+
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    private fun checkLightSensor(): Boolean {
+        var flag = true
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) == null) {
+            flag = false
+        }
+        return flag
     }
 
 

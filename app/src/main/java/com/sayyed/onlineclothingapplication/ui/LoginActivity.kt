@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sayyed.onlineclothingapplication.R
 import com.sayyed.onlineclothingapplication.databinding.ActivityLoginBinding
 import com.sayyed.onlineclothingapplication.repository.UserRepository
+import com.sayyed.onlineclothingapplication.response.UserResponse
 import com.sayyed.onlineclothingapplication.response.UserWearResponse
 import com.sayyed.onlineclothingapplication.utils.Resource
 import com.sayyed.onlineclothingapplication.utils.Status
@@ -186,7 +187,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /*-------------------------------------GET DATA FROM API------------------------------------------------------*/
-    private fun Resource<UserWearResponse>.apiCall() {
+    private fun Resource<UserResponse>.apiCall() {
         let { resource ->
             when (resource.status ) {
                 Status.SUCCESS -> {

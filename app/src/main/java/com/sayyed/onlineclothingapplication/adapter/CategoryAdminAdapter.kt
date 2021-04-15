@@ -17,7 +17,7 @@ import com.sayyed.onlineclothingapplication.utils.FileUpload
 
 class CategoryAdminAdapter (
         val context: Context,
-        val categoryList: MutableList<Category>,
+        private val categoryList: MutableList<Category>,
         private val onAdminCategoryClickListener: OnAdminCategoryClickListener
 ): RecyclerView.Adapter<CategoryAdminAdapter.CategoryViewHolder>() {
 

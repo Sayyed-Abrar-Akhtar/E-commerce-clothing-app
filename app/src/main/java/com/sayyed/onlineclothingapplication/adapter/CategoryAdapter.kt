@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 
 class CategoryAdapter (
         val context: Context,
-        val categoryList: MutableList<Category>,
+        private val categoryList: MutableList<Category>,
         private val onCategoryClickListener: OnCategoryClickListener
     ): RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 

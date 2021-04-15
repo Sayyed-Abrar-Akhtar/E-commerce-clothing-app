@@ -17,7 +17,7 @@ import com.sayyed.onlineclothingapplication.utils.FileUpload
 
 class ProductAdminAdapter (
         val context: Context,
-        val productList: MutableList<Product>,
+        private val productList: MutableList<Product>,
         private val onAdminProductClickListener: OnAdminProductClickListener
 ): RecyclerView.Adapter<ProductAdminAdapter.ProductViewHolder>() {
     override fun onCreateViewHolder(
