@@ -15,7 +15,7 @@ import org.junit.runners.JUnit4
 
 @LargeTest
 @RunWith(JUnit4::class)
-class LoginInstrumentedgTest {
+class LoginInstrumentedTest {
 
     @get:Rule
     val testRule = ActivityScenarioRule(LoginActivity::class.java)
@@ -23,12 +23,12 @@ class LoginInstrumentedgTest {
     @Test
     fun checkLoginUI() {
         Espresso.onView(ViewMatchers.withId(R.id.etUsername))
-            .perform(ViewActions.typeText("sayyed"))
+            .perform(ViewActions.typeText("akhtars10@uni.coventry.ac.uk"))
 
         Thread.sleep(1000)
 
         Espresso.onView(ViewMatchers.withId(R.id.etPassword))
-            .perform(ViewActions.typeText("sayyed"))
+            .perform(ViewActions.typeText("rehman"))
 
         Thread.sleep(1000)
         Espresso.closeSoftKeyboard()
@@ -36,7 +36,7 @@ class LoginInstrumentedgTest {
         Espresso.onView(ViewMatchers.withId(R.id.btnLogin))
             .perform(ViewActions.click())
 
-        Thread.sleep(2000)
+        Thread.sleep(5000)
         Espresso.onView(ViewMatchers.withId(R.id.recyclerViewCategory))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
