@@ -15,7 +15,6 @@ interface UserApi {
     suspend fun newAccount(
             @Field("firstName") firstName: String,
             @Field("lastName") lastName: String,
-            @Field("image") image: String,
             @Field("contact") contact: String,
             @Field("username") username: String,
             @Field("email") email: String,
