@@ -133,7 +133,6 @@ class SignUpActivity : AppCompatActivity() {
         /*-----------------------------------SIGN UP BUTTON CLICK LISTENER----------------------------------------*/
         binding.btnSignUp.setOnClickListener {
             if (Network.isNetworkAvailable(this@SignUpActivity)) {
-
                 if (binding.btnSignUp.text == "Update") {
                     if(isAdminSharedPref) {
                         binding.tvAdmin.visibility = View.VISIBLE
