@@ -22,11 +22,6 @@ class SignUpInstrumentedTest {
 
     @Test
     fun checkSignUpUI() {
-        Espresso.onView(ViewMatchers.withId(R.id.etConfirmPassword))
-                .perform(ViewActions.typeText("aasif"))
-
-        Thread.sleep(1000)
-
         Espresso.onView(ViewMatchers.withId(R.id.etFirstName))
                 .perform(ViewActions.typeText("Aasif"))
 
@@ -42,15 +37,14 @@ class SignUpInstrumentedTest {
 
         Thread.sleep(1000)
 
-
-        Espresso.onView(ViewMatchers.withId(R.id.etUsername))
-                .perform(ViewActions.typeText("aasif"))
+        Espresso.onView(ViewMatchers.withId(R.id.etEmail))
+                .perform(ViewActions.typeText("aasif@ahmed.com"))
 
         Thread.sleep(1000)
 
 
-        Espresso.onView(ViewMatchers.withId(R.id.etEmail))
-                .perform(ViewActions.typeText("aasif@ahmed.com"))
+        Espresso.onView(ViewMatchers.withId(R.id.etUsername))
+                .perform(ViewActions.typeText("aasif"))
 
         Thread.sleep(1000)
 
@@ -61,10 +55,17 @@ class SignUpInstrumentedTest {
 
         Espresso.closeSoftKeyboard()
 
+        Espresso.onView(ViewMatchers.withId(R.id.etConfirmPassword))
+                .perform(ViewActions.typeText("aasif"))
+
+        Thread.sleep(1000)
+
+        Espresso.closeSoftKeyboard()
+
         Espresso.onView(ViewMatchers.withId(R.id.btnSignUp))
                 .perform(ViewActions.click())
 
-        Thread.sleep(8000)
+        Thread.sleep(4000)
         Espresso.onView(ViewMatchers.withId(R.id.recyclerViewCategory))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }

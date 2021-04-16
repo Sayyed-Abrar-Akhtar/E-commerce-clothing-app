@@ -37,12 +37,11 @@ class CartActivity : AppCompatActivity() {
     private  var tokenSharedPref : String? = ""
     private  var isAdminSharedPref : Boolean = false
     private  var contactSharedPref : String? = ""
+    private  var titleProdSharedPref : String? = "Product title"
+    private  var imageProdSharedPref : String? = "http://192.168.1.69:90/uploads/no-image.png"
+    private  var priceProdSharedPref : String? = "0"
+    private  var qtyProdSharedPref : String? = "0"
 
-
-    private var product_title: String = ""
-    private var product_image: String = ""
-    private var product_price: String = ""
-    private var product_qty: String = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,14 +51,9 @@ class CartActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this@CartActivity, R.layout.activity_cart)
 
 
-        product_title = intent.getStringExtra("product_title").toString()
-        product_image = intent.getStringExtra("product_image").toString()
-        product_price = intent.getStringExtra("product_price").toString()
-        product_qty = intent.getStringExtra("product_qty").toString()
-
-
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
         getSharedPref()
+        getCartSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/
         setSupportActionBar(binding.toolbar)
@@ -87,13 +81,13 @@ class CartActivity : AppCompatActivity() {
         navigationDrawerSetup.addEventListenerToNavItems(this@CartActivity, binding.navigationView, isAdminSharedPref)
 
 
-        setUpUI("$product_image", "$product_title", "$product_qty", "$product_price")
+        setUpUI("$imageProdSharedPref", "$titleProdSharedPref", "$qtyProdSharedPref", "$priceProdSharedPref")
 
 
         binding.btnContinuePayment.setOnClickListener {
             showNotification()
             val intent = Intent(this@CartActivity, ShippingActivity::class.java)
-            intent.putExtra("product_title", product_title)
+            intent.putExtra("product_title", titleProdSharedPref)
             startActivity(intent)
             finish()
         }
@@ -114,6 +108,15 @@ class CartActivity : AppCompatActivity() {
         isAdminSharedPref = sharedPref.getBoolean("isAdmin", false)
         tokenSharedPref = sharedPref.getString("token", "")
 
+    }
+
+    /*----------------------------GET SHARED PREFERENCES---------------------------------------------------------*/
+    private fun getCartSharedPref() {
+        val sharedPref = getSharedPreferences("CartPreference", MODE_PRIVATE)
+        titleProdSharedPref = sharedPref.getString("product_title", "")
+        imageProdSharedPref = sharedPref.getString("product_image", "")
+        priceProdSharedPref = sharedPref.getString("product_price", "")
+        qtyProdSharedPref = sharedPref.getString("product_qty", "")
     }
 
     /*----------------------------SET UP UI-----------------------------------------------------------------------*/
@@ -140,7 +143,7 @@ class CartActivity : AppCompatActivity() {
         val notification = NotificationCompat.Builder(this, notificationChannels.CHANNEL_LOW)
             .setSmallIcon(R.drawable.notification)
             .setContentTitle("ORDER CREATED")
-            .setContentText("$product_qty items of $product_title ordered")
+            .setContentText("$qtyProdSharedPref items of $titleProdSharedPref ordered")
             .setColor(Color.BLUE)
             .setContentIntent(pendingIntent)
             .build()

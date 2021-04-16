@@ -63,10 +63,6 @@ class DashboardActivity : AppCompatActivity(), OnCategoryClickListener, SensorEv
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
-        firstNameSharedPref = intent.getStringExtra("name").toString()
-        imageSharedPref = intent.getStringExtra("image").toString()
-        contactSharedPref = intent.getStringExtra("contact").toString()
-
         getSharedPref()
 
         /*---------------------------------------HAMBURGER MENU BAR TOGGLE----------------------------------------*/

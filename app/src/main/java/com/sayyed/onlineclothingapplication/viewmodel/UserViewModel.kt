@@ -58,7 +58,6 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
     fun newAccount(
             firstName: String,
             lastName: String,
-            image: String,
             contact: String,
             username: String,
             email: String,
@@ -66,7 +65,7 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel(), Ob
     ) = liveData {
         emit( Resource.loading(data = null))
         try {
-            val user = userRepository.newAccount(firstName, lastName, image, contact, username, email, password)
+            val user = userRepository.newAccount(firstName, lastName, contact, username, email, password)
             emit(Resource.success(data = user))
         } catch (ex: Exception) {
             println("error message=>${ex.message}")

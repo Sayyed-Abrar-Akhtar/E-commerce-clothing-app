@@ -118,11 +118,14 @@ class ProductDetailActivity : AppCompatActivity(), SensorEventListener {
         /*--------------------------------CHECKOUT CLICK----------------------------------------------------------*/
 
         binding.btnCheckout.setOnClickListener {
+            saveCartSharedPref(
+                "$product_title",
+                "$product_image",
+                "$product_price",
+                "${binding.tvQty.text}"
+            )
+
             val intent = Intent(this@ProductDetailActivity, CartActivity::class.java)
-            intent.putExtra("product_title", "$product_title")
-            intent.putExtra("product_image", "$product_image")
-            intent.putExtra("product_price", "$product_price")
-            intent.putExtra("product_qty", "${binding.tvQty.text}")
             startActivity(intent)
         }
     }
@@ -168,6 +171,19 @@ class ProductDetailActivity : AppCompatActivity(), SensorEventListener {
         val factory = ProductViewModelFactory(repository)
         productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
 
+    }
+
+
+    /*----------------------------SAVE SHARED PREFERENCES---------------------------------------------------------*/
+    private fun saveCartSharedPref(title: String, image: String, price: String, qty: String) {
+        val sharedPref = getSharedPreferences("CartPreference",
+                MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putString("product_title", title)
+        editor.putString("product_image", image)
+        editor.putString("product_price", price)
+        editor.putString("product_qty", qty)
+        editor.apply()
     }
 
     /*-----------------------------------------GET PRODUCTS OF ID-------------------------------------------------*/

@@ -68,7 +68,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var usernameField: String
     private lateinit var emailField: String
     private lateinit var passwordField: String
-    private lateinit var imageResponseFromApi: String
+    private  var imageResponseFromApi: String = "http://192.168.1.69:90/uploads/no-image.png"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +93,8 @@ class SignUpActivity : AppCompatActivity() {
 
         } else {
             binding.btnSignUp.text = "Sign up"
+            binding.imgUserProfile.setImageResource(R.drawable.sign_up)
+            binding.imgUserProfile.isClickable = false
         }
 
         /*----------------------------------------SHARED PREFERENCES----------------------------------------------*/
@@ -134,62 +136,62 @@ class SignUpActivity : AppCompatActivity() {
         binding.btnSignUp.setOnClickListener {
             if (Network.isNetworkAvailable(this@SignUpActivity)) {
                 if (binding.btnSignUp.text == "Update") {
-                    if(isAdminSharedPref) {
+                    if (isAdminSharedPref) {
                         binding.tvAdmin.visibility = View.VISIBLE
                     }
-                    userViewModel.updateUser(
-                            "Bearer $tokenSharedPref",
-                            "${binding.etFirstName.text}",
-                            "${binding.etLastName.text}",
-                            "${binding.etContact.text}",
-                            "${binding.etUsername.text}",
-                            "$emailSharedPref",
-                            "$passwordSharedPref",
-                            "$imageSharedPref"
-                    ).observe(this@SignUpActivity, {
-                        it.apiCall()
-                    })
 
+                    if (imageUrl != null) {
+                        val body = FileUpload.setMimeType(imageUrl)
+                        userViewModel.uploadImage(body).observe(this@SignUpActivity, {
+                            it.apiUploadCall()
+                        })
+                    }
+                    val updateHandler = Handler(Looper.getMainLooper())
+                    updateHandler.postDelayed({
+                        userViewModel.updateUser(
+                                "Bearer $tokenSharedPref",
+                                "${binding.etFirstName.text}",
+                                "${binding.etLastName.text}",
+                                "${binding.etContact.text}",
+                                "${binding.etUsername.text}",
+                                "$emailSharedPref",
+                                "$passwordSharedPref",
+                                "$imageResponseFromApi"
+                        ).observe(this@SignUpActivity, {
+                            it.apiCall()
+                            if(isSuccessfulUserProfile) {
+                                Toast.makeText(this@SignUpActivity, "User updated successfully", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, DashboardActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        })
 
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.postDelayed({
+                    }, 1200)
 
-                        Toast.makeText(this@SignUpActivity, "com.sayyed.onlineclothingapplication.models.Users updated successfully", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, DashboardActivity::class.java)
-                        startActivity(intent)
-                        finish()
-
-                    }, 800)
                 }
 
                 if (binding.btnSignUp.text == "Sign up") {
                     userProfileDetail()
-                    val body = FileUpload.setMimeType(imageUrl)
 
-                    userViewModel.uploadImage(body).observe(this@SignUpActivity, {
-                        it.apiUploadCall()
-                    })
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
-                        if (isSuccessfulUploadImage) {
-                            userViewModel.newAccount(
-                                    firstNameField,
-                                    lastNameField,
-                                    imageResponseFromApi,
-                                    contactField,
-                                    usernameField,
-                                    emailField,
-                                    passwordField
-                            ).observe(this@SignUpActivity, {
-                                it.apiCall()
-                                if (isSuccessfulUserProfile) {
-                                    Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(this, DashboardActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                }
-                            })
-                        }
+                        userViewModel.newAccount(
+                                firstNameField,
+                                lastNameField,
+                                contactField,
+                                usernameField,
+                                emailField,
+                                passwordField
+                        ).observe(this@SignUpActivity, {
+                            it.apiCall()
+                            if (isSuccessfulUserProfile) {
+                                Toast.makeText(this@SignUpActivity, "New user created successfully", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, DashboardActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                        })
                     }, 500)
 
                 }

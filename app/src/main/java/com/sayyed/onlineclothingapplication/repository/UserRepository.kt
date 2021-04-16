@@ -42,14 +42,13 @@ class UserRepository: ApiRequest() {
     suspend fun newAccount(
             firstName: String,
             lastName: String,
-            image: String,
             contact: String,
             username: String,
             email: String,
             password: String,
     ): UserResponse {
         return apiRequest {
-            userApi.newAccount(firstName, lastName, image, contact, username, email, password)
+            userApi.newAccount(firstName, lastName, contact, username, email, password)
         }
     }
 
