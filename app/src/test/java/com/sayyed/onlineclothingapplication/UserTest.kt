@@ -21,7 +21,7 @@ class UserTest {
     @Test
     fun checkUserLogin () = runBlocking {
         userRepository = UserRepository()
-        val response = userRepository.authLogin("akhtars10@uni.coventry.ac.uk", "sayyed-abrar")
+        val response = userRepository.authLogin("akhtars10@uni.coventry.ac.uk", "sayyed")
         val expectedResult = true
         val actualResult = response.success
 
@@ -34,11 +34,10 @@ class UserTest {
 
         val response = userRepository.newAccount(
             "Rehman",
-            "Khan",
-            "/uploads/no-image.png",
+            "Ahmed",
             "980000000000",
             "rehman",
-            "rehman@khan.com",
+            "rehman@ahmed.com",
             "rehman"
         )
 
@@ -88,7 +87,7 @@ class UserTest {
         userRepository = UserRepository()
         val response = userRepository.deleteUser(
             "Bearer $token",
-            "607881e15e83e027f850cf74"
+            "60795262f3544736a002f7d9"
         )
         val expectedResult = true
         val actualResult = response.success
