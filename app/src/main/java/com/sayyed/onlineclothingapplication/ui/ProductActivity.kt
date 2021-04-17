@@ -1,11 +1,13 @@
 package com.sayyed.onlineclothingapplication.ui
 
+import android.app.PendingIntent.getActivity
 import android.content.Intent
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +31,12 @@ import com.sayyed.onlineclothingapplication.utils.Status
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModel
 import com.sayyed.onlineclothingapplication.viewmodel.ProductViewModelFactory
 import java.util.*
+import android.util.DisplayMetrics
+
+import android.view.Display
+import androidx.annotation.RequiresApi
+import kotlin.math.roundToInt
+
 
 class ProductActivity : AppCompatActivity(), OnProductClickListener, SensorEventListener {
 
@@ -53,6 +61,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener, SensorEvent
     private  var isAdminSharedPref : Boolean = false
 
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
@@ -168,9 +177,18 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener, SensorEvent
     }
 
     /*---------------------------------------------SET UP UI------------------------------------------------------*/
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun setupUI() {
+
+        val display: Display? = display
+        val outMetrics = DisplayMetrics()
+        display?.getMetrics(outMetrics)
+
+        val density = resources.displayMetrics.density
+        val dpWidth = outMetrics.widthPixels / density
+        val columns = (dpWidth / 210).roundToInt()
         binding.recyclerViewProduct.layoutManager = GridLayoutManager(
-                this@ProductActivity, 2, GridLayoutManager.VERTICAL, false)
+                this@ProductActivity, columns, GridLayoutManager.VERTICAL, false)
         listProduct = mutableListOf()
         adapter = ProductAdapter(this@ProductActivity, listProduct, this@ProductActivity)
         binding.recyclerViewProduct.adapter = adapter
@@ -204,7 +222,7 @@ class ProductActivity : AppCompatActivity(), OnProductClickListener, SensorEvent
     private fun loadCategorisedProductFromRoom(category: String) {
         productViewModel.retrieveCategorizedProductsFromRoom(category).observe(this, {
             it?.let { product ->
-                binding.recyclerViewProduct.visibility = View. VISIBLE
+                binding.recyclerViewProduct.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
                 listProduct.clear()
                 listProduct.addAll(product)
