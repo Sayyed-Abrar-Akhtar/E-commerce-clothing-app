@@ -4,5 +4,5 @@ Configuration
 
 In <strong>onlineclothinglibrary/src/main/java/com/sayyed/onlineclothinglibrary/api/ServiceBuilder.kt</strong>
 
-use  BASE_URL = "http://10.0.2.2:90/"
-instead of "http://192.168.1.69:90/"
+We use <strong>BASE_URL = "http://10.0.2.2:90/"</strong> for localhost in android emulator
+I have used <strong>"http://192.168.1.69:90/"</strong> which is my laptop ip address
