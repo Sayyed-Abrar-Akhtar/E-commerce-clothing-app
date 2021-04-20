@@ -1,6 +1,8 @@
 # finalassignment-Sayyed-Abrar-Akhtar
 finalassignment-Sayyed-Abrar-Akhtar created by GitHub Classroom
-Configuration
+
+<br />
+<h1>Configuration</h1>
 
 In <strong>onlineclothinglibrary/src/main/java/com/sayyed/onlineclothinglibrary/api/ServiceBuilder.kt</strong>
 
